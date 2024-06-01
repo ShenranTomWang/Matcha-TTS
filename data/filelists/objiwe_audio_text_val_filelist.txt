@@ -1,0 +1,100 @@
+data/objiwe/wavs/JJ00016589.wav|Awesiiyensag niizhtana ashi naanan Awakaanag niizhtana ashi niswi.
+data/objiwe/wavs/JJ00014351.wav|Mii imaa zhingishinaan imaa, baanimaa go awiiya wenji-nawadiniwaad, awiiya gichi-mawiwaad, gwekwekiwebiniwaad.
+data/objiwe/wavs/JJ0001108.wav|Niin gaa biiwidewiyaan
+data/objiwe/wavs/JJ00019009.wav|Apii wedi gii-dagoshing, gaawiin ngoji owaabandanziin gegoon ji-nitaawigininig, 
+data/objiwe/wavs/JJ00013162.wav|Jiikakamigiziwag niimi'idiwaad.
+data/objiwe/wavs/JJ00018461.wav|gegoo gaa-izhiwebak dash iwidi sa gaa-chawaazhendamaan gii-chi-minwendamaan 
+data/objiwe/wavs/JJ00012003.wav|mazinaatesijigan iinzan ogii mikaan a'gichi-aya'aa
+data/objiwe/wavs/JJ000110804.wav|Wiinge aazha aabawaa. 
+data/objiwe/wavs/JJ00015110.wav|Miish a'aw akiwenzii gigizheb onishkaad
+data/objiwe/wavs/JJ00012111.wav|ogii-giimooji inaakonige chi-giiwed
+data/objiwe/wavs/JJ0001577.wav|Gaa inawendiwaad
+data/objiwe/wavs/JJ000110589.wav|Agwajiing iinzan imaa babaa-bimojige Jakaabes. 
+data/objiwe/wavs/JJ00015713.wav|Miish a'aw naagaanizid i'iw baate gaye miinawaa ogagwejimaan gwiiwizensan
+data/objiwe/wavs/JJ00013195.wav|Eya' noozhis, daga sa naa nibi andawaabandamawishin agamiing.
+data/objiwe/wavs/JJ00015535.wav|Maajiibadaabiid zaaga'egan owaabamaan zhiishiiban gii-awi-bakaded omaa jiigibiig.
+data/objiwe/wavs/JJ00013706.wav|Azhigwa eni-dibikak, mii gaa-izhi-ashamid a'aw mindimooyenh, manoomin miinawaa ayi'ii.
+data/objiwe/wavs/JJ00011114.wav|Gii goshkwaawaajishing
+data/objiwe/wavs/JJ00016634.wav|apane ogii-igoon
+data/objiwe/wavs/JJ00014402.wav|Miish i'iw ezhi-namadabiwaad giiwitaashkode imaa boodawaadenig.
+data/objiwe/wavs/JJ00011048.wav|niizhwaaso diba'iganeg ji ayaad owidi wiijiiwaaganan eyaanid
+data/objiwe/wavs/JJ00013017.wav|Apegish bakaan baa-ayaayaan, nindaa-minomanji'. 
+data/objiwe/wavs/JJ0001851.wav|Gakina ezhi iniwendiwaad ayaawag imaa wii waabandamowaad iwe gaa wii izhiseg
+data/objiwe/wavs/JJ00016549.wav|Naabesens
+data/objiwe/wavs/JJ00018341.wav|nisidootamowaad
+data/objiwe/wavs/JJ00012209.wav|Nimishoomis gii-giigoowikesig
+data/objiwe/wavs/JJ00012664.wav|awesii'a onji gikinoo'amawaawag ge-izhi gakendamowaad ji-zhaabwii-aadiziwaad imaa bagwaji-noopiming
+data/objiwe/wavs/JJ00018544.wav|Mii akina gegoo giishkizhang iwidi gii-maajiiizhiwebak.
+data/objiwe/wavs/JJ00011047.wav|Gigizheb
+data/objiwe/wavs/JJ00015477.wav|akawe asemaan ogii-pagidinamawaan manidoon wii-izhi-miijisig i'iw manoomin.
+data/objiwe/wavs/JJ00017192.wav|Inashke iniw gaa-omaamaayikaayaan oozhishenyan ogii-ayaawaan.
+data/objiwe/wavs/JJ00013808.wav|Mii ezhibakwajibidood, mii iniw gichigamiiwashkoon, ikidowag, izhinikaadenig.
+data/objiwe/wavs/JJ00013050.wav|Gego niisibizoken ji-baashkikamigising bemisemagak
+data/objiwe/wavs/JJ00011294.wav|Gii-mashkawadizi'o i'odinawemaagana'
+data/objiwe/wavs/JJ00012813.wav|miidash imaa amikwaazhing gaa atoowaan ninagwaagan
+data/objiwe/wavs/JJ000110801.wav|Ishe, wiinge ngwana moowiwan iwe aanikwaan. 
+data/objiwe/wavs/JJ00016751.wav|gii-inaakonige
+data/objiwe/wavs/JJ00018958.wav|Gii-zhawenindiwag.
+data/objiwe/wavs/JJ0001417.wav|Bizkitaa a'akiwenzi ezhi inoo'aad ini apwaaganan ningaabii'onong nake ishkwaandem gaa ayaag
+data/objiwe/wavs/JJ000112.wav|Bi-zanagaagonagii gaye
+data/objiwe/wavs/JJ00011544.wav|da giizhoochigaatewan ishkwaandeman
+data/objiwe/wavs/JJ00016466.wav|O-atawaadaanig igiweg awakaanag mii imaa gichi-bikwaakwad.
+data/objiwe/wavs/JJ00014448.wav|awiiya ge-bakaded
+data/objiwe/wavs/JJ0001570.wav|Gaa baabiiwishing goon ayaa imaa ogijiya'iing ezhi ozhaashi-mashkawiigaapizid mikom eyaad owidi anaame'ii
+data/objiwe/wavs/JJ00015641.wav|Wayeshkad gii-waabamag a'aw isa makadewiiyaas aazhaa wiindamawaajin anishinaabe omaa oodenaang
+data/objiwe/wavs/JJ00017567.wav|Waabishki-bines ge-bimiwinaad iniw dewe'iganan.
+data/objiwe/wavs/JJ00011103.wav|Gii gakenjigaazo gii nitaa jiishi'iwed imaa okogewining
+data/objiwe/wavs/JJ00019935.wav|Datangishkodaadiwag gii-bimishinowaad. 
+data/objiwe/wavs/JJ00018638.wav|Apane ndawaa maajiiba'iwewag igi gwiiwizensag. 
+data/objiwe/wavs/JJ00015404.wav|Miinawaa onow oniijaanisan gii-shaangachiwan oniijaanisan, ingitiziimag.
+data/objiwe/wavs/JJ00019282.wav|Owaabamaan owiinimoon enishikewizinid. 
+data/objiwe/wavs/JJ00017703.wav|weniban aanh miinawaa gii-aakoziyaan.
+data/objiwe/wavs/JJ00015573.wav|Giga-abwaanigonaan.
+data/objiwe/wavs/JJ00015974.wav|miinawaa ezhi-bichi-maagojiibinaad.
+data/objiwe/wavs/JJ00015580.wav|ogii-inaan zhingibizan
+data/objiwe/wavs/JJ00011825.wav|ono gaye ezhinaagokin imaa wiisaakode-gichipizon dagosinoon miziwe
+data/objiwe/wavs/JJ00015687.wav|Bedosewag endaawaagwen.
+data/objiwe/wavs/JJ00016217.wav|Niibiwa gegoo ogii-piidoon.
+data/objiwe/wavs/JJ00015612.wav|gizhiibazhed giiwenh omigiid.
+data/objiwe/wavs/JJ00011836.wav|zhaagooji'iwewin maagizhaa go gaye mashkawiziiwin oga-aabajitoonawaa
+data/objiwe/wavs/JJ00017760.wav|Gaye imaa
+data/objiwe/wavs/JJ00018123.wav|Mii eta gaa-izhi-wiisiniyaang miinawaa niibing.
+data/objiwe/wavs/JJ00014792.wav|Mii akawe, miish ezhizagaswe'iwed
+data/objiwe/wavs/JJ00015343.wav|Miish imaa onaaganan gichi-niibowa ezhi-ateg.
+data/objiwe/wavs/JJ00017774.wav|Mii i'iw dewe'iganag bemiwinikwaa sago dibi go ezhaayan gaye o'ow ingoji sago
+data/objiwe/wavs/JJ00015473.wav|asemaakewag o'ow isa zaaga'eganiing gii-kaagiijitoowaad o'ow isa manoomin wii-pawa'amowaad.
+data/objiwe/wavs/JJ000110569.wav|Aabiding iinzan, gijigaaneshiinzhan o-gii-bimwaan Jakaabes. 
+data/objiwe/wavs/JJ00015328.wav|gaawiin sa go ingikendanziin
+data/objiwe/wavs/JJ000110748.wav|epiichi-minonawinaan. 
+data/objiwe/wavs/JJ00013382.wav|Mii imaa wendinigaadegin onow dibaajimowinan.
+data/objiwe/wavs/JJ00013602.wav|Miish azhigwa wii-kiizhideg i'iw ziinzibaakwad, Mikwam naazh!
+data/objiwe/wavs/JJ00011225.wav|Gii-gaazowag baamaa gii maajiishkaag ishkodewidaabaan
+data/objiwe/wavs/JJ00018236.wav|Miish i'iw gegoo omaa
+data/objiwe/wavs/JJ000115.wav|Beshogo imaa miinziiwigamigoongningii-akwaandawaanaa gaagii onji-zaagi'ag mitig
+data/objiwe/wavs/JJ00011006.wav|opikonaang eni izhi gwekibizod
+data/objiwe/wavs/JJ00018392.wav|Gidaa-wiidookooninim ji-maajiishkaayaang iwidi dewe'igan iwidi ginwenzh gaa-abid iwidi.
+data/objiwe/wavs/JJ00017765.wav|Gigii-aanawi-maw bikwanaang
+data/objiwe/wavs/JJ00012180.wav|Nimbaapaagaakwa'ige
+data/objiwe/wavs/JJ00015678.wav|Ingoding iwidi Bwaanakiing gii-izhaayaan
+data/objiwe/wavs/JJ00016795.wav|miinawaa babaa-ayaa maawanji'iding
+data/objiwe/wavs/JJ00018884.wav|Ginwesh gii-bimaadizi awe gwiiwizens, biinish gii-gichi-ininiiwi. 
+data/objiwe/wavs/JJ00019464.wav|Daga miinawaa iinzan inendam. 
+data/objiwe/wavs/JJ00019843.wav|amii dash ini gaa-jekidaawangisidoowaad imaa daabishkoo geyaabi e-abiwaad imaa zhi-ishiibag ji-izhinaagwaninig. 
+data/objiwe/wavs/JJ00013059.wav|Mii dash gii-ishkwaa-wiisinid gii-naazikawaad endazhi-anokiinid bakaan ezhinaagozinid waaboozoon gaa-izhi-noondang madwesininig giigidowin
+data/objiwe/wavs/JJ00012130.wav|Niin-igo ninga-bimii'itoon giishpin awiya onji-minjinawezid owe geni-izhiseg
+data/objiwe/wavs/JJ00015092.wav|Ezhi-mawid a'aw mindimooyenh
+data/objiwe/wavs/JJ00015430.wav|imaa gii-wiidigemaad iniw nimaamaayibanen.
+data/objiwe/wavs/JJ00011209.wav|nimbi-mikaag imaa agoojinoowag
+data/objiwe/wavs/JJ00011291.wav|i'gaye gii-zhagadendang Kibichigishig
+data/objiwe/wavs/JJ00014677.wav|maagizhaa gaye gaa-mawadishiwewaangen.
+data/objiwe/wavs/JJ00015622.wav|Miikana imbima'adoomin bezhig oshki-inini.
+data/objiwe/wavs/JJ00015385.wav|gemaa gaye nisawa'ogaaning 
+data/objiwe/wavs/JJ00011789.wav|gaawiin etago onowe waasamoochiganan gaa ayaagin wenji aanjiseg noongom gaa izhiging
+data/objiwe/wavs/JJ00018892.wav|Majiikiwis gii-izhinikaazo awe maawach gaa-zaziikizid osayenzimaa. 
+data/objiwe/wavs/JJ00011031.wav|Gidayaamin iwe onendamowin! bi izhi jiikitaagozi
+data/objiwe/wavs/JJ00012569.wav|Ogii adaawen bezhig ono gaa gaashkibijigaategin mazina'iganensan
+data/objiwe/wavs/JJ00017695.wav|Ingii-pwaanzhii'igoo naaniimiyaan.
+data/objiwe/wavs/JJ000110177.wav|Bezhig miinawaa o-miijin. 
+data/objiwe/wavs/JJ00015779.wav|mii i'iw gaa-onji-izhi'ind a'aw anishinaabe ji-izhichiged.
+data/objiwe/wavs/JJ00012924.wav|dash gaawiin baapiinagosiisinoon wiin gii-abinoojiinyiwinid
+data/objiwe/wavs/JJ00014190.wav|Oo, yay sa gichi-ginwenzh.

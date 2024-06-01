@@ -146,7 +146,8 @@ dmypy.json
 
 # Lightning-Hydra-Template
 configs/local/default.yaml
-/data/
+/data/LJSpeech-1.1/
+/data/objiwe/
 /logs/
 .env
 
@@ -154,7 +155,7 @@ configs/local/default.yaml
 .aim
 
 # Cython complied files
-matcha/utils/monotonic_align/core.c
+# matcha/utils/monotonic_align/core.c
 
 # Ignoring hifigan checkpoint
 generator_v1
