@@ -1,0 +1,22 @@
+_target_: matcha.data.text_mel_datamodule.TextMelDataModule
+name: objiwe
+train_filelist_path: data/filelists/multilingual_train_filelist.txt
+valid_filelist_path: data/filelists/multilingual_val_filelist.txt
+batch_size: 32
+num_workers: 20
+pin_memory: True
+cleaners: [objiwe_cleaners]
+add_blank: True
+n_spks: 4
+n_lang: 4
+n_fft: 1024
+n_feats: 80
+sample_rate: 22050
+hop_length: 256
+win_length: 1024
+f_min: 0
+f_max: 8000
+data_statistics:  # Computed for objiwe dataset
+  mel_mean: -5.517027378082275
+  mel_std: 2.064396858215332
+seed: ${seed}

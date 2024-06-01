@@ -1,0 +1,50 @@
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00013342.wav|1|1|Nit kisitasik tokec wehkasu wici naka micuwakoney malsanikuwam,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00011399.wav|1|1|“Olonahqol tehpu mahkiyew woliposomoniya kuhut.  Wolessu,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00015121.wav|1|1|kinapskosit Luhsil," sami kinapskosu tepessin wahkaliqsok!""",,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT0001405.wav|1|1|wici ehkosqenkun.,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00014647.wav|1|1|wicuhkemut pomawsuwinuwok.,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00011730.wav|1|1|Cahkolet kilun miciyeq ‘cihtasu cossolewey qeni mawcokhomuhtit.,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00015680.wav|1|1|“Tan eci wisokeluhtit pomawsuwinuwok ihitit luhkewakonol naka wisokeluhtit,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00012721.wav|1|1|“Yet olu tan?”,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00013667.wav|1|1|Nuci wikhikonikuwamok naka nkisi papehcima nit luhkewin tama op,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00012944.wav|1|1|pasiciw ‘tolomakonok oloqiw uhsimisol Cesomon.,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT0001869.wav|1|1|kisuhsew.,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00013625.wav|1|1|kci wikuwamol.,,,,,,
+/project/6080355/shenranw/data/Maliseet_Allan/Maliseet_Allan_normalize/AT00014772.wav|1|1|“Mate nulamsotomuwon; ‘toli siqenomonol psi ahpiyil naka,,,,,,
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00019970025.wav|1|1|“Elisinkɨp kujjl wktupnk sepiey, aqq mu piskwalaqkɨp,” Malian ankitasit.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00019970045.wav|1|1|“Keytu na.  Wetjipalik, tewji wli-nemikaq ala pitaw.”
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ0001151.wav|1|1|Weji mimajis tan wkwijl teli kinamasinl ewikikemk.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ0001820.wav|1|1|Piel e'kw ankite'k, jijuaqa poqte'mit.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00019980280.wav|1|1|Mali malqunajik ta’uewe’knukjaqta’siik mijipjamueje’k tpitatk, ke’sk eli-kimamaj ktɨkik muine’jk aq kis-palikatasikl mimanmual.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00019970046.wav|1|1|“Na wjit ma ku'nmuk sismoqnpi wla wejkwi’uk.”
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ0001287.wav|1|1|Metepnakiaq tl-nmiatesk piltuikultijik wisisk.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00019960033.wav|1|1|Na Lusali elaskenmuat wpsetkun, jel mu ankitetmuk ta’ teli-maqeyatipn Ma’l-al kejikawike’l.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ0001630.wav|1|1|Tliaq na toq, kmaltem na mimey ta’ pema’tq kntinnin.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00019980279.wav|1|1|Lusali awnasi-jiklapetesinkaq. Miawlakwemkek, msɨt ktɨkik muine’k mawatalultijik.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00019970192.wav|1|1|“Moqwa, mu na telamuksikw juji’i’jna Leila.”
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00011689.wav|1|1|Msɨt na eymutijik Eskɨnuopitijk, aqq malqutmitij msiku.
+/project/6080355/shenranw/data/Mikmaw_Mary/Mikmaw_Mary_normalize/MJ00011686.wav|1|1|kaqisk peskwetmultijik klapis tewpiatew wiluow mimajultitin
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001672.wav|1|1|misawaa dash ningii-minowiijiindimin gabe-niibin
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011959.wav|1|1|Moozhag igo niwiindamoog gaapi ezhisewaad
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019087.wav|1|1|Gii-babimisewag waasa ishpiming giizhigong. 
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014396.wav|1|1|Gaawiin-sh ingikendanziin amanj iidog
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012524.wav|1|1|mii anishinaabeg ezhi inoo'igewaad oninj awiya ji aabajitoosig
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110212.wav|1|1|Gii-ani-mamaajaa dash awe oshkiniigi. 
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011549.wav|1|1|Ji aajisenid wenji-izhichiged
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00018771.wav|1|1|Heh gi-nagada'osh! odaana-izhi-biibaagimaan. 
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00017510.wav|1|1|Ho, ho, ho, ho, noozis.
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012321.wav|1|1|Ningii-inoode imaa ogiji-wadikwan wii gagwe aazhawe gwaashkwanii-aan a'bezhig mitig
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014998.wav|1|1|Miinawaa gweshkoziyaan, namadabiyaan.
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011686.wav|1|1|anangoog awe gaye dibikigiizis anaame'ii ayaawag imaa miziwe ezhi gooni-waanakwak
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012240.wav|1|1|Ningii-wiindamaagoowiz aandi nake giiwedinong.”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001745.wav|1|1|mii go onowe ayi’iin jiibwiingwekizinan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999454.wav|1|1|Niibiyo gegoo inaabadizi.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990144.wav|1|1|Mii go ge omaa nibiikaang, ojiibikensan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019991787.wav|1|1|Nigig miinawaa Amik odoozhi-ayaanaawaa
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999469.wav|1|1|Mii go gegoo wiindamawit
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999442.wav|1|1|Bagaanimizhiig. Mii go ge awe bezhig aaa,
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00016588.wav|1|1|bangii ayaii okon.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001992040.wav|1|1|gichi-giiwedinong.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011376.wav|1|1|ezhi-waawiyeyaaginang omakazineyaabi odakobijigaagen.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012096.wav|1|1|“Onishkaan gegiin, Amik.” ikido nigig.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001103.wav|1|1|Nigig odaana-gagwe-biminizhawaan Waaboozoon,
