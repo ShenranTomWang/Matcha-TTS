@@ -183,6 +183,7 @@ class TextMelDataset(torch.utils.data.Dataset):
         else:
             filepath, text = filepath_and_text[0], filepath_and_text[1]
             spk = None
+            lang = None
 
         text = self.get_text(text, add_blank=self.add_blank)
         mel = self.get_mel(filepath)
