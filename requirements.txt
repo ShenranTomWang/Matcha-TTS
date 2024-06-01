@@ -24,7 +24,7 @@ pytest          # tests
 # sh            # for running bash commands in some tests (linux/macos only)
 phonemizer      # phonemization of text
 tensorboard
-librosa
+librosa==0.10.1
 Cython
 numpy
 einops

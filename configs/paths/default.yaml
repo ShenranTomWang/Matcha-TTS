@@ -15,4 +15,4 @@ log_dir: ${paths.root_dir}/logs/
 output_dir: ${hydra:runtime.output_dir}
 
 # path to working directory
-work_dir: ${hydra:runtime.cwd}
+work_dir: /project/6080355/shenranw/Matcha-TTS

@@ -7,9 +7,12 @@ from lightning import Callback, LightningDataModule, LightningModule, Trainer
 from lightning.pytorch.loggers import Logger
 from omegaconf import DictConfig
 
-from matcha import utils
-
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
+
+from matcha import utils
+# from matcha.data.text_mel_datamodule import TextMelDataModule
+# from matcha.text.cleaners import objiwe_cleaners
+# from matcha.models.matcha_tts import MatchaTTS, TextEncoder, CFM
 # ------------------------------------------------------------------------------------ #
 # the setup_root above is equivalent to:
 # - adding project root dir to PYTHONPATH

@@ -333,7 +333,9 @@ class TextEncoder(nn.Module):
         duration_predictor_params,
         n_vocab,
         n_spks=1,
+        n_lang=1,
         spk_emb_dim=128,
+        lang_emb_dim=128
     ):
         super().__init__()
         self.encoder_type = encoder_type
@@ -342,6 +344,8 @@ class TextEncoder(nn.Module):
         self.n_channels = encoder_params.n_channels
         self.spk_emb_dim = spk_emb_dim
         self.n_spks = n_spks
+        self.n_lang=n_lang
+        self.lang_emb_dim=lang_emb_dim
 
         self.emb = torch.nn.Embedding(n_vocab, self.n_channels)
         torch.nn.init.normal_(self.emb.weight, 0.0, self.n_channels**-0.5)
@@ -359,7 +363,7 @@ class TextEncoder(nn.Module):
             self.prenet = lambda x, x_mask: x
 
         self.encoder = Encoder(
-            encoder_params.n_channels + (spk_emb_dim if n_spks > 1 else 0),
+            encoder_params.n_channels + (spk_emb_dim if n_spks > 1 else 0) + (lang_emb_dim if n_lang > 1 else 0),
             encoder_params.filter_channels,
             encoder_params.n_heads,
             encoder_params.n_layers,
@@ -367,15 +371,19 @@ class TextEncoder(nn.Module):
             encoder_params.p_dropout,
         )
 
-        self.proj_m = torch.nn.Conv1d(self.n_channels + (spk_emb_dim if n_spks > 1 else 0), self.n_feats, 1)
+        self.proj_m = torch.nn.Conv1d(
+            self.n_channels + (spk_emb_dim if n_spks > 1 else 0) + (lang_emb_dim if n_lang > 1 else 0),
+            self.n_feats,
+            1
+        )
         self.proj_w = DurationPredictor(
-            self.n_channels + (spk_emb_dim if n_spks > 1 else 0),
+            self.n_channels + (spk_emb_dim if n_spks > 1 else 0) + (lang_emb_dim if n_lang > 1 else 0),
             duration_predictor_params.filter_channels_dp,
             duration_predictor_params.kernel_size,
             duration_predictor_params.p_dropout,
         )
 
-    def forward(self, x, x_lengths, spks=None):
+    def forward(self, x, x_lengths, spks=None, lang=None):
         """Run forward pass to the transformer based encoder and duration predictor
 
         Args:
@@ -384,6 +392,8 @@ class TextEncoder(nn.Module):
             x_lengths (torch.Tensor): text input lengths
                 shape: (batch_size,)
             spks (torch.Tensor, optional): speaker ids. Defaults to None.
+                shape: (batch_size,)
+            lang (torch.Tensor, optional): language ids. Defaults to None.
                 shape: (batch_size,)
 
         Returns:
@@ -401,6 +411,8 @@ class TextEncoder(nn.Module):
         x = self.prenet(x, x_mask)
         if self.n_spks > 1:
             x = torch.cat([x, spks.unsqueeze(-1).repeat(1, 1, x.shape[-1])], dim=1)
+        if self.n_lang > 1:
+            x = torch.cat([x, lang.unsqueeze(-1).repeat(1, 1, x.shape[-1])], dim=1)
         x = self.encoder(x, x_mask)
         mu = self.proj_m(x) * x_mask
 

@@ -26,6 +26,8 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         n_vocab,
         n_spks,
         spk_emb_dim,
+        n_lang,
+        lang_emb_dim,
         n_feats,
         encoder,
         decoder,
@@ -43,12 +45,16 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         self.n_vocab = n_vocab
         self.n_spks = n_spks
         self.spk_emb_dim = spk_emb_dim
+        self.n_lang = n_lang,
+        self.lang_emb_dim = lang_emb_dim
         self.n_feats = n_feats
         self.out_size = out_size
         self.prior_loss = prior_loss
 
         if n_spks > 1:
             self.spk_emb = torch.nn.Embedding(n_spks, spk_emb_dim)
+        if n_lang > 1:
+            self.lang_emb = torch.nn.Embedding(n_lang, lang_emb_dim)
 
         self.encoder = TextEncoder(
             encoder.encoder_type,
@@ -57,6 +63,8 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             n_vocab,
             n_spks,
             spk_emb_dim,
+            n_lang,
+            lang_emb_dim
         )
 
         self.decoder = CFM(
@@ -66,12 +74,14 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             decoder_params=decoder,
             n_spks=n_spks,
             spk_emb_dim=spk_emb_dim,
+            n_lang=n_lang,
+            lang_emb_dim=lang_emb_dim
         )
 
         self.update_data_statistics(data_statistics)
 
     @torch.inference_mode()
-    def synthesise(self, x, x_lengths, n_timesteps, temperature=1.0, spks=None, length_scale=1.0):
+    def synthesise(self, x, x_lengths, n_timesteps, temperature=1.0, spks=None, lang=None, length_scale=1.0):
         """
         Generates mel-spectrogram from text. Returns:
             1. encoder outputs
@@ -86,6 +96,8 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             n_timesteps (int): number of steps to use for reverse diffusion in decoder.
             temperature (float, optional): controls variance of terminal distribution.
             spks (bool, optional): speaker ids.
+                shape: (batch_size,)
+            lang (bool, optional): language ids.
                 shape: (batch_size,)
             length_scale (float, optional): controls speech pace.
                 Increase value to slow down generated speech and vice versa.
@@ -111,9 +123,11 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         if self.n_spks > 1:
             # Get speaker embedding
             spks = self.spk_emb(spks.long())
+        if self.n_lang > 1:
+            lang = self.lang_emb(lang.long())
 
         # Get encoder_outputs `mu_x` and log-scaled token durations `logw`
-        mu_x, logw, x_mask = self.encoder(x, x_lengths, spks)
+        mu_x, logw, x_mask = self.encoder(x, x_lengths, spks, lang)
 
         w = torch.exp(logw) * x_mask
         w_ceil = torch.ceil(w) * length_scale
@@ -132,7 +146,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         encoder_outputs = mu_y[:, :, :y_max_length]
 
         # Generate sample tracing the probability flow
-        decoder_outputs = self.decoder(mu_y, y_mask, n_timesteps, temperature, spks)
+        decoder_outputs = self.decoder(mu_y, y_mask, n_timesteps, temperature, spks, lang)
         decoder_outputs = decoder_outputs[:, :, :y_max_length]
 
         t = (dt.datetime.now() - t).total_seconds()
@@ -171,9 +185,11 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         if self.n_spks > 1:
             # Get speaker embedding
             spks = self.spk_emb(spks)
+        if self.n_lang > 1:
+            lang = self.lang_emb(lang)
 
         # Get encoder_outputs `mu_x` and log-scaled token durations `logw`
-        mu_x, logw, x_mask = self.encoder(x, x_lengths, spks)
+        mu_x, logw, x_mask = self.encoder(x, x_lengths, spks, lang)
         y_max_length = y.shape[-1]
 
         y_mask = sequence_mask(y_lengths, y_max_length).unsqueeze(1).to(x_mask)
@@ -228,7 +244,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         mu_y = mu_y.transpose(1, 2)
 
         # Compute loss of the decoder
-        diff_loss, _ = self.decoder.compute_loss(x1=y, mask=y_mask, mu=mu_y, spks=spks, cond=cond)
+        diff_loss, _ = self.decoder.compute_loss(x1=y, mask=y_mask, mu=mu_y, spks=spks, cond=cond, lang=lang)
 
         if self.prior_loss:
             prior_loss = torch.sum(0.5 * ((y - mu_y) ** 2 + math.log(2 * math.pi)) * y_mask)
