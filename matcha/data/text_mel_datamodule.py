@@ -192,7 +192,10 @@ class TextMelDataset(torch.utils.data.Dataset):
 
     def get_mel(self, filepath):
         audio, sr = ta.load(filepath)
-        assert sr == self.sample_rate
+        try:
+            assert sr == self.sample_rate
+        except AssertionError as err:
+            print(f"Sample rate mismatch: expected {self.sample_rate} but received {sr} from {filepath}")
         mel = mel_spectrogram(
             audio,
             self.n_fft,

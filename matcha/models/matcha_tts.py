@@ -45,7 +45,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         self.n_vocab = n_vocab
         self.n_spks = n_spks
         self.spk_emb_dim = spk_emb_dim
-        self.n_lang = n_lang,
+        self.n_lang = n_lang
         self.lang_emb_dim = lang_emb_dim
         self.n_feats = n_feats
         self.out_size = out_size
@@ -180,6 +180,8 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             out_size (int, optional): length (in mel's sampling rate) of segment to cut, on which decoder will be trained.
                 Should be divisible by 2^{num of UNet downsamplings}. Needed to increase batch size.
             spks (torch.Tensor, optional): speaker ids.
+                shape: (batch_size,)
+            lang (torch.Tensor, optional): language ids.
                 shape: (batch_size,)
         """
         if self.n_spks > 1:
