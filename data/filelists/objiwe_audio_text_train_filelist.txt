@@ -3466,7 +3466,6 @@ data/objiwe/wavs/JJ00014690.wav|Mii sa eta go ganawaabamid, ganawaabamid.
 data/objiwe/wavs/JJ00011728.wav|aaniin igo epiichi aakwendami-ayaag i'nimanitookewin
 data/objiwe/wavs/JJ00015438.wav|gii-ozhitood o'ow
 data/objiwe/wavs/JJ00014611.wav|Bengang, ikido, dapaabiyaan, ikido.
-data/objiwe/wavs/JJ00014133.wav|0-giimaabamaadaanig.
 data/objiwe/wavs/JJ00011750.wav|waabanong gii ondaanimak dasogon wii gimiiwan
 data/objiwe/wavs/JJ00014063.wav|Miish imaa gaa-izhiayaad, gaa-izhi-bashkobinaad
 data/objiwe/wavs/JJ00018934.wav|Amii biinish wiin eta ishkose Biipiigiwisens. 
@@ -9601,7 +9600,6 @@ data/objiwe/wavs/JJ000110952.wav|Odishikaagon bizhishig e-gadwed.
 data/objiwe/wavs/JJ000110813.wav|Amii miinawaa gaa-izhinaagwag iwe makizin, emoowaninig. 
 data/objiwe/wavs/JJ0001451.wav|agajisewag aya'aag
 data/objiwe/wavs/JJ00011046.wav|mii ezhi miigwechi'iweng
-data/objiwe/wavs/JJ000110994.wav|Gii-waawiindamawaawag igi oshkiniigiwagji-manaa-zaaminaawaad ini binesiinsa' ( animikiinsa') ge-waabamaawaad imaa 10995
 data/objiwe/wavs/JJ00012572.wav|Ogii asaan ini asemaan gaagiimiinag imaa mazinaabik bedakiteg
 data/objiwe/wavs/JJ00015580.wav|ogii-inaan zhingibizan
 data/objiwe/wavs/JJ00011433.wav|Gowe-oshki'ayaa'aag chi-gagwe maji-doowad chi-anishinaabe'izhi'ayaawad idash ge chi-mashkawidoowad
