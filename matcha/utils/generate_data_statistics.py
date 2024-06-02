@@ -16,6 +16,8 @@ from hydra import compose, initialize
 from omegaconf import open_dict
 from tqdm.auto import tqdm
 
+rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
+
 from matcha.data.text_mel_datamodule import TextMelDataModule
 from matcha.utils.logging_utils import pylogger
 

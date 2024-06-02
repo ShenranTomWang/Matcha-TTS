@@ -80,8 +80,13 @@ def collapse_whitespace(text):
 def convert_to_ascii(text):
     return unidecode(text)
 
-def remove_dashes(text: str):
-    return text.replace("-", " ")
+def remove_puncs(text: str):
+    text = text.replace(")", "")
+    text = text.replace("(", "")
+    text = text.replace("-", " ")
+    text = text.replace("~", "")
+    return text
+
 
 def basic_cleaners(text):
     """Basic pipeline that lowercases and collapses whitespace without transliteration."""
@@ -97,12 +102,13 @@ def transliteration_cleaners(text):
     text = collapse_whitespace(text)
     return text
 
+
 def objiwe_cleaners(text):
     """Pipeline for Objiwe text."""
     text = convert_to_ascii(text)
     text = lowercase(text)
     text = collapse_whitespace(text)
-    text = remove_dashes(text)
+    text = remove_puncs(text)
     return text
 
 
