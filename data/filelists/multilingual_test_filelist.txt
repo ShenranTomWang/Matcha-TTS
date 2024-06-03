@@ -271,7 +271,7 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015280.wav|3|3|miish ingiw wayaanikejig
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110135.wav|3|3|Wiinge wiiin igo giiyaabi mishakwan e-maajiiyaadaged. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011913.wav|3|3|bezhigwan gii-apiichi-minjimishkaagemagatoon; miidash igo bezhigwan ezhi gagwaadagi'igowaad igi gichi-aya'aag daabishkoo iwe
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015696.wav|3|3|Mii dash chimookomaan odinaan
+/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011955.wav|3|3|Mooz odoodeman
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001373.wav|3|3|bezhig omisayeyan gii nibowan gii oshkaadizinid
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00018008.wav|3|3|Miish o'ow gii-kashkitoowaad o'ow ongow waadookawiyangijig 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011382.wav|3|3|Ginoonde gagwedaganaange na ji ayaayeg ono gimiijimimiwaa? ogii initaawaan ini adaawewininiwan a'akiwenzi oozhisan

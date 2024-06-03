@@ -5222,7 +5222,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014079.wav|3|3|Gii-agaasaani azhigwa ogitigaan gaa-o-bashkwashkibidood.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016813.wav|3|3|Gaawiin igo gegoo ogii-kwayakotanziinaawaa gegoo inindwaa.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00018274.wav|3|3|Gegoo giga-wiindamoon i'iw.
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015582.wav|3|3|Mii wenjimamiskoshkiinzhigwed a'aw zhingibiz.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012857.wav|3|3|Waatebagaa-giizis miinawaa daa-dagoshin idash daa-bizaani'ayaa imaa endaawad miinawaa midaaso-giizis
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015732.wav|3|3|Imaa dash dazhiikodaadiwaad imaa michisag
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016130.wav|3|3|Omakakiinsag ikidowag.
@@ -8165,7 +8164,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00017507.wav|3|3|Gaawiin ji-maanenimigooyaan igo gibaapi'isinoon i'iw.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014543.wav|3|3|odaabaan eta go ezhaawaad
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00013864.wav|3|3|ji-obashkwashkibidoowag i'iw gitigaan.
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015407.wav|3|3|Gaawiin indaa-gikendanziin dibi gaa-tazhi-ondaadiziwaanengemaa gaye wiigiwaaming
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015959.wav|3|3|Migiziins ogii-piidoon mayegimaagodinig wiiyaas.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014330.wav|3|3|Zhiishiibag iwidi agomowag.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019648.wav|3|3|Made-agwaataawa'. 
@@ -8744,7 +8742,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012287.wav|3|3|Ningibochiiwenindiz gii-debwetanziwaan iwe manidooke-inaakonigebii'igan ozhisenig odashidamaagewin awiya gegoo gii-ikidod
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012938.wav|3|3|Wiindamowaan ini omishoomisan
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00013394.wav|3|3|Mewinzha gii-ikwezensiwiyaan
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015625.wav|3|3|Ingii-segizimin dash noondamaang biidweweg omaa miikanaang.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015941.wav|3|3|Gego baapi'aakeg Makoons gii-pangishing, ikido Gekinoo'amaaged.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110166.wav|3|3|Ngoding igo o-gii-oditaan wiigiwaamens e-badakidenig. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019390.wav|3|3|Amii gaa-inaad ini, Amii omaa ge-izhi-gashkiiginigooyin, 
@@ -9084,7 +9081,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000115.wav|3|3|Beshogo imaa miinziiwigamigoongningii-akwaandawaanaa gaagii onji-zaagi'ag mitig
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00013430.wav|3|3|Mii go imaa iniw apakweshkwayan gii-ayaag
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015523.wav|3|3|Gaye onow wiigiwaaman, gabe-niibin ongow ikwewag gii-ozhitoowaad onow
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015597.wav|3|3|Namanj apii nibaagobanen.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014901.wav|3|3|Miish wewiibitaawaad imaa.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012053.wav|3|3|onzaam iitog gii-gakenindiwaad maagizhaa gaye gii baabii'indwaa imaa okogewining
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012722.wav|3|3|Ondamadaatiwag igi niizh ininiwag
@@ -9604,7 +9600,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00013566.wav|3|3|Miish imaa naawayi'ii ezhi-onakidood i'iw iskigamiziganaak ezhi-wiindeg.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016902.wav|3|3|Mii i'iw nibi atenig.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016942.wav|3|3|Ingezikwenimaa wiin igo.
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015485.wav|3|3|Nisogiizhigon ingii-tazhi-izhaamin gii-tagoshinaang.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011928.wav|3|3|Misawaa dash owe bakaan gii izhinaagoziyaan
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00013741.wav|3|3|gii-ikidowag iko
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001326.wav|3|3|gaawiin igo geget ninisidotanziin
@@ -11325,7 +11320,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016646.wav|3|3|baabige dash azhegiiwed inaabid imaa waabamoojichaagwaaning eshkam gii-waabigwaned oshtigwaaning 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019446.wav|3|3|Nawach wedi noopimiing danitaagwanini. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001435.wav|3|3|jitago chi-azhe giiwe'ing apii gaagii iziseg
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015444.wav|3|3|Mii miinawaa ishkwaa-iskigamizigewaad
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015487.wav|3|3|Noongom gaawiin izhichigesiin a'aw anishinaabe bi-naazikang bi-onji-bimaadizid.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001905.wav|3|3|Ge do-jaanimendaan chi-amaji'agwaa gowe wiijidaamaagan zaam awe goon gichi-noondaagozi gii-dakokii'aan
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015480.wav|3|3|Akina ingoji gii-izhaa gaye aw anishinaabe sa o'ow isa gii-paamidewid.
@@ -11609,7 +11603,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000129.wav|3|3|Bimibiz omaa gaa-waawiyeyaag miikana ezhi ogidaakiiwebizowan imaa gaa-izhidad
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00018546.wav|3|3|gegoo sago ji-maanzhi-izhiwebizisig gegoo sago zaagimijayi'ii go ji-giishkizhang a'aw ogichidaa.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014735.wav|3|3|omiikanens giiwenh.
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015502.wav|3|3|Manidoo dash gaawiin ogiiminwaabandanziin.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012802.wav|3|3|Owe bezhig gikinoo'amaadiiwin Ogimaagwanebiik chi-ganawaabamad amikwag
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019913.wav|3|3|Nagadameg gigoodaasiwaan amii ge-izhi-minwendamaan. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00017120.wav|3|3|ji-namadabisig imaa geyaabi
@@ -11981,7 +11974,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012321.wav|3|3|Ningii-inoode imaa ogiji-wadikwan wii gagwe aazhawe gwaashkwanii-aan a'bezhig mitig
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016450.wav|3|3|Indaga onagimaadaa ge-zhigweyaabanjiged Ge-ganawenjiged o'owe ataadiyang.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110298.wav|3|3|O-gii-mikawaan imaa ikwewan gaa-gii-zhawenimaad. 
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015730.wav|3|3|Gaa indaa-bazhiba'wigosiig waaani- miigaanaajin, indinendam.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016320.wav|3|3|Haw isa wiidoopandidaa!
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110567.wav|3|3|Gaawiin daabishkoo wiin noongom gaa-izhinaagwag gaa-waabandamang.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011387.wav|3|3|waabishkaani gaye iwe omiishidoonaan
@@ -12292,7 +12284,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00013699.wav|3|3|mii gaawiin indashamigosiin.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00018873.wav|3|3|Gaawiin gaye awiya gi-ga-babaamenimigosii.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016244.wav|3|3|Nashke giga-gikino'amaawin ji-debibinad a'aw.
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015816.wav|3|3|o'ow isa wii-mamood
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110673.wav|3|3|Ishe, inashke miinawaa Namen o-gii-googamidogwenan, ikido awe ikwe. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016459.wav|3|3|weweni gii-kanawendang o'ow gaa-inataading owe baaga'adowewin.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019980.wav|3|3|Ishe! Wiisakejaak gosha iinzan gaa-gii-bi-onaabemishitood! 
@@ -13072,7 +13063,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014937.wav|3|3|Ingii-mookawaakii dash.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001641.wav|3|3|miidash ezhi andawaabamaan gii-azhaa-giiwe-yaan
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011774.wav|3|3|Mii wiinigo gaa ikidod wii-wiiji'id ji onji gikinoo'amawid babizindawogwaa gichi-aya'aag
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015645.wav|3|3|gaa-pi-aanjigoziwaad omaa o'ow isa gaapaapaagokozhiwewinini
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016861.wav|3|3|Baamaash ingoding ingiw
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016598.wav|3|3|mii bishigowebinang ogii-nawadinaan Makoons igiw Awesiiyensag dibaabamaad iniw diba'igiiziswaanan.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011574.wav|3|3|Ji-ni-gakenjigaateg ezhi-wiidokodaading gaye iwe
@@ -14556,7 +14546,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016898.wav|3|3|mii igo anishinaabeg.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016404.wav|3|3|Gikinoo'amaagewinini bezhig nawaj igo gagaawinawezi.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019455.wav|3|3|Biinish waasa noopimiing ayaa. 
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015622.wav|3|3|Miikana imbima'adoomin bezhig oshki-inini.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011178.wav|3|3|Gii-aazhawe-dibaabanding
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012000.wav|3|3|izhi wiindamaage
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110718.wav|3|3|Amii zhemaak ezhi-bi-mookiitaagod. 
@@ -14804,7 +14793,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110656.wav|3|3|Amii miinawaa zaagen gii-giizhigag.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00014628.wav|3|3|Miinawaa imaa aabiding akiwenzii gii-adaawanged miinawaa mindimooyenh.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019712.wav|3|3|Amii gewiin iinzan gaa-nisaabaawed awe wazhashk. 
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015522.wav|3|3|Akina sago gegoo owanitoon anishinaabe mewinzha gaa-pi-izhi-waabamagig.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ000110972.wav|3|3|Mashkiki dash gaa-gii-bi-naanzikamowaad enitaawigig ogidajiw imaa Animiikii-wajiwing. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011847.wav|3|3|Mii'omaa apii daa-minose
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015764.wav|3|3|ji-onjimaajiishkaanid anishinaaben neyaab imaa ji-onjibagidinamawaad.
@@ -15808,7 +15796,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001660.wav|3|3|Gaawiin aapichi gii-aabadizisii mishtadim gaa-wiikobinaad gichi-odaabaanaakoon
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001949.wav|3|3|Gego gegoo doodangen
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015565.wav|3|3|Haa nishiimeyidog
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011955.wav|3|3|Mooz odoodeman
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00019840.wav|3|3|Bizaanigo igi anishinaabeg o-gii-bi-maamoozhaginaawaa' ini zhiishiiba'. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015450.wav|3|3|gaa-onji-bimaadizid a'aw anishinaabe mewinzha.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011820.wav|3|3|Miigo wiiba odaapinan niwe ozhibii'iganan azhe maaji ozhibii'iget
@@ -15837,7 +15824,6 @@
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00011919.wav|3|3|gaawiin gaasiisesinoon i'iwe geget gagwaadagi-inaapinewin giibi-izhiseg dash gaye geyaabi banadiziwin gii-gagishkagwad
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00016040.wav|3|3|Niwii-o-wiiji'aag ingiw ikwezensag gaawiin indaa-gikenimigosiig gwiiwizensiwiyaan. 
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00012887.wav|3|3|Weweni ji-mino-ayaawaad gii-izhi gikinoo'amawaawag i'gaye ji ando-gakendamowaad aaniin ge-izhi anishinaabe-aadiziiwaad
-/project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00015465.wav|3|3|mii dash miinawaa ayiigwa o'ow isa gii-mawinzowaad onow editeg miinan
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ0001566.wav|3|3|Ezhichigewaad abinoojiiwag
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00018250.wav|3|3|miinawaa go mindimooyeyag.
 /project/6080355/shenranw/data/Ojibwe_Jason/Ojibwe_Jason_normalize/JJ00013901.wav|3|3|Ingosaa ingoji ji-izhaad.

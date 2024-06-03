@@ -366,7 +366,7 @@ data/objiwe/wavs/JJ00018311.wav|weweni gii-kashkitooyaan ji-gaganoonagwaa ingiw 
 data/objiwe/wavs/JJ000110897.wav|Gii-inwaazo bineshiinzh ji-naagaji'aad ini gaa-gagwe-bakinaadinid. 
 data/objiwe/wavs/JJ00015869.wav|Indawaa gaa-ani-izhi-zaaga'ang
 data/objiwe/wavs/JJ00019475.wav|Mitigwaabiin odakonaan, gaye bikwakoon. 
-data/objiwe/wavs/JJ00016786.wav|Owiidanokiimaan Zhaangwesh (Rose Tainter) dazhiikamowaad mazina'iganan.
+data/objiwe/wavs/JJ00016786.wav|Owiidanokiimaan Zhaangwesh dazhiikamowaad mazina'iganan.
 data/objiwe/wavs/JJ00012298.wav|Ningii minwendaan gii-akwaandawaanag
 data/objiwe/wavs/JJ00014449.wav|ezhi-maajaad iniw wiigiwaaman babaa-nandodamaaged
 data/objiwe/wavs/JJ00011430.wav|Gowe niizh gwiiwizensag gii-aazhawishkaawag imaa mashkosiikaan
