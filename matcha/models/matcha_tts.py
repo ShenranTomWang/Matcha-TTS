@@ -61,10 +61,10 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             encoder.encoder_params,
             encoder.duration_predictor_params,
             n_vocab,
-            n_spks,
-            spk_emb_dim,
-            n_lang,
-            lang_emb_dim
+            n_spks=n_spks,
+            n_lang=n_lang,
+            spk_emb_dim=spk_emb_dim,
+            lang_emb_dim=lang_emb_dim
         )
 
         self.decoder = CFM(
