@@ -10,7 +10,7 @@ n_vocab: 178
 n_spks: ${data.n_spks}
 n_lang: ${data.n_lang}
 spk_emb_dim: 256
-lang_emb_dim: 256
+lang_emb_dim: 192
 n_feats: 80
 data_statistics: ${data.data_statistics}
 out_size: null # Must be divisible by 4
