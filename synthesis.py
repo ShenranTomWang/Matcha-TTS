@@ -20,7 +20,7 @@ import pandas as pd
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-MATCHA_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/train/objiwe/runs/2024-06-04_21-10-40/checkpoints/last.ckpt"
+MATCHA_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/train/objiwe/runs/2024-06-04_21-10-40/checkpoints/last-v1.ckpt"
 HIFIGAN_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/matcha/hifigan/g_02500000"
 OUTPUT_FOLDER = "synth_output-matcha-hifigan"
 TEXTS_DIR = "/project/6080355/shenranw/Matcha-TTS/data/filelists/objiwe_audio_text_test_filelist.txt"
@@ -52,6 +52,7 @@ def load_vocoder(config_path, checkpoint_path):
     return hifigan
 
 vocoder = load_vocoder(VOCOS_CONFIG, HIFIGAN_CHECKPOINT)
+denoiser = Denoiser(vocoder, mode='zeros')
 
 @torch.inference_mode()
 def process_text(text: str):
@@ -101,15 +102,23 @@ def save_to_folder(filename: str, output: dict, folder: str):
     sf.write(folder / f'{filename}.wav', output['waveform'], 22050, 'PCM_24')
 
 def parse_filelist_get_text(filelist_path, split_char="|", get_index=1):
+    filepaths_and_text = []
     with open(filelist_path, encoding="utf-8") as f:
-        filepaths_and_text = [line.strip().split(split_char)[get_index] for line in f]
+        for line in f:
+            path = line.strip().split(split_char)[0]
+            sentence = line.strip().split(split_char)[get_index]
+            filepaths_and_text.append([path, sentence])
     return filepaths_and_text
 
 texts = parse_filelist_get_text(TEXTS_DIR)
 
 outputs, rtfs = [], []
 rtfs_w = []
-for i, text in enumerate(tqdm(texts)):
+for i, data in enumerate(tqdm(texts)):
+    path = data[0]
+    text = data[1]
+    dirs = path.split("/")
+    name = dirs[len(dirs) - 1].split(".")[0]
     output = synthesise(text) #, torch.tensor([15], device=device, dtype=torch.long).unsqueeze(0))
     output['waveform'] = to_waveform(output['mel'], vocoder)
 
@@ -136,7 +145,7 @@ for i, text in enumerate(tqdm(texts)):
     ipd.display(ipd.Audio(output['waveform'], rate=22050))
 
     ## Save the generated waveform
-    save_to_folder(i, output, OUTPUT_FOLDER)
+    save_to_folder(name, output, OUTPUT_FOLDER)
 
 print(f"Number of ODE steps: {n_timesteps}")
 print(f"Mean RTF:\t\t\t\t{np.mean(rtfs):.6f} ± {np.std(rtfs):.6f}")
