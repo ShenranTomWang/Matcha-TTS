@@ -85,6 +85,11 @@ def remove_puncs(text: str):
     text = text.replace("(", "")
     text = text.replace("-", " ")
     text = text.replace("~", "")
+    text = text.replace('"', "")
+    text = text.replace(".", "")
+    text = text.replace(",", "")
+    text = text.replace("?", "")
+    text = text.replace("!", "")
     return text
 
 

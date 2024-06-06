@@ -8,7 +8,10 @@ import torch
 from tqdm.auto import tqdm
 
 # Hifigan imports
-from vocos.vocos.pretrained import Vocos
+from matcha.hifigan.config import v1
+from matcha.hifigan.denoiser import Denoiser
+from matcha.hifigan.env import AttrDict
+from matcha.hifigan.models import Generator as HiFiGAN
 # Matcha imports
 from matcha.models.matcha_tts import MatchaTTS
 from matcha.text import sequence_to_text, text_to_sequence
@@ -17,9 +20,9 @@ import pandas as pd
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-MATCHA_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/train/objiwe/runs/2024-04-16_20-57-00/checkpoints/last.ckpt"
+MATCHA_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/train/objiwe/runs/2024-06-04_21-10-40/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/matcha/hifigan/g_02500000"
-OUTPUT_FOLDER = "synth_output-vocos"
+OUTPUT_FOLDER = "synth_output-matcha-hifigan"
 TEXTS_DIR = "/project/6080355/shenranw/Matcha-TTS/data/filelists/objiwe_audio_text_test_filelist.txt"
 VOCOS_CONFIG = "/project/6080355/shenranw/Matcha-TTS/vocos/configs/vocos-matcha.yml"
 VOCOS_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/vocos/logs/li9ghtning_logs/version_5/checkpoints/last.ckpd"
@@ -41,10 +44,14 @@ model = load_model(MATCHA_CHECKPOINT)
 print(f"Model loaded! Parameter count: {count_params(model)}")
 
 def load_vocoder(config_path, checkpoint_path):
-    vocos = Vocos.from_checkpoint(config_path, checkpoint_path)
-    return vocos
+    h = AttrDict(v1)
+    hifigan = HiFiGAN(h).to(device)
+    hifigan.load_state_dict(torch.load(checkpoint_path, map_location=device)['generator'])
+    _ = hifigan.eval()
+    hifigan.remove_weight_norm()
+    return hifigan
 
-vocoder = load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT)
+vocoder = load_vocoder(VOCOS_CONFIG, HIFIGAN_CHECKPOINT)
 
 @torch.inference_mode()
 def process_text(text: str):
@@ -78,6 +85,7 @@ def synthesise(text, spks=None):
 @torch.inference_mode()
 def to_waveform(mel, vocoder):
     audio = vocoder(mel).clamp(-1, 1)
+    audio = denoiser(audio.squeeze(0), strength=0.00025).cpu().squeeze()
     return audio.cpu().squeeze()
     
 def save_to_folder(filename: str, output: dict, folder: str):
@@ -85,10 +93,16 @@ def save_to_folder(filename: str, output: dict, folder: str):
     folder.mkdir(exist_ok=True, parents=True)
     np.save(folder / f'{filename}', output['mel'].cpu().numpy())
     sf.write(folder / f'{filename}.wav', output['waveform'], 22050, 'PCM_24')
+    
+def save_to_folder(filename: str, output: dict, folder: str):
+    folder = Path(folder)
+    folder.mkdir(exist_ok=True, parents=True)
+    np.save(folder / f'{filename}', output['mel'].cpu().numpy())
+    sf.write(folder / f'{filename}.wav', output['waveform'], 22050, 'PCM_24')
 
-def parse_filelist_get_text(filelist_path, split_char="|"):
+def parse_filelist_get_text(filelist_path, split_char="|", get_index=1):
     with open(filelist_path, encoding="utf-8") as f:
-        filepaths_and_text = [line.strip().split(split_char)[1] for line in f]
+        filepaths_and_text = [line.strip().split(split_char)[get_index] for line in f]
     return filepaths_and_text
 
 texts = parse_filelist_get_text(TEXTS_DIR)
