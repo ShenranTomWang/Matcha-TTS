@@ -163,4 +163,7 @@ g_02500000
 gradio_cached_examples/
 synth_output/
 
-.bash_history
+/.bash_history
+synth_output*/
+*.c
+/.bashrc
