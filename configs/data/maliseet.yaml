@@ -17,6 +17,6 @@ win_length: 1024
 f_min: 0
 f_max: 8000
 data_statistics:  # Computed for dataset
-  mel_mean: ???
-  mel_std: ???
+  mel_mean: -5.5924906730651855
+  mel_std: 2.3836777210235596
 seed: ${seed}

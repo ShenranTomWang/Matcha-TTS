@@ -16,7 +16,7 @@ hop_length: 256
 win_length: 1024
 f_min: 0
 f_max: 8000
-data_statistics:  # Computed for objiwe dataset
-  mel_mean: -5.517027378082275
-  mel_std: 2.064396858215332
+data_statistics:  # Computed for dataset
+  mel_mean: ???
+  mel_std: ???
 seed: ${seed}

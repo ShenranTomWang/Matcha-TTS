@@ -15,15 +15,14 @@ from matcha.hifigan.models import Generator as HiFiGAN
 # Matcha imports
 from matcha.models.matcha_tts import MatchaTTS
 from matcha.text import sequence_to_text, text_to_sequence
-from matcha.utils.utils import get_user_data_dir, intersperse
-import pandas as pd
+from matcha.utils.utils import intersperse
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-MATCHA_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/train/objiwe/runs/2024-06-04_21-10-40/checkpoints/last-v1.ckpt"
+MATCHA_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/train/objiwe/runs/2024-06-05_18-12-21-objiwe/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/matcha/hifigan/g_02500000"
-OUTPUT_FOLDER = "synth_output-matcha-hifigan"
-TEXTS_DIR = "/project/6080355/shenranw/Matcha-TTS/data/filelists/objiwe_audio_text_test_filelist.txt"
+OUTPUT_FOLDER = "synth_output-nakoda-matcha-hifigan"
+TEXTS_DIR = "/project/6080355/shenranw/Matcha-TTS/data/filelists/maliseet_test_filelist.txt"
 VOCOS_CONFIG = "/project/6080355/shenranw/Matcha-TTS/vocos/configs/vocos-matcha.yml"
 VOCOS_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/vocos/logs/li9ghtning_logs/version_5/checkpoints/last.ckpd"
 ## Number of ODE Solver steps
