@@ -8,7 +8,7 @@ pin_memory: True
 cleaners: [objiwe_cleaners]
 add_blank: True
 n_spks: 4
-n_lang: 4
+n_lang: 3
 n_fft: 1024
 n_feats: 80
 sample_rate: 22050
