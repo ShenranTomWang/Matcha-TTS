@@ -19,12 +19,12 @@ from matcha.utils.utils import intersperse
 # Vocos imports
 from vocos import Vocos
 
-MATCHA_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/train/objiwe/runs/2024-06-05_18-12-21-objiwe/checkpoints/last.ckpt"
-HIFIGAN_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/matcha/hifigan/g_02500000"
-VOCOS_CHECKPOINT = "/project/6080355/shenranw/Matcha-TTS/logs/vocos/version_20/checkpoints/last.ckpt"
-OUTPUT_FOLDER = "synth_output-maliseet-matcha-vocos"
-TEXTS_DIR = "/project/6080355/shenranw/Matcha-TTS/data/filelists/maliseet_test_filelist.txt"
-VOCOS_CONFIG = "/project/6080355/shenranw/Matcha-TTS/vocos/configs/vocos-matcha.yaml"
+MATCHA_CHECKPOINT = "./logs/train/objiwe/runs/mikmaw/checkpoints/checkpoint_epoch=5299.ckpt"
+HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
+VOCOS_CHECKPOINT = "./logs/vocos/version_20/checkpoints/last.ckpt"
+OUTPUT_FOLDER = "synth_output-mikmaw-matcha-vocos"
+TEXTS_DIR = "./data/filelists/mikmaw_test_filelist.txt"
+VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 ## Number of ODE Solver steps
 n_timesteps = 10
 ## Changes to the speaking rate
@@ -54,13 +54,14 @@ def synthesis():
             hifigan.remove_weight_norm()
             return hifigan
         elif model == "vocos":
-            vocoder = Vocos.from_hparams(config_path)
-            checkpoint = torch.load(checkpoint_path)
-            vocoder.load_state_dict(checkpoint["state_dict"])
+            vocoder = Vocos.from_hparams(config_path).to(device)
+            checkpoint = torch.load(checkpoint_path, map_location=device)
+            state_dict = checkpoint["state_dict"]
+            vocoder.load_state_dict(state_dict, strict=False)
             return vocoder
 
     vocoder = load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT, model="vocos")
-    denoiser = Denoiser(vocoder, mode='zeros')
+    # denoiser = Denoiser(vocoder, mode='zeros')
 
     @torch.inference_mode()
     def process_text(text: str):
@@ -94,7 +95,7 @@ def synthesis():
     @torch.inference_mode()
     def to_waveform(mel, vocoder):
         audio = vocoder(mel).clamp(-1, 1)
-        audio = denoiser(audio.squeeze(0), strength=0.00025).cpu().squeeze()
+        # audio = denoiser(audio.squeeze(0), strength=0.00025).cpu().squeeze()
         return audio.cpu().squeeze()
         
     def save_to_folder(filename: str, output: dict, folder: str):

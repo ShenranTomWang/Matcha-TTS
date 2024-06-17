@@ -4,7 +4,7 @@ import torchaudio
 import soundfile as sf
 import numpy as np
 
-out_folder = "./synth_output-maliseet-matcha-hifigan"
+out_folder = "./synth_output-mikmaw-matcha-vocos"
 files = [file for file in os.listdir(out_folder) if file.endswith(".wav")]
 
 count = 0
