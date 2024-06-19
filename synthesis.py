@@ -19,11 +19,11 @@ from matcha.utils.utils import intersperse
 # Vocos imports
 from vocos import Vocos
 
-MATCHA_CHECKPOINT = "./logs/train/objiwe/runs/mikmaw/checkpoints/checkpoint_epoch=5299.ckpt"
+MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/multilingual/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/version_20/checkpoints/last.ckpt"
-OUTPUT_FOLDER = "synth_output-mikmaw-matcha-vocos"
-TEXTS_DIR = "./data/filelists/mikmaw_test_filelist.txt"
+OUTPUT_FOLDER = "synth_output-multilingual-matcha-hifigan"
+TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 ## Number of ODE Solver steps
 n_timesteps = 10
@@ -31,6 +31,7 @@ n_timesteps = 10
 length_scale=1.0
 ## Sampling temperature
 temperature = 0.667
+model = "hifigan"
 
 def synthesis():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -60,8 +61,8 @@ def synthesis():
             vocoder.load_state_dict(state_dict, strict=False)
             return vocoder
 
-    vocoder = load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT, model="vocos")
-    # denoiser = Denoiser(vocoder, mode='zeros')
+    vocoder = load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT, model=model)
+    denoiser = Denoiser(vocoder, mode='zeros')
 
     @torch.inference_mode()
     def process_text(text: str):
@@ -95,7 +96,7 @@ def synthesis():
     @torch.inference_mode()
     def to_waveform(mel, vocoder):
         audio = vocoder(mel).clamp(-1, 1)
-        # audio = denoiser(audio.squeeze(0), strength=0.00025).cpu().squeeze()
+        audio = denoiser(audio.squeeze(0), strength=0.00025).cpu().squeeze()
         return audio.cpu().squeeze()
         
     def save_to_folder(filename: str, output: dict, folder: str):
