@@ -25,13 +25,15 @@ VOCOS_CHECKPOINT = "./logs/vocos/version_20/checkpoints/last.ckpt"
 OUTPUT_FOLDER = "synth_output-multilingual-matcha-hifigan"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
+VOCODER = "hifigan"
+LANG_EMB = True
+SPK_EMB = True
 ## Number of ODE Solver steps
 n_timesteps = 10
 ## Changes to the speaking rate
 length_scale=1.0
 ## Sampling temperature
 temperature = 0.667
-model = "hifigan"
 
 def synthesis():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -46,22 +48,22 @@ def synthesis():
     model = load_model(MATCHA_CHECKPOINT)
     print(f"Model loaded! Parameter count: {count_params(model)}")
 
-    def load_vocoder(config_path, checkpoint_path, model="hifigan"):
-        if model == "hifigan":
+    def load_vocoder(config_path, checkpoint_path, vocoder_type="hifigan"):
+        if vocoder_type == "hifigan":
             h = AttrDict(v1)
             hifigan = HiFiGAN(h).to(device)
             hifigan.load_state_dict(torch.load(checkpoint_path, map_location=device)['generator'])
             _ = hifigan.eval()
             hifigan.remove_weight_norm()
             return hifigan
-        elif model == "vocos":
+        elif vocoder_type == "vocos":
             vocoder = Vocos.from_hparams(config_path).to(device)
             checkpoint = torch.load(checkpoint_path, map_location=device)
             state_dict = checkpoint["state_dict"]
             vocoder.load_state_dict(state_dict, strict=False)
             return vocoder
 
-    vocoder = load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT, model=model)
+    vocoder = load_vocoder(None, HIFIGAN_CHECKPOINT, vocoder_type=VOCODER)
     denoiser = Denoiser(vocoder, mode='zeros')
 
     @torch.inference_mode()
@@ -78,7 +80,7 @@ def synthesis():
 
 
     @torch.inference_mode()
-    def synthesise(text, spks=None):
+    def synthesise(text, spks=None, lang=None):
         text_processed = process_text(text)
         start_t = dt.datetime.now()
         output = model.synthesise(
@@ -87,6 +89,7 @@ def synthesis():
             n_timesteps=n_timesteps,
             temperature=temperature,
             spks=spks,
+            lang=lang,
             length_scale=length_scale
         )
         # merge everything to one dict    
@@ -111,13 +114,15 @@ def synthesis():
         np.save(folder / f'{filename}', output['mel'].cpu().numpy())
         sf.write(folder / f'{filename}.wav', output['waveform'], 22050, 'PCM_24')
 
-    def parse_filelist_get_text(filelist_path, split_char="|", get_index=1):
+    def parse_filelist_get_text(filelist_path, split_char="|", sentence_index=3, spk_index=1, lang_index=2):
         filepaths_and_text = []
         with open(filelist_path, encoding="utf-8") as f:
             for line in f:
                 path = line.strip().split(split_char)[0]
-                sentence = line.strip().split(split_char)[get_index]
-                filepaths_and_text.append([path, sentence])
+                spk = line.strip().split(split_char)[spk_index] if SPK_EMB else None
+                lang = line.strip().split(split_char)[lang_index] if LANG_EMB else None
+                sentence = line.strip().split(split_char)[sentence_index]
+                filepaths_and_text.append([path, spk, lang, sentence])
         return filepaths_and_text
 
     texts = parse_filelist_get_text(TEXTS_DIR)
@@ -126,10 +131,25 @@ def synthesis():
     rtfs_w = []
     for i, data in enumerate(tqdm(texts)):
         path = data[0]
-        text = data[1]
+        if not SPK_EMB and not LANG_EMB:
+            text = data[1]
+            spks = None
+            lang = None
+        elif SPK_EMB and not LANG_EMB:
+            spks = torch.tensor([int(data[1])])
+            text = data[2]
+            lang = None
+        elif LANG_EMB and not SPK_EMB:
+            lang = torch.tensor([int(data[1])])
+            text = data[2]
+            spks = None
+        else:
+            spks = torch.tensor([int(data[1])])
+            lang = torch.tensor([int(data[2])])
+            text = data[3]
         dirs = path.split("/")
         name = dirs[len(dirs) - 1].split(".")[0]
-        output = synthesise(text) #, torch.tensor([15], device=device, dtype=torch.long).unsqueeze(0))
+        output = synthesise(text, spks=spks, lang=lang) #, torch.tensor([15], device=device, dtype=torch.long).unsqueeze(0))
         output['waveform'] = to_waveform(output['mel'], vocoder)
 
         # Compute Real Time Factor (RTF) with HiFi-GAN

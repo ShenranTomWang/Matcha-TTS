@@ -95,9 +95,9 @@ class MatchaTTS(BaseLightningClass):  # 🍵
                 shape: (batch_size,)
             n_timesteps (int): number of steps to use for reverse diffusion in decoder.
             temperature (float, optional): controls variance of terminal distribution.
-            spks (bool, optional): speaker ids.
+            spks (torch.Tensor, optional): speaker ids.
                 shape: (batch_size,)
-            lang (bool, optional): language ids.
+            lang (torch.Tensor, optional): language ids.
                 shape: (batch_size,)
             length_scale (float, optional): controls speech pace.
                 Increase value to slow down generated speech and vice versa.
