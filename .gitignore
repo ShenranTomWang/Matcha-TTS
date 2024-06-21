@@ -167,3 +167,4 @@ synth_output/
 synth_output*/
 *.c
 /.bashrc
+wandb/
