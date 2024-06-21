@@ -22,7 +22,7 @@ from vocos import Vocos
 MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/multilingual/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/multilingual/checkpoints/last.ckpt"
-OUTPUT_FOLDER = "synth_output-multilingual-matcha-hifigan"
+OUTPUT_FOLDER = "synth_output-multilingual-matcha-vocos"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 VOCODER = "vocos"
@@ -139,16 +139,16 @@ def synthesis():
             spks = None
             lang = None
         elif SPK_EMB and not LANG_EMB:
-            spks = torch.tensor([int(data[1])])
+            spks = torch.tensor([int(data[1])], device=device)
             text = data[2]
             lang = None
         elif LANG_EMB and not SPK_EMB:
-            lang = torch.tensor([int(data[1])])
+            lang = torch.tensor([int(data[1])], device=device)
             text = data[2]
             spks = None
         else:
-            spks = torch.tensor([int(data[1])])
-            lang = torch.tensor([int(data[2])])
+            spks = torch.tensor([int(data[1])], device=device)
+            lang = torch.tensor([int(data[2])], device=device)
             text = data[3]
         dirs = path.split("/")
         name = dirs[len(dirs) - 1].split(".")[0]
