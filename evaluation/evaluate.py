@@ -191,7 +191,7 @@ def stoi(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE, new_freq=FS) 
     y = torchaudio.functional.resample(y, orig_freq=sr, new_freq=new_freq)
     yhat = torchaudio.functional.resample(yhat, orig_freq=sr, new_freq=new_freq)
     
-    return stoi(y.t(), yhat.t(), new_freq, extended=False)
+    return stoi_fn(y.t(), yhat.t(), new_freq, extended=False)
 
 def pesq(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE, new_freq=FS, mode=PESQ_MODE) -> float:
     """compute PESQ
@@ -213,7 +213,7 @@ def pesq(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE, new_freq=FS, 
     y = torchaudio.functional.resample(y, orig_freq=sr, new_freq=new_freq)
     yhat = torchaudio.functional.resample(yhat, orig_freq=sr, new_freq=new_freq)
     
-    return pesq(new_freq, y.squeeze(0).cpu().numpy(), yhat.squeeze(0).cpu().numpy(), mode)
+    return pesq_fn(new_freq, y.squeeze(0).cpu().numpy(), yhat.squeeze(0).cpu().numpy(), mode)
 
 def mcd(reference_wav: str, synthesized_wav: str, mode=MCD_MODE) -> float:
     """compute MCD
