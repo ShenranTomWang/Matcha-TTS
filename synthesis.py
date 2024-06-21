@@ -107,7 +107,7 @@ def to_waveform(mel, denoiser, vocoder):
     if denoiser != None:
         audio = denoiser(audio.squeeze(0), strength=0.00025).cpu().squeeze()
     audio = normalize_audio(audio, sample_rate=SAMPLE_RATE)
-    audio = audio.transpose()
+    audio = audio.t()
     return audio.cpu().squeeze()
 
 def save_to_folder(filename: str, output: dict, folder: str):
