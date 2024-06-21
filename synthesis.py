@@ -24,7 +24,6 @@ import evaluation
 # Normalization imports
 from audio_utils import normalize_audio
 
-YHAT_FOLDER = "./synth_output-multilingual-matcha-vocos/normalized"
 Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
 OUTPUT_FOLDER = "synth_output-multilingual-matcha-vocos"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
@@ -202,7 +201,7 @@ def synthesis():
         ## Save the generated waveform
         save_to_folder(name, output, OUTPUT_FOLDER)
 
-    stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1 = evaluation.evaluate(YHAT_FOLDER, Y_FILELIST)
+    stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1 = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST)
     rtfs_mean = np.mean(rtfs)
     rtfs_std = np.std(rtfs)
     rtfs_w_mean = np.mean(rtfs_w)
