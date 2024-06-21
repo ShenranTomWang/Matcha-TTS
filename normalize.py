@@ -2,9 +2,8 @@ import os
 from audio_utils import normalize_audio
 import torchaudio
 import soundfile as sf
-import numpy as np
 
-out_folder = "./synth_output-mikmaw-matcha-vocos"
+out_folder = "./synth_output-multilingual-matcha-vocos"
 files = [file for file in os.listdir(out_folder) if file.endswith(".wav")]
 
 count = 0

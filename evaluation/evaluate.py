@@ -1,5 +1,5 @@
-from pystoi import stoi
-from pesq import pesq
+from pystoi import stoi as stoi_fn
+from pesq import pesq as pesq_fn
 import torchaudio
 import torch
 from pymcd.mcd import Calculate_MCD
@@ -9,12 +9,14 @@ from sklearn.metrics import precision_recall_fscore_support
 
 import os
 
-YHAT_FOLDER = "./synth_output-multilingual-matcha-hifigan"
+YHAT_FOLDER = "./synth_output-multilingual-matcha-vocos/normalized"
 Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
 SAMPLE_RATE = 22050
 FS = 16000
 N_FFT = 1024
 HOP_LENGTH = 256
+PESQ_MODE = "wb"
+MCD_MODE = "plain"
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -142,7 +144,7 @@ def vuv_f1(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE) -> tuple:
         sr (int): The sampling rate of the audio signals.
 
     Returns:
-        (precision, recall, f1): Precision, recall and F1 score for the voiced/unvoiced decisions.
+        vuv_f1: F1 score for the voiced/unvoiced decisions.
     """
     def voiced_unvoiced_decision(f0):
         """
@@ -170,22 +172,100 @@ def vuv_f1(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE) -> tuple:
 
     return f1
 
-def main():
+def stoi(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE, new_freq=FS) -> float:
+    """compute STOI
+
+    Args:
+        reference_wav (str): path to reference .wav file
+        synthesized_wav (str): path to synthesized .wav file
+        sr (int, optional): sample rate. Defaults to SAMPLE_RATE.
+        new_freq (int, optional): new sample rate to resample to. Defaults to FS.
+
+    Returns:
+        float: stoi
+    """
+    y, _ = torchaudio.load(reference_wav)
+    yhat, _ = torchaudio.load(synthesized_wav)
+    y, yhat = pad_shorter_tensor(y, yhat)
+    
+    y = torchaudio.functional.resample(y, orig_freq=sr, new_freq=new_freq)
+    yhat = torchaudio.functional.resample(yhat, orig_freq=sr, new_freq=new_freq)
+    
+    return stoi(y.t(), yhat.t(), new_freq, extended=False)
+
+def pesq(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE, new_freq=FS, mode=PESQ_MODE) -> float:
+    """compute PESQ
+
+    Args:
+        reference_wav (str): path to reference .wav file
+        synthesized_wav (str): path tp synthesized .wav file
+        sr (int, optional): sample rate. Defaults to SAMPLE_RATE.
+        new_freq (int, optional): new sample rate to resample to. Defaults to FS.
+        mode (str, optional): mode used by PESQ, one of "wb" or "sb". Defaults to PESQ_MODE.
+
+    Returns:
+        float: pesq
+    """
+    y, _ = torchaudio.load(reference_wav)
+    yhat, _ = torchaudio.load(synthesized_wav)
+    y, yhat = pad_shorter_tensor(y, yhat)
+    
+    y = torchaudio.functional.resample(y, orig_freq=sr, new_freq=new_freq)
+    yhat = torchaudio.functional.resample(yhat, orig_freq=sr, new_freq=new_freq)
+    
+    return pesq(new_freq, y.squeeze(0).cpu().numpy(), yhat.squeeze(0).cpu().numpy(), mode)
+
+def mcd(reference_wav: str, synthesized_wav: str, mode=MCD_MODE) -> float:
+    """compute MCD
+
+    Args:
+        reference_wav (str): path to reference .wav file
+        synthesized_wav (str): path tp synthesized .wav file
+        mode (str, optional): mode used by MCD. Defaults to PESQ_MODE.
+
+    Returns:
+        float: mcd
+    """
+    mcd_toolbox = Calculate_MCD(MCD_mode=mode)
+    mcd_toolbox.calculate_mcd(reference_wav, synthesized_wav)
+
+def get_paired_data(yhat_folder: str, y_filelist: str) -> dict:
+    """load paired data for evaluation
+
+    Args:
+        yhat_folder (str): directory of synthesized samples
+        y_filelist (str): filelist of reference samples
+
+    Returns:
+        dict: {<data_id>: {yhat_path, y_path}}
+    """
     paired_data = {}
-    for file in os.listdir(YHAT_FOLDER):
+    for file in os.listdir(yhat_folder):
         if file.endswith(".wav"):
             paired_data[file] = {
-                "yhat": f"{YHAT_FOLDER}/{file}",
+                "yhat": f"{yhat_folder}/{file}",
                 "y": None
             }
-    with open(Y_FILELIST, "r") as fl:
+    with open(y_filelist, "r") as fl:
         for line in fl:
             path = line.split("|")[0]
             dirs = path.split("/")
             filename = dirs[len(dirs) - 1]
             paired_data[filename]["y"] = path
+            
+    return paired_data
 
-    mcd = Calculate_MCD(MCD_mode="plain")
+def evaluate(yhat_folder: str, y_filelist: str) -> tuple:
+    """evaluate and return scores
+
+    Args:
+        yhat_folder (str): folder of synthesized samples
+        y_filelist (str): reference .wav filelist
+
+    Returns:
+        (stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1): scores
+    """
+    paired_data = get_paired_data(yhat_folder, y_filelist)
 
     stoi_score_sum = 0
     pesq_score_sum = 0
@@ -196,19 +276,13 @@ def main():
     for name in paired_data.keys():
         dirs = paired_data[name]
         y_path, yhat_path = dirs["yhat"], dirs["y"]
-        y, _ = torchaudio.load(y_path)
-        yhat, _ = torchaudio.load(yhat_path)
-        y, yhat = pad_shorter_tensor(y, yhat)
-        
-        y = torchaudio.functional.resample(y, orig_freq=SAMPLE_RATE, new_freq=FS)
-        yhat = torchaudio.functional.resample(yhat, orig_freq=SAMPLE_RATE, new_freq=FS)
         
         f0_rmse_sum += f0_rmse(y_path, yhat_path)
         las_rmse_sum += las_rmse(y_path, yhat_path)
         vuv_f1_sum += vuv_f1(y_path, yhat_path)
-        mcd_score_sum += mcd.calculate_mcd(y_path, yhat_path)
-        stoi_score_sum += stoi(y.t(), yhat.t(), FS, extended=False)
-        pesq_score_sum += pesq(FS, y.squeeze(0).cpu().numpy(), yhat.squeeze(0).cpu().numpy(), "wb")
+        mcd_score_sum += mcd(y_path, yhat_path)
+        stoi_score_sum += stoi(y_path, yhat_path)
+        pesq_score_sum += pesq(y_path, yhat_path)
 
     size = len(paired_data)
     stoi_mean = stoi_score_sum / size
@@ -218,7 +292,4 @@ def main():
     las_rmse_mean = las_rmse_sum / size
     vuv_f1_mean = vuv_f1_sum / size
 
-    print(f"stoi: {stoi_mean}, pesq: {pesq_mean}, mcd: {mcd_mean}, f0-rmse: {f0_rmse_mean}, las-rmse: {las_rmse_mean}, vuv-f1: {vuv_f1_mean}")
-
-if __name__ == "__main__":
-    main()
+    return stoi_mean, pesq_mean, mcd_mean, f0_rmse_mean, las_rmse_mean, vuv_f1_mean
