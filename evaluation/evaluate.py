@@ -246,7 +246,7 @@ def get_paired_data(yhat_folder: str, y_filelist: str) -> dict:
                 "yhat": f"{yhat_folder}/{file}",
                 "y": None
             }
-    with open(y_filelist, "r") as fl:
+    with open(y_filelist, "r", encoding="utf-8") as fl:
         for line in fl:
             path = line.split("|")[0]
             dirs = path.split("/")
