@@ -35,7 +35,7 @@ VOCOS_CHECKPOINT = "./logs/vocos/multilingual/checkpoints/last.ckpt"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
 WANDB_PROJECT = "MatchaTTS-HiFiGAN"
-WANDB_NAME = "Multilingual Experiment CPU"
+WANDB_NAME = "Multilingual Experiment A100"
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = "MatchaTTS: language embedding, HiFiGAN: vanilla, general"
 
@@ -218,7 +218,8 @@ def synthesis():
             "rtfs_mean": rtfs_mean,
             "rtfs_std": rtfs_std,
             "rtfs_w_mean": rtfs_w_mean,
-            "rtfs_w_std": rtfs_w_std
+            "rtfs_w_std": rtfs_w_std,
+            "num_ode_steps": n_timesteps
         }
     )
     print(f"stoi: {stoi}, pesq: {pesq}, mcd: {mcd}, f0-rmse: {f0_rmse}, las-rmse: {las_rmse}, vuv_f1: {vuv_f1}")
