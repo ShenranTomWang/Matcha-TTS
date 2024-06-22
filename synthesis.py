@@ -25,7 +25,7 @@ import evaluation
 from audio_utils import normalize_audio
 
 Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
-OUTPUT_FOLDER = "synth_output-multilingual-matcha-vocos"
+OUTPUT_FOLDER = "synth_output-multilingual-matcha-hifigan"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 
 MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/multilingual/checkpoints/last.ckpt"
@@ -34,12 +34,12 @@ VOCOS_CHECKPOINT = "./logs/vocos/multilingual/checkpoints/last.ckpt"
 
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
-WANDB_PROJECT = "MatchaTTS-Vocos"
-WANDB_NAME = "Multilingual Experiment"
+WANDB_PROJECT = "MatchaTTS-HiFiGAN"
+WANDB_NAME = "Multilingual Experiment CPU"
 WANDB_DATASET = "multilingual-test"
-WANDB_ARCH = "MatchaTTS: language embedding, Vocos: vanilla"
+WANDB_ARCH = "MatchaTTS: language embedding, HiFiGAN: vanilla, general"
 
-VOCODER = "vocos"
+VOCODER = "hifigan"
 LANG_EMB = True
 SPK_EMB = True
 SAMPLE_RATE = 22050
@@ -104,7 +104,7 @@ def synthesise(text, model, spks=None, lang=None):
 def to_waveform(mel, denoiser, vocoder):
     audio = vocoder(mel).clamp(-1, 1)
     if denoiser != None:
-        audio = denoiser(audio.squeeze(0), strength=0.00025).cpu().squeeze()
+        audio = denoiser(audio.squeeze(0), strength=0.00025).cpu()
     audio = normalize_audio(audio, sample_rate=SAMPLE_RATE)
     audio = audio.t()
     return audio.cpu().squeeze()
