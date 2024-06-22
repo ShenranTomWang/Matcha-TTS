@@ -222,7 +222,7 @@ def synthesis():
             "num_ode_steps": n_timesteps
         }
     )
-    print(f"stoi: {stoi}, pesq: {pesq}, mcd: {mcd}, f0-rmse: {f0_rmse}, las-rmse: {las_rmse}, vuv_f1: {vuv_f1}")
+    print(f"stoi: {stoi}, pesq: {pesq}, mcd: {mcd}, f0_rmse: {f0_rmse}, las_rmse: {las_rmse}, vuv_f1: {vuv_f1}")
     print(f"Number of ODE steps: {n_timesteps}")
     print(f"Mean RTF:\t\t\t\t{rtfs_mean:.6f} ± {rtfs_std:.6f}")
     print(f"Mean RTF Waveform (incl. vocoder):\t{rtfs_w_mean:.6f} ± {rtfs_w_std:.6f}")
