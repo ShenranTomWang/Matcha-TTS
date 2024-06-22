@@ -20,6 +20,23 @@ MCD_MODE = "plain"
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+def load_and_preprocess_tensor(reference_wav: str, synthesized_wav: str) -> tuple:
+    """load and preprocess tensor from file
+
+    Args:
+        reference_wav (str): path to reference .wav file
+        synthesized_wav (str): path to synthesized .wav file
+
+    Returns:
+        (y, yhat)
+    """
+    y, _ = torchaudio.load(reference_wav)
+    yhat, _ = torchaudio.load(synthesized_wav)
+    y = y.to(device)
+    yhat = yhat.to(device)
+    y, yhat = pad_shorter_tensor(y, yhat)
+    return y, yhat
+
 def pad_shorter_tensor(audio1: torch.Tensor, audio2: torch.Tensor) -> tuple:
     """pad the shorter audio input to length of the longer one
 
@@ -184,9 +201,7 @@ def stoi(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE, new_freq=FS) 
     Returns:
         float: stoi
     """
-    y, _ = torchaudio.load(reference_wav)
-    yhat, _ = torchaudio.load(synthesized_wav)
-    y, yhat = pad_shorter_tensor(y, yhat)
+    y, yhat = load_and_preprocess_tensor(reference_wav, synthesized_wav)
     
     y = torchaudio.functional.resample(y, orig_freq=sr, new_freq=new_freq)
     yhat = torchaudio.functional.resample(yhat, orig_freq=sr, new_freq=new_freq)
@@ -206,9 +221,7 @@ def pesq(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE, new_freq=FS, 
     Returns:
         float: pesq
     """
-    y, _ = torchaudio.load(reference_wav)
-    yhat, _ = torchaudio.load(synthesized_wav)
-    y, yhat = pad_shorter_tensor(y, yhat)
+    y, yhat = load_and_preprocess_tensor(reference_wav, synthesized_wav)
     
     y = torchaudio.functional.resample(y, orig_freq=sr, new_freq=new_freq)
     yhat = torchaudio.functional.resample(yhat, orig_freq=sr, new_freq=new_freq)
