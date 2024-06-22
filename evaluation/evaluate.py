@@ -227,7 +227,7 @@ def mcd(reference_wav: str, synthesized_wav: str, mode=MCD_MODE) -> float:
         float: mcd
     """
     mcd_toolbox = Calculate_MCD(MCD_mode=mode)
-    mcd_toolbox.calculate_mcd(reference_wav, synthesized_wav)
+    return mcd_toolbox.calculate_mcd(reference_wav, synthesized_wav)
 
 def get_paired_data(yhat_folder: str, y_filelist: str) -> dict:
     """load paired data for evaluation
