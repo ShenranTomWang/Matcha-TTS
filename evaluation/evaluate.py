@@ -242,19 +242,20 @@ def mcd(reference_wav: str, synthesized_wav: str, mode=MCD_MODE) -> float:
     mcd_toolbox = Calculate_MCD(MCD_mode=mode)
     return mcd_toolbox.calculate_mcd(reference_wav, synthesized_wav)
 
-def get_paired_data(yhat_folder: str, y_filelist: str) -> dict:
+def get_paired_data(yhat_folder: str, y_filelist: str, file_flag: str) -> dict:
     """load paired data for evaluation
 
     Args:
         yhat_folder (str): directory of synthesized samples
         y_filelist (str): filelist of reference samples
+        file_flag (str): flag of file, used to filter files to obtain
 
     Returns:
         dict: {<data_id>: {yhat_path, y_path}}
     """
     paired_data = {}
     for file in os.listdir(yhat_folder):
-        if file.endswith(".wav"):
+        if file.endswith(".wav") and file.find(file_flag) != -1:
             paired_data[file] = {
                 "yhat": f"{yhat_folder}/{file}",
                 "y": None
@@ -264,21 +265,23 @@ def get_paired_data(yhat_folder: str, y_filelist: str) -> dict:
             path = line.split("|")[0]
             dirs = path.split("/")
             filename = dirs[len(dirs) - 1]
-            paired_data[filename]["y"] = path
+            if filename.find(file_flag) != -1:
+                paired_data[filename]["y"] = path
             
     return paired_data
 
-def evaluate(yhat_folder: str, y_filelist: str) -> tuple:
+def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
     """evaluate and return scores
 
     Args:
         yhat_folder (str): folder of synthesized samples
         y_filelist (str): reference .wav filelist
+        spk_flag (str, optional): speaker flag (AT, JJ, MJ, NJ), defaults to "" to obtain all files.
 
     Returns:
         (stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1): scores
     """
-    paired_data = get_paired_data(yhat_folder, y_filelist)
+    paired_data = get_paired_data(yhat_folder, y_filelist, spk_flag)
 
     stoi_score_sum = 0
     pesq_score_sum = 0
