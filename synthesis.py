@@ -25,7 +25,7 @@ import evaluation
 from audio_utils import normalize_audio
 
 Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
-OUTPUT_FOLDER = "synth_output-multilingual-matcha-hifigan"
+OUTPUT_FOLDER = "synth_output-multilingual-matcha-vocos"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 
 MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/multilingual/checkpoints/last.ckpt"
@@ -34,14 +34,15 @@ VOCOS_CHECKPOINT = "./logs/vocos/multilingual/checkpoints/last.ckpt"
 
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
-WANDB_PROJECT = "MatchaTTS-HiFiGAN"
-WANDB_NAME = "Multilingual Experiment A100"
+WANDB_PROJECT = "MatchaTTS-Vocos"
+WANDB_NAME = "Multilingual Experiment CPU"
 WANDB_DATASET = "multilingual-test"
-WANDB_ARCH = "MatchaTTS: language embedding, HiFiGAN: vanilla, general"
+WANDB_ARCH = "MatchaTTS: language embedding, Vocos: vanilla"
 
-VOCODER = "hifigan"
+VOCODER = "vocos"
 LANG_EMB = True
 SPK_EMB = True
+SPK_FLAGS = ["AT", "MJ", "JJ", "NJ"]
 SAMPLE_RATE = 22050
 ## Number of ODE Solver steps
 n_timesteps = 10
@@ -201,31 +202,39 @@ def synthesis():
         ## Save the generated waveform
         save_to_folder(name, output, OUTPUT_FOLDER)
 
-    stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1 = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST)
-    rtfs_mean = np.mean(rtfs)
-    rtfs_std = np.std(rtfs)
-    rtfs_w_mean = np.mean(rtfs_w)
-    rtfs_w_std = np.std(rtfs_w)
-    
+    for spk_flag in SPK_FLAGS:
+        stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1 = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
+        rtfs_mean = np.mean(rtfs)
+        rtfs_std = np.std(rtfs)
+        rtfs_w_mean = np.mean(rtfs_w)
+        rtfs_w_std = np.std(rtfs_w)
+        
+        wandb.log(
+            {
+                f"{spk_flag}/stoi": stoi,
+                f"{spk_flag}/pesq": pesq,
+                f"{spk_flag}/mcd": mcd,
+                f"{spk_flag}/f0_rmse": f0_rmse,
+                f"{spk_flag}/las_rmse": las_rmse,
+                f"{spk_flag}/vuv_f1": vuv_f1
+            }
+        )
+        print(f"stoi: {stoi}, pesq: {pesq}, mcd: {mcd}, f0_rmse: {f0_rmse}, las_rmse: {las_rmse}, vuv_f1: {vuv_f1}")
+        print(f"Number of ODE steps: {n_timesteps}")
+        print(f"Mean RTF:\t\t\t\t{rtfs_mean:.6f} ± {rtfs_std:.6f}")
+        print(f"Mean RTF Waveform (incl. vocoder):\t{rtfs_w_mean:.6f} ± {rtfs_w_std:.6f}")
+
     wandb.log(
         {
-            "stoi": stoi,
-            "pesq": pesq,
-            "mcd": mcd,
-            "f0_rmse": f0_rmse,
-            "las_rmse": las_rmse,
-            "vuv_f1": vuv_f1,
+            "num_ode_steps": n_timesteps,
+            "temperature": temperature,
+            "length_scale": length_scale,
             "rtfs_mean": rtfs_mean,
             "rtfs_std": rtfs_std,
             "rtfs_w_mean": rtfs_w_mean,
-            "rtfs_w_std": rtfs_w_std,
-            "num_ode_steps": n_timesteps
+            "rtfs_w_std": rtfs_w_std
         }
     )
-    print(f"stoi: {stoi}, pesq: {pesq}, mcd: {mcd}, f0_rmse: {f0_rmse}, las_rmse: {las_rmse}, vuv_f1: {vuv_f1}")
-    print(f"Number of ODE steps: {n_timesteps}")
-    print(f"Mean RTF:\t\t\t\t{rtfs_mean:.6f} ± {rtfs_std:.6f}")
-    print(f"Mean RTF Waveform (incl. vocoder):\t{rtfs_w_mean:.6f} ± {rtfs_w_std:.6f}")
 
 if __name__ == "__main__":
     synthesis()
