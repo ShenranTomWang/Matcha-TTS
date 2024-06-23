@@ -32,14 +32,14 @@ MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/multilingual/checkpoints/las
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/multilingual/checkpoints/last.ckpt"
 
+VOCODER = "HiFiGAN"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
-WANDB_PROJECT = "MatchaTTS-Vocos"
+WANDB_PROJECT = f"MatchaTTS-{VOCODER}"
 WANDB_NAME = "Multilingual Experiment CPU"
 WANDB_DATASET = "multilingual-test"
-WANDB_ARCH = "MatchaTTS: language embedding, Vocos: vanilla"
+WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla, general"
 
-VOCODER = "vocos"
 LANG_EMB = True
 SPK_EMB = True
 SPK_FLAGS = ["AT", "MJ", "JJ", "NJ"]
@@ -53,14 +53,14 @@ temperature = 0.667
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def load_vocoder(config_path, checkpoint_path, vocoder_type="hifigan"):
-    if vocoder_type == "hifigan":
+    if vocoder_type == "HiFiGAN":
         h = AttrDict(v1)
         hifigan = HiFiGAN(h).to(device)
         hifigan.load_state_dict(torch.load(checkpoint_path, map_location=device)['generator'])
         _ = hifigan.eval()
         hifigan.remove_weight_norm()
         return hifigan
-    elif vocoder_type == "vocos":
+    elif vocoder_type == "Vocos":
         vocoder = Vocos.from_hparams(config_path).to(device)
         checkpoint = torch.load(checkpoint_path, map_location=device)
         state_dict = checkpoint["state_dict"]
