@@ -36,7 +36,7 @@ VOCODER = "HiFiGAN"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
 WANDB_PROJECT = f"MatchaTTS-{VOCODER}"
-WANDB_NAME = "Multilingual Experiment CPU"
+WANDB_NAME = "Multilingual Experiment A100"
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla, general"
 
@@ -52,7 +52,7 @@ length_scale=1.0
 temperature = 0.667
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def load_vocoder(config_path, checkpoint_path, vocoder_type="hifigan"):
+def load_vocoder(config_path, checkpoint_path, vocoder_type="HiFiGAN"):
     if vocoder_type == "HiFiGAN":
         h = AttrDict(v1)
         hifigan = HiFiGAN(h).to(device)
