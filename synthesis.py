@@ -28,7 +28,7 @@ Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
 OUTPUT_FOLDER = "synth_output-multilingual-matcha-vocos"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 
-MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/multilingual/checkpoints/last.ckpt"
+MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/balanced-dataset/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/multilingual/checkpoints/last.ckpt"
 
@@ -36,7 +36,7 @@ VOCODER = "HiFiGAN"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
 WANDB_PROJECT = f"MatchaTTS-{VOCODER}"
-WANDB_NAME = "Multilingual Experiment A100"
+WANDB_NAME = "Multilingual Experiment CPU Balanced Dataset"
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla, general"
 
@@ -143,7 +143,7 @@ def synthesis():
     model = load_model(MATCHA_CHECKPOINT)
     print(f"Model loaded! Parameter count: {count_params(model)}")
     
-    if VOCODER == "hifigan":
+    if VOCODER == "HiFiGAN":
         vocoder = load_vocoder(None, HIFIGAN_CHECKPOINT, vocoder_type=VOCODER)
         denoiser = Denoiser(vocoder, mode='zeros')
     else:
