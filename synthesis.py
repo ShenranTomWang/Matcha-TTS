@@ -25,20 +25,20 @@ import evaluation
 from audio_utils import normalize_audio
 
 Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
-OUTPUT_FOLDER = "synth_output-multilingual-matcha-vocos"
+OUTPUT_FOLDER = "synth_output"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 
 MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/balanced-dataset/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
-VOCOS_CHECKPOINT = "./logs/vocos/multilingual/checkpoints/last.ckpt"
+VOCOS_CHECKPOINT = "./logs/vocos/multilingual-balanced-dataset/checkpoints/last.ckpt"
 
 VOCODER = "HiFiGAN"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
-WANDB_PROJECT = f"MatchaTTS-{VOCODER}"
-WANDB_NAME = "Multilingual Experiment CPU Balanced Dataset"
+WANDB_PROJECT = f"TTS"
+WANDB_NAME = "Multilingual Experiment CPU HiFiGAN Balanced Dataset"
 WANDB_DATASET = "multilingual-test"
-WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla, general"
+WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
 LANG_EMB = True
 SPK_EMB = True
@@ -47,7 +47,7 @@ SAMPLE_RATE = 22050
 ## Number of ODE Solver steps
 n_timesteps = 10
 ## Changes to the speaking rate
-length_scale=1.0
+length_scale = 1.0
 ## Sampling temperature
 temperature = 0.667
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
