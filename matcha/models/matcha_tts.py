@@ -127,6 +127,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             lang = self.lang_emb(lang.long())
 
         # Get encoder_outputs `mu_x` and log-scaled token durations `logw`
+        # mu_x has shape (batch_size, n_feats, max_text_length)
         mu_x, logw, x_mask = self.encoder(x, x_lengths, spks, lang)
 
         w = torch.exp(logw) * x_mask

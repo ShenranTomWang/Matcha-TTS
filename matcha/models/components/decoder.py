@@ -8,6 +8,7 @@ from conformer import ConformerBlock
 from diffusers.models.activations import get_activation
 from einops import pack, rearrange, repeat
 
+from matcha.models.components.mamba2 import BasicMamba2Block
 from matcha.models.components.transformer import BasicTransformerBlock
 
 
@@ -337,6 +338,10 @@ class Decoder(nn.Module):
                 dropout=dropout,
                 activation_fn=act_fn,
             )
+        elif block_type == "mamba2":
+            block = BasicMamba2Block(
+                d_model=dim
+            )
         else:
             raise ValueError(f"Unknown block type {block_type}")
 
@@ -365,15 +370,12 @@ class Decoder(nn.Module):
 
         Args:
             x (torch.Tensor): shape (batch_size, in_channels, time)
-            mask (_type_): shape (batch_size, 1, time)
-            t (_type_): shape (batch_size)
-            spks (_type_, optional): shape: (batch_size, condition_channels). Defaults to None.
-            lang (_type_, optional): shape: (batch_size, condition_channels). Defaults tp None.
-            cond (_type_, optional): placeholder for future use. Defaults to None.
-
-        Raises:
-            ValueError: _description_
-            ValueError: _description_
+            mask (torch.Tensor): shape (batch_size, 1, time)
+            mu (torch.Tensor): shape (batch_size, in_channels, time)
+            t (torch.Tensor): shape (batch_size)
+            spks (torch.Tensor, optional): shape: (batch_size, condition_channels). Defaults to None.
+            lang (torch.Tensor, optional): shape: (batch_size, condition_channels). Defaults tp None.
+            cond (torch.Tensor, optional): placeholder for future use. Defaults to None.
 
         Returns:
             _type_: _description_
@@ -390,12 +392,14 @@ class Decoder(nn.Module):
         if lang is not None:
             lang = repeat(lang, "b c -> b c t", t=x.shape[-1])
             x = pack([x, lang], "b * t")[0]
+        # x now has shape (batch_size, x_in_channels + mu_in_channels + lang_in_channels + spks_in_channels, time)
 
         hiddens = []
         masks = [mask]
         for resnet, transformer_blocks, downsample in self.down_blocks:
             mask_down = masks[-1]
             x = resnet(x, mask_down, t)
+            # x now has shape (batch_size, out_channels, t)
             x = rearrange(x, "b c t -> b t c")
             mask_down = rearrange(mask_down, "b 1 t -> b t")
             for transformer_block in transformer_blocks:
