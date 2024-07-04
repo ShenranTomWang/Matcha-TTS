@@ -3,7 +3,7 @@ name: objiwe
 train_filelist_path: data/filelists/multilingual_train_filelist.txt
 valid_filelist_path: data/filelists/multilingual_val_filelist.txt
 batch_size: 32
-num_workers: 20
+num_workers: 8
 pin_memory: True
 cleaners: [objiwe_cleaners]
 add_blank: True
