@@ -88,9 +88,12 @@ class BaseLightningClass(LightningModule, ABC):
             sync_dist=True,
         )
 
+        dur_loss = loss_dict["dur_loss"]
+        prior_loss = loss_dict["prior_loss"]
+        diff_loss = loss_dict["diff_loss"]
         self.log(
             "sub_loss/train_dur_loss",
-            loss_dict["dur_loss"],
+            dur_loss,
             on_step=True,
             on_epoch=True,
             logger=True,
@@ -98,7 +101,7 @@ class BaseLightningClass(LightningModule, ABC):
         )
         self.log(
             "sub_loss/train_prior_loss",
-            loss_dict["prior_loss"],
+            prior_loss,
             on_step=True,
             on_epoch=True,
             logger=True,
@@ -106,7 +109,7 @@ class BaseLightningClass(LightningModule, ABC):
         )
         self.log(
             "sub_loss/train_diff_loss",
-            loss_dict["diff_loss"],
+            diff_loss,
             on_step=True,
             on_epoch=True,
             logger=True,
@@ -123,14 +126,18 @@ class BaseLightningClass(LightningModule, ABC):
             prog_bar=True,
             sync_dist=True,
         )
+        print(f"Training loss: dur_loss: {dur_loss}, prior_loss: {prior_loss}, diff_loss: {diff_loss}")
 
         return {"loss": total_loss, "log": loss_dict}
 
     def validation_step(self, batch: Any, batch_idx: int):
         loss_dict = self.get_losses(batch)
+        dur_loss = loss_dict["dur_loss"]
+        prior_loss = loss_dict["prior_loss"]
+        diff_loss = loss_dict["diff_loss"]
         self.log(
             "sub_loss/val_dur_loss",
-            loss_dict["dur_loss"],
+            dur_loss,
             on_step=True,
             on_epoch=True,
             logger=True,
@@ -138,7 +145,7 @@ class BaseLightningClass(LightningModule, ABC):
         )
         self.log(
             "sub_loss/val_prior_loss",
-            loss_dict["prior_loss"],
+            prior_loss,
             on_step=True,
             on_epoch=True,
             logger=True,
@@ -146,7 +153,7 @@ class BaseLightningClass(LightningModule, ABC):
         )
         self.log(
             "sub_loss/val_diff_loss",
-            loss_dict["diff_loss"],
+            diff_loss,
             on_step=True,
             on_epoch=True,
             logger=True,
@@ -163,6 +170,7 @@ class BaseLightningClass(LightningModule, ABC):
             prog_bar=True,
             sync_dist=True,
         )
+        print(f"Validation loss: dur_loss: {dur_loss}, prior_loss: {prior_loss}, diff_loss: {diff_loss}")
 
         return total_loss
 
