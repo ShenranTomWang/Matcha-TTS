@@ -113,6 +113,7 @@ class BASECFM(torch.nn.Module, ABC):
                 shape: (batch_size, n_feats, mel_timesteps)
         """
         b, _, t = mu.shape
+        import pdb; pdb.set_trace()
 
         # random timestep
         t = torch.rand([b, 1, 1], device=mu.device, dtype=mu.dtype)
@@ -122,7 +123,8 @@ class BASECFM(torch.nn.Module, ABC):
         y = (1 - (1 - self.sigma_min) * t) * z + t * x1
         u = x1 - (1 - self.sigma_min) * z
 
-        loss = F.mse_loss(self.estimator(y, mask, mu, t.squeeze(), spks, lang), u, reduction="sum") / (
+        output = self.estimator(y, mask, mu, t.squeeze(), spks, lang)
+        loss = F.mse_loss(output, u, reduction="sum") / (
             torch.sum(mask) * u.shape[1]
         )
         return loss, y

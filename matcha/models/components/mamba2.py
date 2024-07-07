@@ -50,4 +50,17 @@ class BasicMamba2Block(Mamba2):
         cross_attention_kwargs: Dict[str, Any] = None,
         class_labels: Optional[torch.LongTensor] = None,
     ):
+        """
+        Args:
+            hidden_states (torch.FloatTensor): shape (batch, seqlen, hidden_dim)
+            attention_mask (Optional[torch.FloatTensor], optional): _description_. Defaults to None.
+            encoder_hidden_states (Optional[torch.FloatTensor], optional): _description_. Defaults to None.
+            encoder_attention_mask (Optional[torch.FloatTensor], optional): _description_. Defaults to None.
+            timestep (Optional[torch.LongTensor], optional): _description_. Defaults to None.
+            cross_attention_kwargs (Dict[str, Any], optional): _description_. Defaults to None.
+            class_labels (Optional[torch.LongTensor], optional): _description_. Defaults to None.
+
+        Returns:
+            _type_: _description_
+        """
         return super().forward(hidden_states)

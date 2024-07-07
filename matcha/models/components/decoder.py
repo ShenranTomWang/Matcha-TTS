@@ -380,9 +380,10 @@ class Decoder(nn.Module):
         Returns:
             _type_: _description_
         """
+        import pdb; pdb.set_trace()
 
-        t = self.time_embeddings(t)
-        t = self.time_mlp(t)
+        t = self.time_embeddings(t)     # position embedding turns t from shape (batch_size, 1, 1) to (batch_size, self.in_channels)
+        t = self.time_mlp(t)        # time embedding. t now has shape (batch_size, 4 * transformer_in_channels)
 
         x = pack([x, mu], "b * t")[0]
 
@@ -392,14 +393,14 @@ class Decoder(nn.Module):
         if lang is not None:
             lang = repeat(lang, "b c -> b c t", t=x.shape[-1])
             x = pack([x, lang], "b * t")[0]
-        # x now has shape (batch_size, x_in_channels + mu_in_channels + lang_in_channels + spks_in_channels, time)
+        # x now has shape (batch_size, self.in_channels, time)
 
         hiddens = []
         masks = [mask]
         for resnet, transformer_blocks, downsample in self.down_blocks:
             mask_down = masks[-1]
             x = resnet(x, mask_down, t)
-            # x now has shape (batch_size, out_channels, t)
+            # x now has shape (batch_size, transformer_in_channels, 4 * transformer_in_channels)
             x = rearrange(x, "b c t -> b t c")
             mask_down = rearrange(mask_down, "b 1 t -> b t")
             for transformer_block in transformer_blocks:

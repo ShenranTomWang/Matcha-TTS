@@ -207,7 +207,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             mu_square = torch.sum(factor * (mu_x**2), 1).unsqueeze(-1)
             log_prior = y_square - y_mu_double + mu_square + const
 
-            attn = monotonic_align.maximum_path(log_prior, attn_mask.squeeze(1))
+            attn = monotonic_align.maximum_path(log_prior, attn_mask.squeeze(1))        # TODO: take a look at attn and "time"
             attn = attn.detach()
 
         # Compute loss between predicted log-scaled durations and those obtained from MAS
@@ -242,6 +242,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             y = y_cut
             y_mask = y_cut_mask
 
+        # attn has shape (batch_size, max_length, time)
         # Align encoded text with mel-spectrogram and get mu_y segment
         mu_y = torch.matmul(attn.squeeze(1).transpose(1, 2), mu_x.transpose(1, 2))
         mu_y = mu_y.transpose(1, 2)
