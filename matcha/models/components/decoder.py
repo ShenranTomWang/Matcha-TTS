@@ -8,8 +8,7 @@ from conformer import ConformerBlock
 from diffusers.models.activations import get_activation
 from einops import pack, rearrange, repeat
 
-from matcha.models.components.mamba2 import BasicMamba2Block
-from matcha.models.components.transformer import BasicTransformerBlock
+from matcha.models.components.transformer import BasicTransformerBlock, Mamba2TransformerBlock
 
 
 class SinusoidalPosEmb(torch.nn.Module):
@@ -339,7 +338,7 @@ class Decoder(nn.Module):
                 activation_fn=act_fn,
             )
         elif block_type == "mamba2":
-            block = BasicMamba2Block(
+            block = Mamba2TransformerBlock(
                 d_model=dim
             )
         else:
@@ -380,7 +379,6 @@ class Decoder(nn.Module):
         Returns:
             _type_: _description_
         """
-        import pdb; pdb.set_trace()
 
         t = self.time_embeddings(t)     # position embedding turns t from shape (batch_size, 1, 1) to (batch_size, self.in_channels)
         t = self.time_mlp(t)        # time embedding. t now has shape (batch_size, 4 * transformer_in_channels)

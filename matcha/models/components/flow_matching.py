@@ -113,7 +113,6 @@ class BASECFM(torch.nn.Module, ABC):
                 shape: (batch_size, n_feats, mel_timesteps)
         """
         b, _, t = mu.shape
-        import pdb; pdb.set_trace()
 
         # random timestep
         t = torch.rand([b, 1, 1], device=mu.device, dtype=mu.dtype)
