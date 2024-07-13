@@ -1,6 +1,6 @@
 defaults:
   - _self_
-  - encoder: default.yaml
+  - encoder: mamba2.yaml
   - decoder: mamba2.yaml
   - cfm: default.yaml
   - optimizer: adam.yaml

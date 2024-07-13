@@ -351,7 +351,6 @@ class Mamba2TransformerBlock(nn.Module):
         attention_bias: bool = False,
         only_cross_attention: bool = False,
         double_self_attention: bool = False,
-        upcast_attention: bool = False,
         norm_elementwise_affine: bool = True,
         norm_type: str = "layer_norm",
         final_dropout: bool = False,
@@ -376,11 +375,14 @@ class Mamba2TransformerBlock(nn.Module):
             self.norm1 = AdaLayerNormZero(dim, num_embeds_ada_norm)
         else:
             self.norm1 = nn.LayerNorm(dim, elementwise_affine=norm_elementwise_affine)
-        self.attn1 = Mamba2(
-            d_model=dim,
-            heads=num_attention_heads,
-            headdim=attention_head_dim,
-            bias=attention_bias
+        self.attn1 = nn.Sequential(
+            Mamba2(
+                d_model=dim,
+                headdim=attention_head_dim,
+                bias=attention_bias,
+                d_ssm=num_attention_heads*attention_head_dim
+            ),
+            nn.Dropout(dropout)
         )
 
         # 2. Cross-Attn
@@ -393,13 +395,16 @@ class Mamba2TransformerBlock(nn.Module):
                 if self.use_ada_layer_norm
                 else nn.LayerNorm(dim, elementwise_affine=norm_elementwise_affine)
             )
-            self.attn2 = Mamba2(
-                d_model=dim,
-                heads=num_attention_heads,
-                dim_head=attention_head_dim,
-                bias=attention_bias,
-                # scale_qk=False, # uncomment this to not to use flash attention
-            )  # is self-attn if encoder_hidden_states is none
+            self.attn2 = nn.Sequential(
+                Mamba2(
+                    d_model=dim,
+                    headdim=attention_head_dim,
+                    bias=attention_bias,
+                    d_ssm=num_attention_heads*attention_head_dim
+                    # scale_qk=False, # uncomment this to not to use flash attention
+                ),  # is self-attn if encoder_hidden_states is none
+                nn.Dropout(dropout)
+            )
         else:
             self.norm2 = None
             self.attn2 = None

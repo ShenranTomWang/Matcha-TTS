@@ -339,7 +339,9 @@ class Decoder(nn.Module):
             )
         elif block_type == "mamba2":
             block = Mamba2TransformerBlock(
-                d_model=dim
+                dim=dim,
+                attention_head_dim=attention_head_dim,
+                num_attention_heads=num_heads
             )
         else:
             raise ValueError(f"Unknown block type {block_type}")

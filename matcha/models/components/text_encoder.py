@@ -1,10 +1,13 @@
 """ from https://github.com/jaywalnut310/glow-tts """
 
 import math
+import os
 
 import torch
 import torch.nn as nn
 from einops import rearrange
+from flash_attn import flash_attn_func
+from mamba_ssm import Mamba2
 
 import matcha.utils as utils
 from matcha.utils.model import sequence_mask
@@ -193,6 +196,12 @@ class MultiHeadAttention(nn.Module):
         self.proximal_bias = proximal_bias
         self.p_dropout = p_dropout
         self.attn = None
+        self.use_memory_efficient_attention = os.getenv("USE_MEMORY_EFFICIENT_ATTENTION")
+        if self.use_memory_efficient_attention:
+            self.use_memory_efficient_attention = int(self.use_memory_efficient_attention)
+        
+        if self.use_memory_efficient_attention == 1:
+            print("Using FlashAttention")
 
         self.k_channels = channels // n_heads
         self.conv_q = torch.nn.Conv1d(channels, channels, 1)
@@ -218,7 +227,16 @@ class MultiHeadAttention(nn.Module):
         k = self.conv_k(c)
         v = self.conv_v(c)
 
-        x, self.attn = self.attention(q, k, v, mask=attn_mask)
+        if self.use_memory_efficient_attention == 1:
+            q = q.to(dtype=torch.float16)
+            k = k.to(dtype=torch.float16)
+            v = v.to(dtype=torch.float16)
+            q = rearrange(q, "b (h c) t-> b t h c", h=self.n_heads)
+            k = rearrange(k, "b (h c) t-> b t h c", h=self.n_heads)
+            v = rearrange(v, "b (h c) t-> b t h c", h=self.n_heads)
+            x = flash_attn_func(q, k, v, dropout_p=self.p_dropout)
+        else:
+            x, self.attn = self.attention(q, k, v, mask=attn_mask)
 
         x = self.conv_o(x)
         return x
@@ -252,6 +270,19 @@ class MultiHeadAttention(nn.Module):
         return torch.unsqueeze(torch.unsqueeze(-torch.log1p(torch.abs(diff)), 0), 0)
 
 
+class Mamba2Attention(nn.Module):
+    def __init__(self, dim, p_dropout, **kwargs):
+        super().__init__()
+        self.mamba2 = Mamba2(dim, **kwargs)
+        self.drop = nn.Dropout(p_dropout)
+    
+    def forward(self, x, c, attn_mask=None):
+        x = rearrange(x, "b h t-> b t h")
+        y = self.mamba2(x)      # TODO: RuntimeError: causal_conv1d with channel last layout requires strides (x.stride(0) and x.stride(2)) to be multiples of 8
+        y = self.drop(y)
+        return y
+
+
 class FFN(nn.Module):
     def __init__(self, in_channels, out_channels, filter_channels, kernel_size, p_dropout=0.0):
         super().__init__()
@@ -282,6 +313,7 @@ class Encoder(nn.Module):
         n_layers,
         kernel_size=1,
         p_dropout=0.0,
+        attn="multiheadattention",
         **kwargs,
     ):
         super().__init__()
@@ -298,7 +330,7 @@ class Encoder(nn.Module):
         self.ffn_layers = torch.nn.ModuleList()
         self.norm_layers_2 = torch.nn.ModuleList()
         for _ in range(self.n_layers):
-            self.attn_layers.append(MultiHeadAttention(hidden_channels, hidden_channels, n_heads, p_dropout=p_dropout))
+            self.attn_layers.append(Encoder.get_attn_block(attn, hidden_channels, n_heads, p_dropout))
             self.norm_layers_1.append(LayerNorm(hidden_channels))
             self.ffn_layers.append(
                 FFN(
@@ -311,7 +343,24 @@ class Encoder(nn.Module):
             )
             self.norm_layers_2.append(LayerNorm(hidden_channels))
 
+    @staticmethod
+    def get_attn_block(attn_type: str, hidden_channels: int, n_heads: int, p_dropout: float):
+        if attn_type == "multiheadattention":
+            return MultiHeadAttention(hidden_channels, hidden_channels, n_heads, p_dropout=p_dropout)
+        elif attn_type == "mamba2":
+            return Mamba2Attention(hidden_channels, p_dropout, d_ssm=n_heads*hidden_channels)
+        else:
+            raise ValueError(f"Unknown block type {attn_type}")
+
     def forward(self, x, x_mask):
+        """
+        Args:
+            x (torch.Tensor): (batch_size, channels, max_text_length)
+            x_mask (torch.Tensor): (batch_size, 1, max_text_length)
+
+        Returns:
+            _type_: _description_
+        """
         attn_mask = x_mask.unsqueeze(2) * x_mask.unsqueeze(-1)
         for i in range(self.n_layers):
             x = x * x_mask
@@ -369,6 +418,7 @@ class TextEncoder(nn.Module):
             encoder_params.n_layers,
             encoder_params.kernel_size,
             encoder_params.p_dropout,
+            attn=encoder_params.attn if "attn" in encoder_params else "multiheadattention"
         )
 
         self.proj_m = torch.nn.Conv1d(
