@@ -352,6 +352,7 @@ class Mamba2TransformerBlock(nn.Module):
         only_cross_attention: bool = False,
         double_self_attention: bool = False,
         norm_elementwise_affine: bool = True,
+        upcast_attention: bool = False,
         norm_type: str = "layer_norm",
         final_dropout: bool = False,
     ):
@@ -395,16 +396,16 @@ class Mamba2TransformerBlock(nn.Module):
                 if self.use_ada_layer_norm
                 else nn.LayerNorm(dim, elementwise_affine=norm_elementwise_affine)
             )
-            self.attn2 = nn.Sequential(
-                Mamba2(
-                    d_model=dim,
-                    headdim=attention_head_dim,
-                    bias=attention_bias,
-                    d_ssm=num_attention_heads*attention_head_dim
-                    # scale_qk=False, # uncomment this to not to use flash attention
-                ),  # is self-attn if encoder_hidden_states is none
-                nn.Dropout(dropout)
-            )
+            self.attn2 = Attention(
+                query_dim=dim,
+                cross_attention_dim=cross_attention_dim if not double_self_attention else None,
+                heads=num_attention_heads,
+                dim_head=attention_head_dim,
+                dropout=dropout,
+                bias=attention_bias,
+                upcast_attention=upcast_attention,
+                # scale_qk=False, # uncomment this to not to use flash attention
+            )  # is self-attn if encoder_hidden_states is none
         else:
             self.norm2 = None
             self.attn2 = None
@@ -446,10 +447,7 @@ class Mamba2TransformerBlock(nn.Module):
         cross_attention_kwargs = cross_attention_kwargs if cross_attention_kwargs is not None else {}
 
         attn_output = self.attn1(
-            norm_hidden_states,
-            encoder_hidden_states=encoder_hidden_states if self.only_cross_attention else None,
-            attention_mask=encoder_attention_mask if self.only_cross_attention else attention_mask,
-            **cross_attention_kwargs,
+            norm_hidden_states
         )
         if self.use_ada_layer_norm_zero:
             attn_output = gate_msa.unsqueeze(1) * attn_output
