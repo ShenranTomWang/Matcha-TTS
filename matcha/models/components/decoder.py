@@ -213,10 +213,27 @@ class Decoder(nn.Module):
         mid_block_type="transformer",
         up_block_type="transformer",
     ):
+        """
+        Args:
+            in_channels (int): number of channels coming in
+            out_channels (int): number of channels going out
+            channels (tuple, optional): channels for each layer of the UNet transformer blocks 
+                (e.g. (256, 256) means 256 channels coming into the first transformer, then compress to 256 channels in hidden representation)
+                Defaults to (256, 256).
+            dropout (float, optional): dropout percentage. Defaults to 0.05.
+            attention_head_dim (int, optional): dimension of attention head. Defaults to 64.
+            n_blocks (int, optional): number of transformer blocks per layer. Defaults to 1.
+            num_mid_blocks (int, optional): number of transformer blocks in middle layer. Defaults to 2.
+            num_heads (int, optional): number of attention heads used in transformer. Defaults to 4.
+            act_fn (str, optional): activation function. Defaults to "snake".
+            down_block_type (str, optional): type of transformer block used in downsampling layer. Defaults to "transformer".
+            mid_block_type (str, optional): type of transformer block used in middle layer. Defaults to "transformer".
+            up_block_type (str, optional): type of transformer block used in upsampling layer. Defaults to "transformer".
+        """
         super().__init__()
         channels = tuple(channels)
-        self.in_channels = in_channels
-        self.out_channels = out_channels
+        self.in_channels = in_channels          # 2 * encoder.n_feats
+        self.out_channels = out_channels        # encoder.n_feats
 
         self.time_embeddings = SinusoidalPosEmb(in_channels)
         time_embed_dim = channels[0] * 4
@@ -232,7 +249,7 @@ class Decoder(nn.Module):
 
         output_channel = in_channels
         for i in range(len(channels)):  # pylint: disable=consider-using-enumerate
-            input_channel = output_channel
+            input_channel = output_channel      # 2 * encoder.n_feats
             output_channel = channels[i]
             is_last = i == len(channels) - 1
             resnet = ResnetBlock1D(dim=input_channel, dim_out=output_channel, time_emb_dim=time_embed_dim)
@@ -317,6 +334,7 @@ class Decoder(nn.Module):
 
     @staticmethod
     def get_block(block_type, dim, attention_head_dim, num_heads, dropout, act_fn):
+        # dim is set in channels
         if block_type == "conformer":
             block = ConformerWrapper(
                 dim=dim,

@@ -315,6 +315,29 @@ class BasicTransformerBlock(nn.Module):
         hidden_states = ff_output + hidden_states
 
         return hidden_states
+    
+
+class Mamba2CrossAttention(nn.Module):
+    r"""
+    A cross attention block that uses Mamba2
+    """
+    
+    def __init__(self, d_model: int, p_dropout: float, headdim: int = 64, bias: bool = False, d_ssm: int = None, **kwargs):
+        super().__init__()
+        self.mamba2 = Mamba2(
+            d_model,
+            headdim=headdim,
+            bias=bias,
+            d_ssm=d_ssm,
+            **kwargs
+        )
+        self.drop = nn.Dropout(p_dropout)
+        
+    def forward(self, x: torch.Tensor, c: torch.Tensor, mask: torch.Tensor = None, **kwargs):
+        x = torch.cat((x, c), dim=-2)
+        y = self.mamba2(x)
+        y = self.drop(y)
+        return y
 
 
 @maybe_allow_in_graph
@@ -352,9 +375,9 @@ class Mamba2TransformerBlock(nn.Module):
         only_cross_attention: bool = False,
         double_self_attention: bool = False,
         norm_elementwise_affine: bool = True,
-        upcast_attention: bool = False,
         norm_type: str = "layer_norm",
         final_dropout: bool = False,
+        **kwargs
     ):
         super().__init__()
         self.only_cross_attention = only_cross_attention
@@ -381,7 +404,8 @@ class Mamba2TransformerBlock(nn.Module):
                 d_model=dim,
                 headdim=attention_head_dim,
                 bias=attention_bias,
-                d_ssm=num_attention_heads*attention_head_dim
+                d_ssm=num_attention_heads*dim,
+                **kwargs
             ),
             nn.Dropout(dropout)
         )
@@ -396,16 +420,13 @@ class Mamba2TransformerBlock(nn.Module):
                 if self.use_ada_layer_norm
                 else nn.LayerNorm(dim, elementwise_affine=norm_elementwise_affine)
             )
-            self.attn2 = Attention(
-                query_dim=dim,
-                cross_attention_dim=cross_attention_dim if not double_self_attention else None,
-                heads=num_attention_heads,
-                dim_head=attention_head_dim,
-                dropout=dropout,
+            self.attn2 = Mamba2CrossAttention(
+                d_model=dim*2,
+                headdim=attention_head_dim,
                 bias=attention_bias,
-                upcast_attention=upcast_attention,
-                # scale_qk=False, # uncomment this to not to use flash attention
-            )  # is self-attn if encoder_hidden_states is none
+                d_ssm=num_attention_heads*dim
+                **kwargs
+            )
         else:
             self.norm2 = None
             self.attn2 = None
@@ -433,6 +454,23 @@ class Mamba2TransformerBlock(nn.Module):
         cross_attention_kwargs: Dict[str, Any] = None,
         class_labels: Optional[torch.LongTensor] = None,
     ):
+        """
+        Args:
+            hidden_states (torch.FloatTensor): (batch_size, max_text_len, channels)
+            attention_mask (Optional[torch.FloatTensor], optional): not used. Defaults to None.
+            encoder_hidden_states (Optional[torch.FloatTensor], optional): (batch_size, max_text_len, channels). Defaults to None.
+            encoder_attention_mask (Optional[torch.FloatTensor], optional): not used. Defaults to None.
+            timestep (Optional[torch.LongTensor], optional): (batch_size, decoder_in_channels). Defaults to None.
+            cross_attention_kwargs (Dict[str, Any], optional): not used. Defaults to None.
+            class_labels (Optional[torch.LongTensor], optional): _description_. Defaults to None.
+
+        Raises:
+            ValueError: _description_
+
+        Returns:
+            torch.Tensor: _description_
+        """
+        
         # Notice that normalization is always applied before the real computation in the following blocks.
         # 1. Self-Attention
         if self.use_ada_layer_norm:
@@ -461,9 +499,7 @@ class Mamba2TransformerBlock(nn.Module):
 
             attn_output = self.attn2(
                 norm_hidden_states,
-                encoder_hidden_states=encoder_hidden_states,
-                attention_mask=encoder_attention_mask,
-                **cross_attention_kwargs,
+                encoder_hidden_states=encoder_hidden_states
             )
             hidden_states = attn_output + hidden_states
 

@@ -8,10 +8,10 @@ encoder_params:
   n_layers: 6
   kernel_size: 3
   p_dropout: 0.1
-  spk_emb_dim: 64
-  n_spks: 1
   prenet: true
   attn: mamba2
+  mamba2_kwargs:
+    headdim: 160
 
 duration_predictor_params:
   filter_channels_dp: ${model.encoder.encoder_params.filter_channels_dp}

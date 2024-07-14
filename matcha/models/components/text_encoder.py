@@ -278,8 +278,9 @@ class Mamba2Attention(nn.Module):
     
     def forward(self, x, c, attn_mask=None):
         x = rearrange(x, "b h t-> b t h")
-        y = self.mamba2(x)      # TODO: RuntimeError: causal_conv1d with channel last layout requires strides (x.stride(0) and x.stride(2)) to be multiples of 8
+        y = self.mamba2(x)
         y = self.drop(y)
+        y = rearrange(y, "b t h-> b h t")
         return y
 
 
@@ -316,6 +317,17 @@ class Encoder(nn.Module):
         attn="multiheadattention",
         **kwargs,
     ):
+        """
+        Args:
+            hidden_channels (int): size of hidden channels
+            filter_channels (int): filter channels in FFN
+            n_heads (int): number of attention heads
+            n_layers (int): number of attention, normalization and dropout layers
+            kernel_size (int, optional): FFN kernal size. Defaults to 1.
+            p_dropout (float, optional): dropout percentage. Defaults to 0.0.
+            attn (str, optional): attention type. Defaults to "multiheadattention".
+            kwargs: extra arguments passed to Mamba2Attention
+        """
         super().__init__()
         self.hidden_channels = hidden_channels
         self.filter_channels = filter_channels
@@ -323,6 +335,7 @@ class Encoder(nn.Module):
         self.n_layers = n_layers
         self.kernel_size = kernel_size
         self.p_dropout = p_dropout
+        self.attn = attn
 
         self.drop = torch.nn.Dropout(p_dropout)
         self.attn_layers = torch.nn.ModuleList()
@@ -330,7 +343,7 @@ class Encoder(nn.Module):
         self.ffn_layers = torch.nn.ModuleList()
         self.norm_layers_2 = torch.nn.ModuleList()
         for _ in range(self.n_layers):
-            self.attn_layers.append(Encoder.get_attn_block(attn, hidden_channels, n_heads, p_dropout))
+            self.attn_layers.append(Encoder.get_attn_block(attn, hidden_channels, n_heads, p_dropout, **kwargs))
             self.norm_layers_1.append(LayerNorm(hidden_channels))
             self.ffn_layers.append(
                 FFN(
@@ -344,11 +357,11 @@ class Encoder(nn.Module):
             self.norm_layers_2.append(LayerNorm(hidden_channels))
 
     @staticmethod
-    def get_attn_block(attn_type: str, hidden_channels: int, n_heads: int, p_dropout: float):
+    def get_attn_block(attn_type: str, hidden_channels: int, n_heads: int, p_dropout: float, **kwargs):
         if attn_type == "multiheadattention":
             return MultiHeadAttention(hidden_channels, hidden_channels, n_heads, p_dropout=p_dropout)
         elif attn_type == "mamba2":
-            return Mamba2Attention(hidden_channels, p_dropout, d_ssm=n_heads*hidden_channels)
+            return Mamba2Attention(hidden_channels, p_dropout, d_ssm=n_heads*hidden_channels, **kwargs)
         else:
             raise ValueError(f"Unknown block type {attn_type}")
 
@@ -359,18 +372,20 @@ class Encoder(nn.Module):
             x_mask (torch.Tensor): (batch_size, 1, max_text_length)
 
         Returns:
-            _type_: _description_
+            torch.Tensor: (batch_size, channels, max_text_length)
         """
         attn_mask = x_mask.unsqueeze(2) * x_mask.unsqueeze(-1)
         for i in range(self.n_layers):
-            x = x * x_mask
+            if self.attn != "mamba2":
+                x = x * x_mask
             y = self.attn_layers[i](x, x, attn_mask)
             y = self.drop(y)
             x = self.norm_layers_1[i](x + y)
             y = self.ffn_layers[i](x, x_mask)
             y = self.drop(y)
             x = self.norm_layers_2[i](x + y)
-        x = x * x_mask
+        if self.attn != "mamba2":
+            x = x * x_mask
         return x
 
 
@@ -418,7 +433,8 @@ class TextEncoder(nn.Module):
             encoder_params.n_layers,
             encoder_params.kernel_size,
             encoder_params.p_dropout,
-            attn=encoder_params.attn if "attn" in encoder_params else "multiheadattention"
+            attn=encoder_params.attn if "attn" in encoder_params else "multiheadattention",
+            **encoder_params.mamba2_kwargs if "mamba2_kwargs" in encoder_params else None
         )
 
         self.proj_m = torch.nn.Conv1d(
