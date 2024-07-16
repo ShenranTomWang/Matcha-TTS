@@ -6,7 +6,7 @@ import numpy as np
 import soundfile as sf
 import torch
 from tqdm.auto import tqdm
-import wandb
+# import wandb
 
 # Hifigan imports
 from matcha.hifigan.config import v1
@@ -28,15 +28,15 @@ Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
 OUTPUT_FOLDER = "synth_output"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 
-MATCHA_CHECKPOINT = "./logs/train/multilingual/runs/balanced-dataset/checkpoints/last.ckpt"
+MATCHA_CHECKPOINT = "./logs/train/multilingual_mamba2/runs/2024-07-14_16-39-23/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/multilingual-balanced-dataset/checkpoints/last.ckpt"
 
-VOCODER = "HiFiGAN"
+VOCODER = "Vocos"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
 WANDB_PROJECT = f"TTS"
-WANDB_NAME = "Multilingual Experiment CPU HiFiGAN Balanced Dataset"
+WANDB_NAME = "Multilingual Experiment A100 Vocos Balanced Dataset Mamba2"
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
@@ -128,15 +128,15 @@ def parse_filelist_get_text(filelist_path, split_char="|", sentence_index=3, spk
     return filepaths_and_text
 
 def synthesis():
-    wandb.init(
-        project=WANDB_PROJECT,
-        name=WANDB_NAME,
-        config={
-            "architecture": WANDB_ARCH,
-            "dataset": WANDB_DATASET,
-            "hardware": device
-        }
-    )
+    # wandb.init(
+    #     project=WANDB_PROJECT,
+    #     name=WANDB_NAME,
+    #     config={
+    #         "architecture": WANDB_ARCH,
+    #         "dataset": WANDB_DATASET,
+    #         "hardware": device
+    #     }
+    # )
     
     count_params = lambda x: f"{sum(p.numel() for p in x.parameters()):,}"
 
@@ -201,6 +201,10 @@ def synthesis():
 
         ## Save the generated waveform
         save_to_folder(name, output, OUTPUT_FOLDER)
+    
+    print(f"Number of ODE steps: {n_timesteps}")
+    print(f"Mean RTF:\t\t\t\t{rtfs_mean:.6f} ± {rtfs_std:.6f}")
+    print(f"Mean RTF Waveform (incl. vocoder):\t{rtfs_w_mean:.6f} ± {rtfs_w_std:.6f}")
 
     for spk_flag in SPK_FLAGS:
         stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1 = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
@@ -209,32 +213,29 @@ def synthesis():
         rtfs_w_mean = np.mean(rtfs_w)
         rtfs_w_std = np.std(rtfs_w)
         
-        wandb.log(
-            {
-                f"{spk_flag}/stoi": stoi,
-                f"{spk_flag}/pesq": pesq,
-                f"{spk_flag}/mcd": mcd,
-                f"{spk_flag}/f0_rmse": f0_rmse,
-                f"{spk_flag}/las_rmse": las_rmse,
-                f"{spk_flag}/vuv_f1": vuv_f1
-            }
-        )
+        # wandb.log(
+        #     {
+        #         f"{spk_flag}/stoi": stoi,
+        #         f"{spk_flag}/pesq": pesq,
+        #         f"{spk_flag}/mcd": mcd,
+        #         f"{spk_flag}/f0_rmse": f0_rmse,
+        #         f"{spk_flag}/las_rmse": las_rmse,
+        #         f"{spk_flag}/vuv_f1": vuv_f1
+        #     }
+        # )
         print(f"{spk_flag}/stoi: {stoi}, {spk_flag}/pesq: {pesq}, {spk_flag}/mcd: {mcd}, {spk_flag}/f0_rmse: {f0_rmse}, {spk_flag}/las_rmse: {las_rmse}, {spk_flag}/vuv_f1: {vuv_f1}")
-    
-    print(f"Number of ODE steps: {n_timesteps}")
-    print(f"Mean RTF:\t\t\t\t{rtfs_mean:.6f} ± {rtfs_std:.6f}")
-    print(f"Mean RTF Waveform (incl. vocoder):\t{rtfs_w_mean:.6f} ± {rtfs_w_std:.6f}")
-    wandb.log(
-        {
-            "num_ode_steps": n_timesteps,
-            "temperature": temperature,
-            "length_scale": length_scale,
-            "rtfs_mean": rtfs_mean,
-            "rtfs_std": rtfs_std,
-            "rtfs_w_mean": rtfs_w_mean,
-            "rtfs_w_std": rtfs_w_std
-        }
-    )
+
+    # wandb.log(
+    #     {
+    #         "num_ode_steps": n_timesteps,
+    #         "temperature": temperature,
+    #         "length_scale": length_scale,
+    #         "rtfs_mean": rtfs_mean,
+    #         "rtfs_std": rtfs_std,
+    #         "rtfs_w_mean": rtfs_w_mean,
+    #         "rtfs_w_std": rtfs_w_std
+    #     }
+    # )
 
 if __name__ == "__main__":
     synthesis()
