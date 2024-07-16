@@ -207,7 +207,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             mu_square = torch.sum(factor * (mu_x**2), 1).unsqueeze(-1)
             log_prior = y_square - y_mu_double + mu_square + const
 
-            attn = monotonic_align.maximum_path(log_prior, attn_mask.squeeze(1))        # TODO: take a look at attn and "time"
+            attn = monotonic_align.maximum_path(log_prior, attn_mask.squeeze(1))
             attn = attn.detach()
 
         # Compute loss between predicted log-scaled durations and those obtained from MAS
