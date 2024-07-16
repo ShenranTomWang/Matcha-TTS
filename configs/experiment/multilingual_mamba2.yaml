@@ -4,8 +4,9 @@
 # python train.py experiment=multispeaker
 
 defaults:
-  - override /data: multilingual.yaml
+  - override /data: multilingual_mamba2.yaml
   - override /model: multilingual_mamba2.yaml
+  - override /trainer: mamba2.yaml
 
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters

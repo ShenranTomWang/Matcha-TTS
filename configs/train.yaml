@@ -45,7 +45,7 @@ train: True
 test: True
 
 # simply provide checkpoint path to resume training
-ckpt_path: null
+ckpt_path: ./logs/train/multilingual_mamba2/runs/2024-07-14_16-39-23/checkpoints/last.ckpt
 
 # seed for random number generators in pytorch, numpy and python.random
 seed: 1234

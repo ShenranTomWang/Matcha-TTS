@@ -1,0 +1,7 @@
+scheduler:
+  _partial_: true
+  _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+  T_max: 100
+lightning_args:
+  interval: 'step'  # Update the scheduler by step
+  frequency: 10  # Update per x intervals

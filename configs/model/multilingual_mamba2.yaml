@@ -4,6 +4,7 @@ defaults:
   - decoder: mamba2.yaml
   - cfm: default.yaml
   - optimizer: adam.yaml
+  - scheduler: cosine.yaml
 
 _target_: matcha.models.matcha_tts.MatchaTTS
 n_vocab: 178

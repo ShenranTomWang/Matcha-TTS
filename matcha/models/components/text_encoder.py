@@ -434,7 +434,7 @@ class TextEncoder(nn.Module):
             encoder_params.kernel_size,
             encoder_params.p_dropout,
             attn=encoder_params.attn if "attn" in encoder_params else "multiheadattention",
-            **encoder_params.mamba2_kwargs if "mamba2_kwargs" in encoder_params else None
+            **encoder_params.mamba2_kwargs if "mamba2_kwargs" in encoder_params else {}
         )
 
         self.proj_m = torch.nn.Conv1d(
