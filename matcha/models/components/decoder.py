@@ -8,7 +8,7 @@ from conformer import ConformerBlock
 from diffusers.models.activations import get_activation
 from einops import pack, rearrange, repeat
 
-from matcha.models.components.transformer import BasicTransformerBlock, Mamba2TransformerBlock
+from matcha.models.components.transformer import BasicTransformerBlock, Mamba2TransformerBlock, FNetTransformerBlock
 
 
 class SinusoidalPosEmb(torch.nn.Module):
@@ -212,6 +212,7 @@ class Decoder(nn.Module):
         down_block_type="transformer",
         mid_block_type="transformer",
         up_block_type="transformer",
+        fourier="FFT"
     ):
         """
         Args:
@@ -262,6 +263,7 @@ class Decoder(nn.Module):
                         num_heads,
                         dropout,
                         act_fn,
+                        fourier
                     )
                     for _ in range(n_blocks)
                 ]
@@ -287,6 +289,7 @@ class Decoder(nn.Module):
                         num_heads,
                         dropout,
                         act_fn,
+                        fourier
                     )
                     for _ in range(n_blocks)
                 ]
@@ -314,6 +317,7 @@ class Decoder(nn.Module):
                         num_heads,
                         dropout,
                         act_fn,
+                        fourier
                     )
                     for _ in range(n_blocks)
                 ]
@@ -333,7 +337,7 @@ class Decoder(nn.Module):
         # nn.init.normal_(self.final_proj.weight)
 
     @staticmethod
-    def get_block(block_type, dim, attention_head_dim, num_heads, dropout, act_fn):
+    def get_block(block_type, dim, attention_head_dim, num_heads, dropout, act_fn, fourier):
         # dim is set in channels
         if block_type == "conformer":
             block = ConformerWrapper(
@@ -360,6 +364,19 @@ class Decoder(nn.Module):
                 dim=dim,
                 attention_head_dim=attention_head_dim,
                 num_attention_heads=num_heads
+            )
+        elif block_type == "fnet":
+            block = FNetTransformerBlock(
+                dim=dim,
+                dim_head=attention_head_dim,
+                heads=num_heads,
+                ff_mult=1,
+                conv_expansion_factor=2,
+                ff_dropout=dropout,
+                attn_dropout=dropout,
+                conv_dropout=dropout,
+                conv_kernel_size=31,
+                fourier=fourier
             )
         else:
             raise ValueError(f"Unknown block type {block_type}")

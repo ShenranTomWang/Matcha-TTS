@@ -10,7 +10,7 @@ encoder_params:
   p_dropout: 0.1
   prenet: true
   attn: mamba2
-  mamba2_kwargs:
+  kwargs:
     headdim: 160
 
 duration_predictor_params:
