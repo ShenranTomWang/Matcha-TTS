@@ -571,7 +571,8 @@ class FNetTransformerBlock(nn.Module):
         norm_elementwise_affine: bool = True,
         norm_type: str = "layer_norm",
         final_dropout: bool = False,
-        fourier: str = "FFT"
+        fourier: str = "FFT",
+        eps: float = 0.00001
     ):
         super().__init__()
         self.only_cross_attention = only_cross_attention
@@ -596,7 +597,7 @@ class FNetTransformerBlock(nn.Module):
         self.attn1 = FNetLayer({
             "hidden_size": dim,
             "dropout_rate": dropout,
-            "layer_norm_eps": None,
+            "layer_norm_eps": eps,
             "intermediate_size": dim,
             "fourier": fourier
         })

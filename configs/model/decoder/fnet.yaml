@@ -9,3 +9,4 @@ up_block_type: fnet
 mid_block_type: fnet
 down_block_type: fnet
 fourier: FFT
+eps: 0.00001
