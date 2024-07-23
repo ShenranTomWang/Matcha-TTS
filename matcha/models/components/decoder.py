@@ -211,9 +211,7 @@ class Decoder(nn.Module):
         act_fn="snake",
         down_block_type="transformer",
         mid_block_type="transformer",
-        up_block_type="transformer",
-        fourier="FFT",
-        eps=0.00001
+        up_block_type="transformer"
     ):
         """
         Args:
@@ -265,9 +263,7 @@ class Decoder(nn.Module):
                         attention_head_dim,
                         num_heads,
                         dropout,
-                        act_fn,
-                        fourier,
-                        eps
+                        act_fn
                     )
                     for _ in range(n_blocks)
                 ]
@@ -292,9 +288,7 @@ class Decoder(nn.Module):
                         attention_head_dim,
                         num_heads,
                         dropout,
-                        act_fn,
-                        fourier,
-                        eps
+                        act_fn
                     )
                     for _ in range(n_blocks)
                 ]
@@ -321,9 +315,7 @@ class Decoder(nn.Module):
                         attention_head_dim,
                         num_heads,
                         dropout,
-                        act_fn,
-                        fourier,
-                        eps
+                        act_fn
                     )
                     for _ in range(n_blocks)
                 ]
@@ -343,7 +335,7 @@ class Decoder(nn.Module):
         # nn.init.normal_(self.final_proj.weight)
 
     @staticmethod
-    def get_block(block_type, dim, attention_head_dim, num_heads, dropout, act_fn, fourier="FFT", eps=0.00001):
+    def get_block(block_type, dim, attention_head_dim, num_heads, dropout, act_fn):
         # dim is set in channels
         if block_type == "conformer":
             block = ConformerWrapper(
@@ -374,12 +366,7 @@ class Decoder(nn.Module):
         elif block_type == "fnet":
             block = FNetTransformerBlock(
                 dim=dim,
-                num_attention_heads=num_heads,
-                attention_head_dim=attention_head_dim,
-                dropout=dropout,
-                activation_fn=act_fn,
-                fourier=fourier,
-                eps=eps
+                dropout=dropout
             )
         else:
             raise ValueError(f"Unknown block type {block_type}")

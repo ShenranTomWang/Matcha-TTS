@@ -14,7 +14,7 @@ from diffusers.models.lora import LoRACompatibleLinear
 from diffusers.utils.torch_utils import maybe_allow_in_graph
 
 from mamba_ssm import Mamba2
-from fnet import FNetLayer
+from fnet import FourierFFTLayer
 
 class SnakeBeta(nn.Module):
     """
@@ -339,6 +339,23 @@ class Mamba2CrossAttention(nn.Module):
         y = self.mamba2(x)
         y = self.drop(y)
         return y
+    
+
+class FNetCrossAttention(nn.Module):
+    r"""
+    A cross attention block that uses FNet (Fourier Transform)
+    """
+    
+    def __init__(self, p_dropout: float):
+        super().__init__()
+        self.mamba2 = FourierFFTLayer()
+        self.drop = nn.Dropout(p_dropout)
+        
+    def forward(self, x: torch.Tensor, c: torch.Tensor, mask: torch.Tensor = None, **kwargs):
+        x = torch.cat((x, c), dim=-2)
+        y = self.mamba2(x)
+        y = self.drop(y)
+        return y
 
 
 @maybe_allow_in_graph
@@ -500,7 +517,7 @@ class Mamba2TransformerBlock(nn.Module):
 
             attn_output = self.attn2(
                 norm_hidden_states,
-                encoder_hidden_states=encoder_hidden_states
+                encoder_hidden_states
             )
             hidden_states = attn_output + hidden_states
 
@@ -558,8 +575,8 @@ class FNetTransformerBlock(nn.Module):
     def __init__(
         self,
         dim: int,
-        num_attention_heads: int,
-        attention_head_dim: int,
+        num_attention_heads: int = None,
+        attention_head_dim: int = None,
         dropout=0.0,
         cross_attention_dim: Optional[int] = None,
         activation_fn: str = "geglu",
@@ -570,9 +587,7 @@ class FNetTransformerBlock(nn.Module):
         upcast_attention: bool = False,
         norm_elementwise_affine: bool = True,
         norm_type: str = "layer_norm",
-        final_dropout: bool = False,
-        fourier: str = "FFT",
-        eps: float = 0.00001
+        final_dropout: bool = False
     ):
         super().__init__()
         self.only_cross_attention = only_cross_attention
@@ -594,13 +609,10 @@ class FNetTransformerBlock(nn.Module):
             self.norm1 = AdaLayerNormZero(dim, num_embeds_ada_norm)
         else:
             self.norm1 = nn.LayerNorm(dim, elementwise_affine=norm_elementwise_affine)
-        self.attn1 = FNetLayer({
-            "hidden_size": dim,
-            "dropout_rate": dropout,
-            "layer_norm_eps": eps,
-            "intermediate_size": dim,
-            "fourier": fourier
-        })
+        self.attn1 = nn.Sequential(
+            FourierFFTLayer(),
+            nn.Dropout(dropout)
+        )
 
         # 2. Cross-Attn
         if cross_attention_dim is not None or double_self_attention:
@@ -612,16 +624,7 @@ class FNetTransformerBlock(nn.Module):
                 if self.use_ada_layer_norm
                 else nn.LayerNorm(dim, elementwise_affine=norm_elementwise_affine)
             )
-            self.attn2 = Attention(
-                query_dim=dim,
-                cross_attention_dim=cross_attention_dim if not double_self_attention else None,
-                heads=num_attention_heads,
-                dim_head=attention_head_dim,
-                dropout=dropout,
-                bias=attention_bias,
-                upcast_attention=upcast_attention,
-                # scale_qk=False, # uncomment this to not to use flash attention
-            )  # is self-attn if encoder_hidden_states is none
+            self.attn2 = FNetCrossAttention(dropout)
         else:
             self.norm2 = None
             self.attn2 = None
@@ -677,9 +680,7 @@ class FNetTransformerBlock(nn.Module):
 
             attn_output = self.attn2(
                 norm_hidden_states,
-                encoder_hidden_states=encoder_hidden_states,
-                attention_mask=encoder_attention_mask,
-                **cross_attention_kwargs,
+                encoder_hidden_states
             )
             hidden_states = attn_output + hidden_states
 

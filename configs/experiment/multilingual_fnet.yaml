@@ -6,7 +6,7 @@
 defaults:
   - override /data: multilingual.yaml
   - override /model: multilingual_fnet.yaml
-  - override /trainer: default.yaml
+  - override /trainer: fnet.yaml
 
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters
