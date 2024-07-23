@@ -11,7 +11,7 @@ encoder_params:
   prenet: true
   attn: mamba2
   kwargs:
-    headdim: 160
+    headdim: 160    # (lang_emb_dim + spk_emb_dim + n_channels) / headdim must be multiples of 4
 
 duration_predictor_params:
   filter_channels_dp: ${model.encoder.encoder_params.filter_channels_dp}

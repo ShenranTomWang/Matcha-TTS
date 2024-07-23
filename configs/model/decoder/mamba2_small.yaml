@@ -1,6 +1,6 @@
-channels: [256, 256]
+channels: [128, 128]
 dropout: 0.05
-attention_head_dim: 64    # channels / attention_head_dim must be multiples of 4 if expand for mamba2 is not set)
+attention_head_dim: 32    # channels / attention_head_dim must be multiples of 4 if expand for mamba2 is not set)
 n_blocks: 1
 num_mid_blocks: 2
 num_heads: 2
