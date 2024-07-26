@@ -28,7 +28,7 @@ OUTPUT_FOLDER = "synth_output"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 SYNC_SAVE_DIR = "./"
 
-MATCHA_CHECKPOINT = "./logs/train/multilingual_mamba2/runs/balanced-dataset/checkpoints/last.ckpt"
+MATCHA_CHECKPOINT = "./logs/train/multilingual_mamba2/runs/small_decoder/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/multilingual-balanced-dataset/checkpoints/last.ckpt"
 
@@ -143,7 +143,7 @@ def save_python_script_with_data(metrics, filename="sync_wandb.py"):
             f"        'dataset': '{WANDB_DATASET}',\n"
             f"        'hardware': '{device}',\n"
             "    }\n"
-            f"    sync_wandb(metrics, project_name, run_name)\n"
+            f"    sync_wandb(metrics, project_name, run_name config)\n"
         )
 
 def synthesis():

@@ -5,12 +5,12 @@
 
 defaults:
   - override /data: multilingual_mamba2.yaml
-  - override /model: multilingual_mamba2_small.yaml
+  - override /model: multilingual_mamba2_39M.yaml
   - override /trainer: mamba2.yaml
 
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters
 
-tags: ["multilingual_mamba2_small"]
+tags: ["multilingual_mamba2_39M"]
 
 run_name: multilingual_mamba2

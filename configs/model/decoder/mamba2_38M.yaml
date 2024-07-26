@@ -1,0 +1,10 @@
+channels: [192, 192]
+dropout: 0.05
+attention_head_dim: 48    # channels / attention_head_dim must be multiples of 4 if expand for mamba2 is not set)
+n_blocks: 1
+num_mid_blocks: 2
+num_heads: 2
+act_fn: snakebeta
+up_block_type: mamba2
+mid_block_type: mamba2
+down_block_type: mamba2

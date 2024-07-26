@@ -1,7 +1,7 @@
 defaults:
   - _self_
-  - encoder: mamba2.yaml
-  - decoder: mamba2.yaml
+  - encoder: mamba2_38M.yaml
+  - decoder: mamba2_38M.yaml
   - cfm: default.yaml
   - optimizer: adam_mamba2.yaml
   - scheduler: cosine.yaml

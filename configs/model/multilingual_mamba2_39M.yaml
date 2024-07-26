@@ -1,9 +1,9 @@
 defaults:
   - _self_
   - encoder: mamba2.yaml
-  - decoder: mamba2_small.yaml
+  - decoder: mamba2_39M.yaml
   - cfm: default.yaml
-  - optimizer: adam.yaml
+  - optimizer: adam_mamba2.yaml
   - scheduler: cosine.yaml
 
 _target_: matcha.models.matcha_tts.MatchaTTS
