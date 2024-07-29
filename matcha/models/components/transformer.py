@@ -575,16 +575,12 @@ class FNetTransformerBlock(nn.Module):
     def __init__(
         self,
         dim: int,
-        num_attention_heads: int = None,
-        attention_head_dim: int = None,
         dropout=0.0,
         cross_attention_dim: Optional[int] = None,
         activation_fn: str = "geglu",
         num_embeds_ada_norm: Optional[int] = None,
-        attention_bias: bool = False,
         only_cross_attention: bool = False,
         double_self_attention: bool = False,
-        upcast_attention: bool = False,
         norm_elementwise_affine: bool = True,
         norm_type: str = "layer_norm",
         final_dropout: bool = False
@@ -665,9 +661,11 @@ class FNetTransformerBlock(nn.Module):
 
         cross_attention_kwargs = cross_attention_kwargs if cross_attention_kwargs is not None else {}
 
+        import pdb; pdb.set_trace()
         attn_output = self.attn1(
             norm_hidden_states
         )
+        import pdb; pdb.set_trace()
         if self.use_ada_layer_norm_zero:
             attn_output = gate_msa.unsqueeze(1) * attn_output
         hidden_states = attn_output + hidden_states

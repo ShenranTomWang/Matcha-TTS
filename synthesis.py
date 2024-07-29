@@ -103,7 +103,7 @@ def synthesise(text, model, spks=None, lang=None):
     return output
 
 @torch.inference_mode()
-def batch_synthesis(texts, names, model, vocoder, denoiser, batch_size, spks=None, lang=None):
+def batch_synthesis(texts, names, model, vocoder, denoiser, batch_size, hop_length, spks=None, lang=None):
     outputs = []
     for i in range(0, len(texts), batch_size):
         end_idx = min(i + batch_size, len(texts))
@@ -122,6 +122,8 @@ def batch_synthesis(texts, names, model, vocoder, denoiser, batch_size, spks=Non
 
         batch_output['waveform'] = to_waveform(batch_output['mel'], denoiser, vocoder)
         rtf_w = compute_rtf_w(batch_output)
+        batch_output["waveform_lengths"] = batch_output["mel_lengths"] * hop_length
+        batch_output["waveform"] = trim_waveform(batch_output)
         batch_output["rtf_w"] = rtf_w
         batch_output["names"] = batch_names
         
@@ -151,7 +153,7 @@ def save_to_folder_batch(output: dict, folder: str):
     for i in range(output["mel"].shape[0]):
         filename = output["names"][i]
         np.save(folder / f'{filename}', output['mel'][i].cpu().numpy())
-        sf.write(folder / f'{filename}.wav', output['waveform'][:, i], SAMPLE_RATE, 'PCM_24')
+        sf.write(folder / f'{filename}.wav', output['waveform'][i], SAMPLE_RATE, 'PCM_24')
 
 def parse_filelist_get_text(filelist_path, split_char="|", sentence_index=3, spk_index=1, lang_index=2):
     filepaths_and_text = []
@@ -189,6 +191,16 @@ def pad(input, target_len):
         return input
 
     return torch.nn.functional.pad(input, (0, padding_needed), "constant", 0)
+
+def trim_waveform(output):
+    waveforms = output["waveform"]
+    lengths = output["waveform_lengths"]
+    trimmed = []
+    for i in range(waveforms.shape[-1]):
+        waveform = waveforms[:, i]
+        length = int(lengths[i])
+        trimmed.append(waveform[:length])
+    return trimmed
 
 def get_item(data):
     if not SPK_EMB and not LANG_EMB:
@@ -258,6 +270,7 @@ def synthesis():
     if BATCHED_SYNTHESIS:
         ckpt = torch.load(MATCHA_CHECKPOINT)
         batch_size = ckpt["datamodule_hyper_parameters"]["batch_size"]
+        hop_length = ckpt["datamodule_hyper_parameters"]["hop_length"]
         index = get_index()
         paths = [data[0] for data in texts]
         dirs = [path.split("/") for path in paths]
@@ -265,7 +278,7 @@ def synthesis():
         inputs = [data[index] for data in texts]  # Assuming text is at index 3
         spks = [int(data[1]) for data in texts] if SPK_EMB else None
         lang = [int(data[2]) for data in texts] if LANG_EMB else None
-        outputs = batch_synthesis(inputs, names, model, vocoder, denoiser, batch_size, spks=spks, lang=lang)
+        outputs = batch_synthesis(inputs, names, model, vocoder, denoiser, batch_size, hop_length, spks=spks, lang=lang)
         
         for i, output in enumerate(outputs):
             rtf_w = output["rtf_w"]
