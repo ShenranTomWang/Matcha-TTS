@@ -23,22 +23,24 @@ import evaluation
 # Normalization imports
 from audio_utils import normalize_audio
 
+VOCODER = "Vocos"
+BATCHED_SYNTHESIS = True
+
+WANDB_PROJECT = f"TTS"
+WANDB_NAME = f"Multilingual Experiment A100 {VOCODER} Balanced Dataset Mamba2 38M"
+WANDB_DATASET = "multilingual-test"
+WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
+
 Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
-OUTPUT_FOLDER = "synth_output"
+OUTPUT_FOLDER = f"synth_output-{WANDB_NAME}"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 SYNC_SAVE_DIR = "./"
 
-MATCHA_CHECKPOINT = "./logs/train/multilingual_mamba2/runs/small_decoder/checkpoints/last.ckpt"
+MATCHA_CHECKPOINT = "./logs/train/multilingual_mamba2/runs/38M/checkpoints/last.ckpt"
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/multilingual-balanced-dataset/checkpoints/last.ckpt"
 
-VOCODER = "Vocos"
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
-
-WANDB_PROJECT = f"TTS"
-WANDB_NAME = f"Multilingual Experiment A100 {VOCODER} Balanced Dataset Mamba2"
-WANDB_DATASET = "multilingual-test"
-WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
 LANG_EMB = True
 SPK_EMB = True
@@ -86,11 +88,10 @@ def process_text(text: str):
 
 @torch.inference_mode()
 def synthesise(text, model, spks=None, lang=None):
-    text_processed = process_text(text)
     start_t = dt.datetime.now()
     output = model.synthesise(
-        text_processed['x'], 
-        text_processed['x_lengths'],
+        text['x'], 
+        text['x_lengths'],
         n_timesteps=n_timesteps,
         temperature=temperature,
         spks=spks,
@@ -98,15 +99,43 @@ def synthesise(text, model, spks=None, lang=None):
         length_scale=length_scale
     )
     # merge everything to one dict    
-    output.update({'start_t': start_t, **text_processed})
+    output.update({'start_t': start_t, **text})
     return output
+
+@torch.inference_mode()
+def batch_synthesis(texts, names, model, vocoder, denoiser, batch_size, spks=None, lang=None):
+    outputs = []
+    for i in range(0, len(texts), batch_size):
+        end_idx = min(i + batch_size, len(texts))
+        batch_texts = texts[i:end_idx]
+        batch_names = names[i: end_idx]
+        batch_spks = torch.tensor(spks[i:end_idx], device=device) if spks is not None else None
+        batch_lang = torch.tensor(lang[i:end_idx], device=device) if lang is not None else None
+
+        batch_x = [process_text(text) for text in batch_texts]
+        batch_lengths = torch.tensor([x["x"].shape[1] for x in batch_x], dtype=torch.long, device=device)
+        max_len = int(max(batch_lengths))
+        batch_x = torch.cat([pad(process_text(text)['x'], max_len) for text in batch_texts], dim=0)
+        inputs = {"x": batch_x, "x_lengths": batch_lengths}
+
+        batch_output = synthesise(inputs, model, batch_spks, batch_lang)
+
+        batch_output['waveform'] = to_waveform(batch_output['mel'], denoiser, vocoder)
+        rtf_w = compute_rtf_w(batch_output)
+        batch_output["rtf_w"] = rtf_w
+        batch_output["names"] = batch_names
+        
+        outputs.append(batch_output)
+        print(f"Samples {i} synthesized")
+    print("All samples synthesized")
+    return outputs
+
 
 @torch.inference_mode()
 def to_waveform(mel, denoiser, vocoder):
     audio = vocoder(mel).clamp(-1, 1)
     if denoiser != None:
         audio = denoiser(audio.squeeze(0), strength=0.00025).cpu()
-    audio = normalize_audio(audio, sample_rate=SAMPLE_RATE)
     audio = audio.t()
     return audio.cpu().squeeze()
 
@@ -115,6 +144,14 @@ def save_to_folder(filename: str, output: dict, folder: str):
     folder.mkdir(exist_ok=True, parents=True)
     np.save(folder / f'{filename}', output['mel'].cpu().numpy())
     sf.write(folder / f'{filename}.wav', output['waveform'], SAMPLE_RATE, 'PCM_24')
+    
+def save_to_folder_batch(output: dict, folder: str):
+    folder = Path(folder)
+    folder.mkdir(exist_ok=True, parents=True)
+    for i in range(output["mel"].shape[0]):
+        filename = output["names"][i]
+        np.save(folder / f'{filename}', output['mel'][i].cpu().numpy())
+        sf.write(folder / f'{filename}.wav', output['waveform'][:, i], SAMPLE_RATE, 'PCM_24')
 
 def parse_filelist_get_text(filelist_path, split_char="|", sentence_index=3, spk_index=1, lang_index=2):
     filepaths_and_text = []
@@ -143,11 +180,64 @@ def save_python_script_with_data(metrics, filename="sync_wandb.py"):
             f"        'dataset': '{WANDB_DATASET}',\n"
             f"        'hardware': '{device}',\n"
             "    }\n"
-            f"    sync_wandb(metrics, project_name, run_name config)\n"
+            f"    sync_wandb(metrics, project_name, run_name, config)\n"
         )
+        
+def pad(input, target_len):
+    padding_needed = target_len - input.size(-1)
+    if padding_needed <= 0:
+        return input
+
+    return torch.nn.functional.pad(input, (0, padding_needed), "constant", 0)
+
+def get_item(data):
+    if not SPK_EMB and not LANG_EMB:
+        text = data[1]
+        spks = None
+        lang = None
+    elif SPK_EMB and not LANG_EMB:
+        spks = torch.tensor([int(data[1])], device=device)
+        text = data[2]
+        lang = None
+    elif LANG_EMB and not SPK_EMB:
+        lang = torch.tensor([int(data[1])], device=device)
+        text = data[2]
+        spks = None
+    else:
+        spks = torch.tensor([int(data[1])], device=device)
+        lang = torch.tensor([int(data[2])], device=device)
+        text = data[3]
+    return text, spks, lang
+
+def get_index():
+    if not SPK_EMB and not LANG_EMB:
+        return 1
+    elif SPK_EMB and not LANG_EMB:
+        return 2
+    elif LANG_EMB and not SPK_EMB:
+        return 2
+    else:
+        return 3
+
+def pretty_print(output, rtf_w, i):
+    print(f"{'*' * 53}")
+    print(f"Input text - {i}")
+    print(f"{'-' * 53}")
+    print(output['x_orig'])
+    print(f"{'*' * 53}")
+    print(f"Phonetised text - {i}")
+    print(f"{'-' * 53}")
+    print(output['x_phones'])
+    print(f"{'*' * 53}")
+    print(f"RTF:\t\t{output['rtf']:.6f}")
+    print(f"RTF Waveform:\t{rtf_w:.6f}")
+    
+def compute_rtf_w(output):
+    t = (dt.datetime.now() - output['start_t']).total_seconds()
+    rtf_w = t * SAMPLE_RATE / (output['waveform'].shape[-1])
+    return rtf_w
 
 def synthesis():
-    
     count_params = lambda x: f"{sum(p.numel() for p in x.parameters()):,}"
 
     model = load_model(MATCHA_CHECKPOINT)
@@ -165,53 +255,44 @@ def synthesis():
     outputs, rtfs = [], []
     rtfs_w = []
     metrics = {}
-    for i, data in enumerate(tqdm(texts)):
-        path = data[0]
-        if not SPK_EMB and not LANG_EMB:
-            text = data[1]
-            spks = None
-            lang = None
-        elif SPK_EMB and not LANG_EMB:
-            spks = torch.tensor([int(data[1])], device=device)
-            text = data[2]
-            lang = None
-        elif LANG_EMB and not SPK_EMB:
-            lang = torch.tensor([int(data[1])], device=device)
-            text = data[2]
-            spks = None
-        else:
-            spks = torch.tensor([int(data[1])], device=device)
-            lang = torch.tensor([int(data[2])], device=device)
-            text = data[3]
-        dirs = path.split("/")
-        name = dirs[len(dirs) - 1].split(".")[0]
-        output = synthesise(text, model, spks=spks, lang=lang) #, torch.tensor([15], device=device, dtype=torch.long).unsqueeze(0))
-        output['waveform'] = to_waveform(output['mel'], denoiser, vocoder)
+    if BATCHED_SYNTHESIS:
+        ckpt = torch.load(MATCHA_CHECKPOINT)
+        batch_size = ckpt["datamodule_hyper_parameters"]["batch_size"]
+        index = get_index()
+        paths = [data[0] for data in texts]
+        dirs = [path.split("/") for path in paths]
+        names = [dir[len(dir) - 1].split(".")[0] for dir in dirs]
+        inputs = [data[index] for data in texts]  # Assuming text is at index 3
+        spks = [int(data[1]) for data in texts] if SPK_EMB else None
+        lang = [int(data[2]) for data in texts] if LANG_EMB else None
+        outputs = batch_synthesis(inputs, names, model, vocoder, denoiser, batch_size, spks=spks, lang=lang)
+        
+        for i, output in enumerate(outputs):
+            rtf_w = output["rtf_w"]
+            rtf_w = rtf_w / batch_size
+            rtf = output["rtf"] / batch_size
+            
+            rtfs.append(rtf)
+            rtfs_w.append(rtf_w)
 
-        # Compute Real Time Factor (RTF) with HiFi-GAN
-        t = (dt.datetime.now() - output['start_t']).total_seconds()
-        rtf_w = t * SAMPLE_RATE / (output['waveform'].shape[-1])
-
-        ## Pretty print
-        print(f"{'*' * 53}")
-        print(f"Input text - {i}")
-        print(f"{'-' * 53}")
-        print(output['x_orig'])
-        print(f"{'*' * 53}")
-        print(f"Phonetised text - {i}")
-        print(f"{'-' * 53}")
-        print(output['x_phones'])
-        print(f"{'*' * 53}")
-        print(f"RTF:\t\t{output['rtf']:.6f}")
-        print(f"RTF Waveform:\t{rtf_w:.6f}")
-        rtfs.append(output['rtf'])
-        rtfs_w.append(rtf_w)
-
-        ## Display the synthesised waveform
-        ipd.display(ipd.Audio(output['waveform'], rate=SAMPLE_RATE))
-
-        ## Save the generated waveform
-        save_to_folder(name, output, OUTPUT_FOLDER)
+            # pretty_print(output, rtf_w, name)
+            save_to_folder_batch(output, OUTPUT_FOLDER)
+    else:
+        for i, data in enumerate(tqdm(texts)):
+            path = data[0]
+            text, spks, lang = get_item(data)
+            dirs = path.split("/")
+            name = dirs[len(dirs) - 1].split(".")[0]
+            output = synthesise(process_text(text), model, spks=spks, lang=lang) #, torch.tensor([15], device=device, dtype=torch.long).unsqueeze(0))
+            waveform = to_waveform(output['mel'], denoiser, vocoder)
+            output['waveform'] = normalize_audio(waveform, sample_rate=SAMPLE_RATE)
+            
+            rtf_w = compute_rtf_w(output)
+            rtfs.append(output['rtf'])
+            rtfs_w.append(rtf_w)
+            
+            pretty_print(output, rtf_w, name)
+            save_to_folder(name, output, OUTPUT_FOLDER)
     
     print(f"Experiment: {WANDB_NAME}")
     for spk_flag in SPK_FLAGS:
