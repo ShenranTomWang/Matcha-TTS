@@ -14,7 +14,6 @@ from diffusers.models.lora import LoRACompatibleLinear
 from diffusers.utils.torch_utils import maybe_allow_in_graph
 
 from mamba_ssm import Mamba2
-from fnet import FourierFFTLayer
 
 class SnakeBeta(nn.Module):
     """
@@ -341,19 +340,29 @@ class Mamba2CrossAttention(nn.Module):
         return y
     
 
+class FourierFFTLayer(nn.Module):
+    def __init__(self, norm: str = None):
+        super().__init__()
+        self.norm = norm
+
+    @torch.cuda.amp.autocast(enabled=False)
+    def forward(self, hidden_states):
+        return torch.fft.fft(torch.fft.fft(hidden_states.float(), dim=-1, norm=self.norm), dim=-2, norm=self.norm).real
+
+
 class FNetCrossAttention(nn.Module):
     r"""
     A cross attention block that uses FNet (Fourier Transform)
     """
     
-    def __init__(self, p_dropout: float):
+    def __init__(self, p_dropout: float, norm: str = None):
         super().__init__()
-        self.mamba2 = FourierFFTLayer()
+        self.fnet = FourierFFTLayer(norm)
         self.drop = nn.Dropout(p_dropout)
         
     def forward(self, x: torch.Tensor, c: torch.Tensor, mask: torch.Tensor = None, **kwargs):
         x = torch.cat((x, c), dim=-2)
-        y = self.mamba2(x)
+        y = self.fnet(x)
         y = self.drop(y)
         return y
 
@@ -583,7 +592,8 @@ class FNetTransformerBlock(nn.Module):
         double_self_attention: bool = False,
         norm_elementwise_affine: bool = True,
         norm_type: str = "layer_norm",
-        final_dropout: bool = False
+        final_dropout: bool = False,
+        norm: str = None
     ):
         super().__init__()
         self.only_cross_attention = only_cross_attention
@@ -606,7 +616,7 @@ class FNetTransformerBlock(nn.Module):
         else:
             self.norm1 = nn.LayerNorm(dim, elementwise_affine=norm_elementwise_affine)
         self.attn1 = nn.Sequential(
-            FourierFFTLayer(),
+            FourierFFTLayer(norm),
             nn.Dropout(dropout)
         )
 
@@ -661,11 +671,9 @@ class FNetTransformerBlock(nn.Module):
 
         cross_attention_kwargs = cross_attention_kwargs if cross_attention_kwargs is not None else {}
 
-        import pdb; pdb.set_trace()
         attn_output = self.attn1(
             norm_hidden_states
         )
-        import pdb; pdb.set_trace()
         if self.use_ada_layer_norm_zero:
             attn_output = gate_msa.unsqueeze(1) * attn_output
         hidden_states = attn_output + hidden_states

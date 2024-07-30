@@ -3,7 +3,7 @@ defaults:
   - encoder: fnet.yaml
   - decoder: fnet.yaml
   - cfm: default.yaml
-  - optimizer: adam.yaml
+  - optimizer: adam_fnet.yaml
   - scheduler: cosine.yaml
 
 _target_: matcha.models.matcha_tts.MatchaTTS

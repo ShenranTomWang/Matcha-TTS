@@ -8,3 +8,4 @@ act_fn: snakebeta
 up_block_type: fnet
 mid_block_type: fnet
 down_block_type: fnet
+norm: forward

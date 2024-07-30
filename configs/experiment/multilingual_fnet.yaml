@@ -4,7 +4,7 @@
 # python train.py experiment=multispeaker
 
 defaults:
-  - override /data: multilingual.yaml
+  - override /data: multilingual_fnet.yaml
   - override /model: multilingual_fnet.yaml
   - override /trainer: fnet.yaml
 

@@ -95,7 +95,7 @@ def normalize_audio(wav: torch.Tensor, normalize: bool = True,
                     stem_name: tp.Optional[str] = None) -> torch.Tensor:
     """Normalize the audio according to the prescribed strategy (see after).
     Args:
-        wav (torch.Tensor): Audio data.
+        wav (torch.Tensor): Audio data, shape (channels, length)
         normalize (bool): if `True` (default), normalizes according to the prescribed
             strategy (see after). If `False`, the strategy is only used in case clipping
             would happen.
