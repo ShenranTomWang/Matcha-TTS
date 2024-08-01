@@ -14,11 +14,11 @@ import synthesis.io as io
 import synthesis.inference as inference
 
 VOCODER = "Vocos"
-BATCHED_SYNTHESIS = True
+BATCHED_SYNTHESIS = False
 BATCH_SIZE = 32
 
 WANDB_PROJECT = f"TTS"
-WANDB_NAME = f"Multilingual Experiment A100 {VOCODER} Balanced Dataset Mamba2 38M {'Batched' if BATCHED_SYNTHESIS else None}"
+WANDB_NAME = f"Multilingual Experiment A100 {VOCODER} Balanced Dataset Mamba2 38M{' Batched' if BATCHED_SYNTHESIS else ''}"
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
@@ -150,8 +150,9 @@ def synthesis():
     metrics["rtfs_std"] = rtfs_std
     metrics["rtfs_w_mean"] = rtfs_w_mean
     metrics["rtfs_w_std"] = rtfs_w_std
-    metrics["throughput_mean"] = throughput_mean
-    metrics["throughput_std"] = throughput_std
+    if BATCHED_SYNTHESIS:
+        metrics["throughput_mean"] = throughput_mean
+        metrics["throughput_std"] = throughput_std
     
     print(f'"num_ode_steps": {n_timesteps}, "rtfs_mean": {rtfs_mean}, "rtfs_std": {rtfs_std}, "rtfs_w_mean": {rtfs_w_mean}, "rtfs_w_std": {rtfs_w_std}, "throughput_mean": {throughput_mean}, "thoughput_std": {throughput_std}')
 
@@ -167,7 +168,7 @@ def synthesis():
         
         print(f'"{spk_flag}/stoi": {stoi}, "{spk_flag}/pesq": {pesq}, "{spk_flag}/mcd": {mcd}, "{spk_flag}/f0_rmse": {f0_rmse}, "{spk_flag}/las_rmse": {las_rmse}, "{spk_flag}/vuv_f1": {vuv_f1}, ')
     
-    io.save_python_script_with_data(metrics, filename=SYNC_SAVE_DIR + WANDB_NAME.replace(" ", "_") + ".py")
+    io.save_python_script_with_data(metrics, WANDB_PROJECT, WANDB_NAME, WANDB_ARCH, WANDB_DATASET, device, filename=SYNC_SAVE_DIR + WANDB_NAME.replace(" ", "_") + ".py")
 
 if __name__ == "__main__":
     synthesis()
