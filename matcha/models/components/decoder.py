@@ -8,7 +8,7 @@ from conformer import ConformerBlock
 from diffusers.models.activations import get_activation
 from einops import pack, rearrange, repeat
 
-from matcha.models.components.transformer import BasicTransformerBlock, Mamba2TransformerBlock, FNetTransformerBlock
+from matcha.models.components.transformer import BasicTransformerBlock, Mamba2TransformerBlock, FNetTransformerBlock, HydraTransformerBlock
 
 
 class SinusoidalPosEmb(torch.nn.Module):
@@ -372,6 +372,12 @@ class Decoder(nn.Module):
                 dim=dim,
                 dropout=dropout,
                 norm=norm
+            )
+        elif block_type == "hydra":
+            block = HydraTransformerBlock(
+                dim=dim,
+                attention_head_dim=attention_head_dim,
+                num_attention_heads=num_heads
             )
         else:
             raise ValueError(f"Unknown block type {block_type}")

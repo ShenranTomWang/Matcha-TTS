@@ -13,8 +13,10 @@ import synthesis.utils as utils
 import synthesis.io as io
 import synthesis.inference as inference
 
+import os
+
 VOCODER = "Vocos"
-BATCHED_SYNTHESIS = False
+BATCHED_SYNTHESIS = bool(os.getenv("BATCHED_SYNTHESIS"))
 BATCH_SIZE = 32
 
 WANDB_PROJECT = f"TTS"
@@ -27,7 +29,7 @@ OUTPUT_FOLDER = f"synth_output-{WANDB_NAME}"
 TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
 SYNC_SAVE_DIR = "./"
 
-MATCHA_CHECKPOINT = "./logs/train/multilingual_mamba2/runs/38M/checkpoints/last.ckpt"
+MATCHA_CHECKPOINT = os.getenv("MATCHA_CHECKPOINT")
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
 VOCOS_CHECKPOINT = "./logs/vocos/multilingual-balanced-dataset/checkpoints/last.ckpt"
 

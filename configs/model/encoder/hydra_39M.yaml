@@ -1,0 +1,19 @@
+encoder_type: RoPE Encoder
+encoder_params:
+  n_feats: ${model.n_feats}
+  n_channels: 128
+  filter_channels: 768
+  filter_channels_dp: 256
+  n_heads: 2
+  n_layers: 6
+  kernel_size: 3
+  p_dropout: 0.1
+  prenet: true
+  attn: hydra
+  kwargs:
+    headdim: 144    # (lang_emb_dim + spk_emb_dim + n_channels) / headdim must be multiples of 4
+
+duration_predictor_params:
+  filter_channels_dp: ${model.encoder.encoder_params.filter_channels_dp}
+  kernel_size: 3
+  p_dropout: ${model.encoder.encoder_params.p_dropout}

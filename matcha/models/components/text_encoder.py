@@ -8,6 +8,7 @@ import torch.nn as nn
 from einops import rearrange
 from flash_attn import flash_attn_func
 from mamba_ssm import Mamba2
+from hydra_mm.hydra import Hydra
 from fnet import FourierFFTLayer
 
 import matcha.utils as utils
@@ -283,6 +284,20 @@ class Mamba2Attention(nn.Module):
         y = self.drop(y)
         y = rearrange(y, "b t h-> b h t")
         return y
+    
+
+class HydraAttention(nn.Module):
+    def __init__(self, dim, p_dropout: float, **kwargs):
+        super().__init__()
+        self.hydra = Hydra(dim, **kwargs)
+        self.drop = nn.Dropout(p_dropout)
+    
+    def forward(self, x, c, attn_mask=None):
+        x = rearrange(x, "b h t-> b t h")
+        y = self.hydra(x)
+        y = self.drop(y)
+        y = rearrange(y, "b t h-> b h t")
+        return y
 
 
 class FNetAttention(nn.Module):
@@ -377,6 +392,8 @@ class Encoder(nn.Module):
             return Mamba2Attention(hidden_channels, p_dropout, d_ssm=n_heads*hidden_channels, **kwargs)
         elif attn_type == "fnet":
             return FNetAttention(p_dropout)
+        elif attn_type == "hydra":
+            return HydraAttention(hidden_channels, p_dropout, **kwargs)
         else:
             raise ValueError(f"Unknown block type {attn_type}")
 

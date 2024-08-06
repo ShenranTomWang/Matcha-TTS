@@ -1,0 +1,18 @@
+defaults:
+  - _self_
+  - encoder: hydra_39M.yaml
+  - decoder: hydra_39M.yaml
+  - cfm: default.yaml
+  - optimizer: adam.yaml
+  - scheduler: cosine.yaml
+
+_target_: matcha.models.matcha_tts.MatchaTTS
+n_vocab: 178
+n_spks: ${data.n_spks}
+n_lang: ${data.n_lang}
+spk_emb_dim: 256
+lang_emb_dim: 192
+n_feats: 80
+data_statistics: ${data.data_statistics}
+out_size: null # Must be divisible by 4
+prior_loss: true
