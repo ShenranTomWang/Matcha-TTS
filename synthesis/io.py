@@ -12,9 +12,9 @@ def save_to_folder(filename: str, output: dict, folder: str, sr: int):
 def save_to_folder_batch(output: dict, folder: str, sr: int):
     folder = Path(folder)
     folder.mkdir(exist_ok=True, parents=True)
-    for i in range(output["mel"].shape[0]):
+    for i in range(len(output["normalized_waveforms"])):
         filename = output["names"][i]
-        np.save(folder / f'{filename}', output['mel'][i].cpu().numpy())
+        # np.save(folder / f'{filename}', output['mel'][i].cpu().numpy())
         sf.write(folder / f'{filename}.wav', output['normalized_waveforms'][i], sr, 'PCM_24')
 
 def parse_filelist_get_text(

@@ -20,7 +20,7 @@ BATCHED_SYNTHESIS = bool(os.getenv("BATCHED_SYNTHESIS"))
 BATCH_SIZE = 32
 
 WANDB_PROJECT = f"TTS"
-WANDB_NAME = f"Multilingual Experiment A100 {VOCODER} Balanced Dataset Mamba2 38M{' Batched' if BATCHED_SYNTHESIS else ''}"
+WANDB_NAME = f"Multilingual Experiment A100 {VOCODER} Balanced Dataset Hydra 39M{' Batched' if BATCHED_SYNTHESIS else ''}"
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
@@ -92,22 +92,24 @@ def synthesis():
             length_scale=length_scale
         )
         
-        normalized_waveforms = []
+        
         for i, output in enumerate(outputs):
+            normalized_waveforms = []
             rtf_w = output["rtf_w"]
             rtf_w = rtf_w / BATCH_SIZE
             rtf = output["rtf"] / BATCH_SIZE
             throughput = output['throughput']
             for wave in output['waveform']:
-                normalized = normalize_audio(wave, sample_rate=SAMPLE_RATE).t().squeeze()
+                normalized = normalize_audio(wave, sample_rate=SAMPLE_RATE).t()
                 normalized_waveforms.append(normalized)
             
             rtfs.append(rtf)
             rtfs_w.append(rtf_w)
             throughputs.append(throughput)
 
-        output['normalized_waveforms'] = normalized_waveforms
-        io.save_to_folder_batch(output, OUTPUT_FOLDER, SAMPLE_RATE)
+            output['normalized_waveforms'] = normalized_waveforms
+            
+            io.save_to_folder_batch(output, OUTPUT_FOLDER, SAMPLE_RATE)
             
     else:
         for i, data in enumerate(tqdm(texts)):
