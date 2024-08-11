@@ -20,7 +20,7 @@ BATCHED_SYNTHESIS = bool(os.getenv("BATCHED_SYNTHESIS"))
 BATCH_SIZE = 32
 
 WANDB_PROJECT = f"TTS"
-WANDB_NAME = f"Multilingual Experiment A100 {VOCODER} Balanced Dataset Hydra 39M{' Batched' if BATCHED_SYNTHESIS else ''}"
+WANDB_NAME = os.getenv("WANDB_NAME")
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
@@ -99,8 +99,12 @@ def synthesis():
             rtf_w = rtf_w / BATCH_SIZE
             rtf = output["rtf"] / BATCH_SIZE
             throughput = output['throughput']
-            for wave in output['waveform']:
-                normalized = normalize_audio(wave, sample_rate=SAMPLE_RATE).t()
+            for j, wave in enumerate(output['waveform']):
+                try:
+                    normalized = normalize_audio(wave, sample_rate=SAMPLE_RATE).t()
+                except RuntimeError as err:
+                    print(f"{output['name'][j]}: {err}")
+                    normalized = wave.t()
                 normalized_waveforms.append(normalized)
             
             rtfs.append(rtf)
