@@ -6,6 +6,7 @@ from pymcd.mcd import Calculate_MCD
 import librosa
 import numpy as np
 from sklearn.metrics import precision_recall_fscore_support
+from frechetdist import frdist
 
 import os
 
@@ -99,6 +100,26 @@ def rmse(ref, syn) -> float:
         float: RMSE
     """
     return np.sqrt(np.mean((ref - syn) ** 2))
+
+def fd(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE) -> float:
+    """compute frechet distance
+
+    Args:
+        reference_wav (str): reference .wav filepath
+        synthesized_wav (str): synthesized .wav filepath
+        sr (int, optional): sample rate. Defaults to SAMPLE_RATE.
+
+    Returns:
+        float: frechet distance
+    """
+    ref_audio, _ = librosa.load(reference_wav, sr=sr)
+    syn_audio, _ = librosa.load(synthesized_wav, sr=sr)
+    
+    ref_audio, syn_audio = pad_shorter_np(ref_audio, syn_audio)
+    ref_audio, syn_audio = np.expand_dims(ref_audio, axis=1), np.expand_dims(syn_audio, axis=1)
+    ref_audio, syn_audio = ref_audio.tolist(), syn_audio.tolist()
+    
+    return frdist(ref_audio, syn_audio)
 
 def f0_rmse(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE) -> float:
     """compute F0-RMSE
@@ -279,7 +300,7 @@ def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
         spk_flag (str, optional): speaker flag (AT, JJ, MJ, NJ), defaults to "" to obtain all files.
 
     Returns:
-        (stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1): scores
+        (stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd): scores
     """
     paired_data = get_paired_data(yhat_folder, y_filelist, spk_flag)
 
@@ -289,6 +310,7 @@ def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
     f0_rmse_sum = 0
     las_rmse_sum = 0
     vuv_f1_sum = 0
+    fd_sum = 0
     for name in paired_data.keys():
         dirs = paired_data[name]
         y_path, yhat_path = dirs["yhat"], dirs["y"]
@@ -299,6 +321,7 @@ def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
         mcd_score_sum += mcd(y_path, yhat_path)
         stoi_score_sum += stoi(y_path, yhat_path)
         pesq_score_sum += pesq(y_path, yhat_path)
+        fd_sum += fd(y_path, yhat_path)
 
     size = len(paired_data)
     stoi_mean = stoi_score_sum / size
@@ -307,5 +330,6 @@ def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
     f0_rmse_mean = f0_rmse_sum / size
     las_rmse_mean = las_rmse_sum / size
     vuv_f1_mean = vuv_f1_sum / size
+    fd_mean = fd_sum / size
 
-    return stoi_mean, pesq_mean, mcd_mean, f0_rmse_mean, las_rmse_mean, vuv_f1_mean
+    return stoi_mean, pesq_mean, mcd_mean, f0_rmse_mean, las_rmse_mean, vuv_f1_mean, fd_mean
