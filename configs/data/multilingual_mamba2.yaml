@@ -2,7 +2,7 @@ _target_: matcha.data.text_mel_datamodule.TextMelDataModule
 name: multilingual_mamba2
 train_filelist_path: data/filelists/multilingual_train_filelist.txt
 valid_filelist_path: data/filelists/multilingual_val_filelist.txt
-batch_size: 64
+batch_size: 32
 num_workers: 8
 pin_memory: True
 cleaners: [objiwe_cleaners]

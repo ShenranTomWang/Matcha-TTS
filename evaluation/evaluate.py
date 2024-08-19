@@ -6,7 +6,7 @@ from pymcd.mcd import Calculate_MCD
 import librosa
 import numpy as np
 from sklearn.metrics import precision_recall_fscore_support
-from frechetdist import frdist
+from .fid import CalFIDAlign
 
 import os
 
@@ -112,14 +112,9 @@ def fd(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE) -> float:
     Returns:
         float: frechet distance
     """
-    ref_audio, _ = librosa.load(reference_wav, sr=sr)
-    syn_audio, _ = librosa.load(synthesized_wav, sr=sr)
+    fd = CalFIDAlign(synthesized_wav, reference_wav)
     
-    ref_audio, syn_audio = pad_shorter_np(ref_audio, syn_audio)
-    ref_audio, syn_audio = np.expand_dims(ref_audio, axis=1), np.expand_dims(syn_audio, axis=1)
-    ref_audio, syn_audio = ref_audio.tolist(), syn_audio.tolist()
-    
-    return frdist(ref_audio, syn_audio)
+    return fd("mfcc")
 
 def f0_rmse(reference_wav: str, synthesized_wav: str, sr=SAMPLE_RATE) -> float:
     """compute F0-RMSE
@@ -272,7 +267,7 @@ def get_paired_data(yhat_folder: str, y_filelist: str, file_flag: str) -> dict:
         file_flag (str): flag of file, used to filter files to obtain
 
     Returns:
-        dict: {<data_id>: {yhat_path, y_path}}
+        dict: {data_id: {yhat_path, y_path}}
     """
     paired_data = {}
     for file in os.listdir(yhat_folder):
@@ -291,6 +286,32 @@ def get_paired_data(yhat_folder: str, y_filelist: str, file_flag: str) -> dict:
             
     return paired_data
 
+def get_syn_ref_filelist(yhat_folder: str, y_filelist: str, file_flag: str) -> tuple:
+    """get lists of yhat and y
+
+    Args:
+        yhat_folder (str): directory of synthesized samples
+        y_filelist (str): filelist of reference samples
+        file_flag (str): flag of file, used to filter files to obtain
+
+    Returns:
+        tuple: (synthesized, reference)
+    """
+    synthesized = []
+    for file in os.listdir(yhat_folder):
+        if file.endswith(".wav") and file.find(file_flag) != -1:
+            synthesized.append(f"{yhat_folder}/{file}")
+    reference = []
+    with open(y_filelist, "r", encoding="utf-8") as fl:
+        for line in fl:
+            path = line.split("|")[0]
+            dirs = path.split("/")
+            filename = dirs[len(dirs) - 1]
+            if filename.find(file_flag) != -1:
+                reference.append(path)
+                
+    return synthesized, reference
+
 def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
     """evaluate and return scores
 
@@ -303,6 +324,7 @@ def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
         (stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd): scores
     """
     paired_data = get_paired_data(yhat_folder, y_filelist, spk_flag)
+    syn_filelist, ref_filelist = get_syn_ref_filelist(yhat_folder, y_filelist, spk_flag)
 
     stoi_score_sum = 0
     pesq_score_sum = 0
@@ -321,7 +343,6 @@ def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
         mcd_score_sum += mcd(y_path, yhat_path)
         stoi_score_sum += stoi(y_path, yhat_path)
         pesq_score_sum += pesq(y_path, yhat_path)
-        fd_sum += fd(y_path, yhat_path)
 
     size = len(paired_data)
     stoi_mean = stoi_score_sum / size
@@ -330,6 +351,6 @@ def evaluate(yhat_folder: str, y_filelist: str, spk_flag="") -> tuple:
     f0_rmse_mean = f0_rmse_sum / size
     las_rmse_mean = las_rmse_sum / size
     vuv_f1_mean = vuv_f1_sum / size
-    fd_mean = fd_sum / size
+    fd_mean = fd(syn_filelist, ref_filelist)
 
     return stoi_mean, pesq_mean, mcd_mean, f0_rmse_mean, las_rmse_mean, vuv_f1_mean, fd_mean

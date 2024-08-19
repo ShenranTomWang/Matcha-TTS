@@ -20,7 +20,7 @@ BATCHED_SYNTHESIS = bool(os.getenv("BATCHED_SYNTHESIS"))
 BATCH_SIZE = 32
 
 WANDB_PROJECT = f"TTS"
-WANDB_NAME = os.getenv("WANDB_NAME")
+WANDB_NAME = os.getenv("WANDB_NAME") + " Batched" if BATCHED_SYNTHESIS else os.getenv("WANDB_NAME")
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
@@ -103,7 +103,7 @@ def synthesis():
                 try:
                     normalized = normalize_audio(wave, sample_rate=SAMPLE_RATE).t()
                 except RuntimeError as err:
-                    print(f"{output['name'][j]}: {err}")
+                    print(f"{output['names'][j]}: {err}")
                     normalized = wave.t()
                 normalized_waveforms.append(normalized)
             
@@ -165,7 +165,7 @@ def synthesis():
     print(f'"num_ode_steps": {n_timesteps}, "rtfs_mean": {rtfs_mean}, "rtfs_std": {rtfs_std}, "rtfs_w_mean": {rtfs_w_mean}, "rtfs_w_std": {rtfs_w_std}, "throughput_mean": {throughput_mean}, "thoughput_std": {throughput_std}')
 
     for spk_flag in SPK_FLAGS:
-        stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1 = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
+        stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
         
         metrics[f"{spk_flag}/stoi"] = stoi
         metrics[f"{spk_flag}/pesq"] = pesq
@@ -173,8 +173,9 @@ def synthesis():
         metrics[f"{spk_flag}/f0_rmse"] = f0_rmse
         metrics[f"{spk_flag}/las_rmse"] = las_rmse
         metrics[f"{spk_flag}/vuv_f1"] = vuv_f1
+        metrics[f"{spk_flag}/fd"] = fd
         
-        print(f'"{spk_flag}/stoi": {stoi}, "{spk_flag}/pesq": {pesq}, "{spk_flag}/mcd": {mcd}, "{spk_flag}/f0_rmse": {f0_rmse}, "{spk_flag}/las_rmse": {las_rmse}, "{spk_flag}/vuv_f1": {vuv_f1}, ')
+        print(f'"{spk_flag}/stoi": {stoi}, "{spk_flag}/pesq": {pesq}, "{spk_flag}/mcd": {mcd}, "{spk_flag}/f0_rmse": {f0_rmse}, "{spk_flag}/las_rmse": {las_rmse}, "{spk_flag}/vuv_f1": {vuv_f1}, {spk_flag}/fd": {fd},')
     
     io.save_python_script_with_data(metrics, WANDB_PROJECT, WANDB_NAME, WANDB_ARCH, WANDB_DATASET, device, filename=SYNC_SAVE_DIR + WANDB_NAME.replace(" ", "_") + ".py")
 
