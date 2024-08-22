@@ -69,7 +69,7 @@ def expand_abbreviations(text):
     return text
 
 
-def lowercase(text):
+def lowercase(text: str):
     return text.lower()
 
 

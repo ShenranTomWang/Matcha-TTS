@@ -24,9 +24,9 @@ WANDB_NAME = os.getenv("WANDB_NAME") + " Batched" if BATCHED_SYNTHESIS else os.g
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
-Y_FILELIST = "./data/filelists/multilingual_test_filelist.txt"
+Y_FILELIST = os.getenv("Y_FILELIST")
 OUTPUT_FOLDER = f"synth_output-{WANDB_NAME}"
-TEXTS_DIR = "./data/filelists/multilingual_test_filelist.txt"
+TEXTS_DIR = os.getenv("TEXTS_DIR")
 SYNC_SAVE_DIR = "./"
 
 MATCHA_CHECKPOINT = os.getenv("MATCHA_CHECKPOINT")
@@ -35,9 +35,10 @@ VOCOS_CHECKPOINT = "./logs/vocos/multilingual-balanced-dataset/checkpoints/last.
 
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
-LANG_EMB = True
-SPK_EMB = True
+LANG_EMB = bool(os.getenv("LANG_EMB"))
+SPK_EMB = bool(os.getenv("SPK_EMB"))
 SPK_FLAGS = ["AT", "MJ", "JJ", "NJ"]
+SPK_FLAG_MONOLINGUAL = os.getenv("SPK_FLAG_MONOLINGUAL")
 SAMPLE_RATE = 22050
 ## Number of ODE Solver steps
 n_timesteps = 10
@@ -117,8 +118,7 @@ def synthesis():
             
     else:
         for i, data in enumerate(tqdm(texts)):
-            path = data[0]
-            text, spks, lang = utils.get_item(data, SPK_EMB, LANG_EMB, device)
+            path, spks, lang, text= data[0], data[1], data[2], data[3]
             dirs = path.split("/")
             name = dirs[len(dirs) - 1].split(".")[0]
             output = inference.synthesise(
@@ -164,18 +164,31 @@ def synthesis():
     
     print(f'"num_ode_steps": {n_timesteps}, "rtfs_mean": {rtfs_mean}, "rtfs_std": {rtfs_std}, "rtfs_w_mean": {rtfs_w_mean}, "rtfs_w_std": {rtfs_w_std}, "throughput_mean": {throughput_mean}, "thoughput_std": {throughput_std}')
 
-    for spk_flag in SPK_FLAGS:
-        stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
+    if LANG_EMB:
+        for spk_flag in SPK_FLAGS:
+            stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
+            
+            metrics[f"{spk_flag}/stoi"] = stoi
+            metrics[f"{spk_flag}/pesq"] = pesq
+            metrics[f"{spk_flag}/mcd"] = mcd
+            metrics[f"{spk_flag}/f0_rmse"] = f0_rmse
+            metrics[f"{spk_flag}/las_rmse"] = las_rmse
+            metrics[f"{spk_flag}/vuv_f1"] = vuv_f1
+            metrics[f"{spk_flag}/fd"] = fd
+            
+            print(f'"{spk_flag}/stoi": {stoi}, "{spk_flag}/pesq": {pesq}, "{spk_flag}/mcd": {mcd}, "{spk_flag}/f0_rmse": {f0_rmse}, "{spk_flag}/las_rmse": {las_rmse}, "{spk_flag}/vuv_f1": {vuv_f1}, {spk_flag}/fd": {fd},')
+    else:
+        stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, SPK_FLAG_MONOLINGUAL)
+
+        metrics[f"{SPK_FLAG_MONOLINGUAL}/stoi"] = stoi
+        metrics[f"{SPK_FLAG_MONOLINGUAL}/pesq"] = pesq
+        metrics[f"{SPK_FLAG_MONOLINGUAL}/mcd"] = mcd
+        metrics[f"{SPK_FLAG_MONOLINGUAL}/f0_rmse"] = f0_rmse
+        metrics[f"{SPK_FLAG_MONOLINGUAL}/las_rmse"] = las_rmse
+        metrics[f"{SPK_FLAG_MONOLINGUAL}/vuv_f1"] = vuv_f1
+        metrics[f"{SPK_FLAG_MONOLINGUAL}/fd"] = fd
         
-        metrics[f"{spk_flag}/stoi"] = stoi
-        metrics[f"{spk_flag}/pesq"] = pesq
-        metrics[f"{spk_flag}/mcd"] = mcd
-        metrics[f"{spk_flag}/f0_rmse"] = f0_rmse
-        metrics[f"{spk_flag}/las_rmse"] = las_rmse
-        metrics[f"{spk_flag}/vuv_f1"] = vuv_f1
-        metrics[f"{spk_flag}/fd"] = fd
-        
-        print(f'"{spk_flag}/stoi": {stoi}, "{spk_flag}/pesq": {pesq}, "{spk_flag}/mcd": {mcd}, "{spk_flag}/f0_rmse": {f0_rmse}, "{spk_flag}/las_rmse": {las_rmse}, "{spk_flag}/vuv_f1": {vuv_f1}, {spk_flag}/fd": {fd},')
+        print(f'"{SPK_FLAG_MONOLINGUAL}/stoi": {stoi}, "{SPK_FLAG_MONOLINGUAL}/pesq": {pesq}, "{SPK_FLAG_MONOLINGUAL}/mcd": {mcd}, "{SPK_FLAG_MONOLINGUAL}/f0_rmse": {f0_rmse}, "{SPK_FLAG_MONOLINGUAL}/las_rmse": {las_rmse}, "{SPK_FLAG_MONOLINGUAL}/vuv_f1": {vuv_f1}, {SPK_FLAG_MONOLINGUAL}/fd": {fd},')
     
     io.save_python_script_with_data(metrics, WANDB_PROJECT, WANDB_NAME, WANDB_ARCH, WANDB_DATASET, device, filename=SYNC_SAVE_DIR + WANDB_NAME.replace(" ", "_") + ".py")
 
