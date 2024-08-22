@@ -15,6 +15,17 @@ import synthesis.inference as inference
 
 import os
 
+"""
+Synthesis code.
+This script generates a python file that when invoked, syncs all metrics to WandB. Set the run name in environment variable WANDB_NAME
+If you want to perform batched synthesis, please set the environment variable BATCHED_SYNTHESIS to 1, and set BATCH_SIZE below
+There are two vocoders available: Vocos or HiFiGAN. Please set accordingly below in the VOCODER constant
+Y_FILELIST is the path of filelist of all test files
+Set the environment variable MATCHA_CHECKPOINT for path of checkpoint where MatchaTTS gets picked up
+Set environment variables LANG_EMB or SPK_EMB to 1 if the filelist contains language/speaker embeddings
+For Monolingual Synthesis, set environment variable SPK_FLAG_MONOLINGUAL to the corresponding speaker (AT, MJ, JJ, NJ)
+"""
+
 VOCODER = "Vocos"
 BATCHED_SYNTHESIS = bool(os.getenv("BATCHED_SYNTHESIS"))
 BATCH_SIZE = 32
@@ -26,7 +37,6 @@ WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
 Y_FILELIST = os.getenv("Y_FILELIST")
 OUTPUT_FOLDER = f"synth_output-{WANDB_NAME}"
-TEXTS_DIR = os.getenv("TEXTS_DIR")
 SYNC_SAVE_DIR = "./"
 
 MATCHA_CHECKPOINT = os.getenv("MATCHA_CHECKPOINT")
@@ -61,7 +71,7 @@ def synthesis():
         vocoder = utils.load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT, device, vocoder_type=VOCODER)
         denoiser = None
     index = utils.get_data_index(SPK_EMB, LANG_EMB)
-    texts = io.parse_filelist_get_text(TEXTS_DIR, SPK_EMB, LANG_EMB, sentence_index=index)
+    texts = io.parse_filelist_get_text(Y_FILELIST, SPK_EMB, LANG_EMB, sentence_index=index)
 
     outputs, rtfs = [], []
     rtfs_w = []
