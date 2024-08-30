@@ -27,8 +27,8 @@ For Monolingual Synthesis, set environment variable SPK_FLAG_MONOLINGUAL to the 
 """
 
 VOCODER = "Vocos"
-BATCHED_SYNTHESIS = bool(os.getenv("BATCHED_SYNTHESIS"))
-BATCH_SIZE = 32
+BATCHED_SYNTHESIS = os.getenv("BATCHED_SYNTHESIS") == "1"
+BATCH_SIZE = 400
 
 WANDB_PROJECT = f"TTS"
 WANDB_NAME = os.getenv("WANDB_NAME") + " Batched" if BATCHED_SYNTHESIS else os.getenv("WANDB_NAME")
@@ -45,8 +45,8 @@ VOCOS_CHECKPOINT = "./logs/vocos/multilingual-balanced-dataset/checkpoints/last.
 
 VOCOS_CONFIG = "./configs/vocos/vocos-matcha.yaml"
 
-LANG_EMB = bool(os.getenv("LANG_EMB"))
-SPK_EMB = bool(os.getenv("SPK_EMB"))
+LANG_EMB = os.getenv("LANG_EMB") == "1"
+SPK_EMB = os.getenv("SPK_EMB") == "1"
 SPK_FLAGS = ["AT", "MJ", "JJ", "NJ"]
 SPK_FLAG_MONOLINGUAL = os.getenv("SPK_FLAG_MONOLINGUAL")
 SAMPLE_RATE = 22050
@@ -79,13 +79,26 @@ def synthesis():
     throughputs = []
     if BATCHED_SYNTHESIS:
         ckpt = torch.load(MATCHA_CHECKPOINT)
-        hop_length = ckpt["datamodule_hyper_parameters"]["hop_length"]
-        paths = [data[0] for data in texts]
-        dirs = [path.split("/") for path in paths]
-        names = [dir[len(dir) - 1].split(".")[0] for dir in dirs]
-        inputs = [data[3] for data in texts]
-        spks = [int(data[1]) for data in texts] if SPK_EMB else None
-        lang = [int(data[2]) for data in texts] if LANG_EMB else None
+        hop_length, names, inputs, spks, lang = utils.get_item_batched(ckpt, texts, SPK_EMB, LANG_EMB)
+        for i in range(5):
+            print(f"compile run {i}")
+            outputs = inference.batch_synthesis(
+                inputs, 
+                names, 
+                model, 
+                vocoder, 
+                denoiser, 
+                BATCH_SIZE, 
+                hop_length, 
+                device, 
+                SAMPLE_RATE, 
+                spks=spks, 
+                lang=lang,
+                temperature=temperature,
+                n_timesteps=n_timesteps,
+                length_scale=length_scale
+            )
+        print(f"synthesis starting")
         outputs = inference.batch_synthesis(
             inputs, 
             names, 
@@ -102,7 +115,6 @@ def synthesis():
             n_timesteps=n_timesteps,
             length_scale=length_scale
         )
-        
         
         for i, output in enumerate(outputs):
             normalized_waveforms = []
@@ -127,8 +139,30 @@ def synthesis():
             io.save_to_folder_batch(output, OUTPUT_FOLDER, SAMPLE_RATE)
             
     else:
+        # compilation runs
+        for i in range(10):
+            print(f"compile run {i}")
+            data = texts[i]
+            path, spks, lang, text = utils.get_item(data, SPK_EMB, LANG_EMB, device)
+            dirs = path.split("/")
+            name = dirs[len(dirs) - 1].split(".")[0]
+            output = inference.synthesise(
+                inference.process_text(text, device), 
+                model, 
+                spks=spks, 
+                lang=lang,
+                temperature=temperature,
+                length_scale=length_scale,
+                n_timesteps=n_timesteps
+            )
+            waveform = inference.to_waveform(output['mel'], denoiser, vocoder)
+            output['waveform'] = normalize_audio(waveform, sample_rate=SAMPLE_RATE).t().squeeze()
+            
+            rtf_w = utils.compute_rtf_w(output, SAMPLE_RATE)
+            
+        print(f"starting synthesis")
         for i, data in enumerate(tqdm(texts)):
-            path, spks, lang, text= data[0], data[1], data[2], data[3]
+            path, spks, lang, text = utils.get_item(data, SPK_EMB, LANG_EMB, device)
             dirs = path.split("/")
             name = dirs[len(dirs) - 1].split(".")[0]
             output = inference.synthesise(
@@ -152,9 +186,9 @@ def synthesis():
     
     print(f"Experiment: {WANDB_NAME}")
     
-    rtfs = rtfs[1:]
-    rtfs_w = rtfs_w[1:]
-    throughputs = throughputs[1:]
+    # rtfs = rtfs[1:]
+    # rtfs_w = rtfs_w[1:]
+    # throughputs = throughputs[1:]
     
     rtfs_mean = np.mean(rtfs)
     rtfs_std = np.std(rtfs)
@@ -164,10 +198,11 @@ def synthesis():
     throughput_std = np.std(throughputs)
     
     metrics["num_ode_steps"] = n_timesteps
-    metrics["rtfs_mean"] = rtfs_mean
-    metrics["rtfs_std"] = rtfs_std
-    metrics["rtfs_w_mean"] = rtfs_w_mean
-    metrics["rtfs_w_std"] = rtfs_w_std
+    if not BATCHED_SYNTHESIS:
+        metrics["rtfs_mean"] = rtfs_mean
+        metrics["rtfs_std"] = rtfs_std
+        metrics["rtfs_w_mean"] = rtfs_w_mean
+        metrics["rtfs_w_std"] = rtfs_w_std
     if BATCHED_SYNTHESIS:
         metrics["throughput_mean"] = throughput_mean
         metrics["throughput_std"] = throughput_std

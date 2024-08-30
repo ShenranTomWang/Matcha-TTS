@@ -58,6 +58,7 @@ def batch_synthesis(
     n_timesteps: int = 10
 ):
     outputs = []
+
     for i in range(0, len(texts), batch_size):
         end_idx = min(i + batch_size, len(texts))
         batch_texts = texts[i:end_idx]

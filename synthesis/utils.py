@@ -30,6 +30,7 @@ def trim_waveform(output: dict):
     return trimmed_wavs
 
 def get_item(data: list, spk_emb: bool, lang_emb: bool, device: torch.DeviceObjType):
+    path = data[0]
     if not spk_emb and not lang_emb:
         text = data[1]
         spks = None
@@ -46,7 +47,17 @@ def get_item(data: list, spk_emb: bool, lang_emb: bool, device: torch.DeviceObjT
         spks = torch.tensor([int(data[1])], device=device)
         lang = torch.tensor([int(data[2])], device=device)
         text = data[3]
-    return text, spks, lang
+    return path, spks, lang, text
+
+def get_item_batched(ckpt: dict, texts: list, spk_emb: bool, lang_emb: bool):
+    hop_length = ckpt["datamodule_hyper_parameters"]["hop_length"]
+    paths = [data[0] for data in texts]
+    dirs = [path.split("/") for path in paths]
+    names = [dir[len(dir) - 1].split(".")[0] for dir in dirs]
+    inputs = [data[3] for data in texts]
+    spks = [int(data[1]) for data in texts] if spk_emb else None
+    lang = [int(data[2]) for data in texts] if lang_emb else None
+    return hop_length, names, inputs, spks, lang
 
 def get_data_index(spk_emb: bool, lang_emb: bool):
     if not spk_emb and not lang_emb:
@@ -84,9 +95,9 @@ def compute_rtf_w(output: dict, sr: int):
 
 def compute_throughput(output: dict, sr: int):
     dur = output['waveform_lengths']
-    total_dur = sum(dur) / sr
+    total_dur = sum(dur)
     inference_time = output['inference_time']
-    throughput = inference_time / total_dur
+    throughput = total_dur / inference_time
     return throughput.cpu()
 
 def compute_time_spent(output: dict):
