@@ -29,24 +29,11 @@ def trim_waveform(output: dict):
         trimmed_wavs.append(trimmed)
     return trimmed_wavs
 
-def get_item(data: list, spk_emb: bool, lang_emb: bool, device: torch.DeviceObjType):
+def get_item(data: list, device: torch.DeviceObjType):
     path = data[0]
-    if not spk_emb and not lang_emb:
-        text = data[1]
-        spks = None
-        lang = None
-    elif spk_emb and not lang_emb:
-        spks = torch.tensor([int(data[1])], device=device)
-        text = data[2]
-        lang = None
-    elif lang_emb and not spk_emb:
-        lang = torch.tensor([int(data[1])], device=device)
-        text = data[2]
-        spks = None
-    else:
-        spks = torch.tensor([int(data[1])], device=device)
-        lang = torch.tensor([int(data[2])], device=device)
-        text = data[3]
+    spks = torch.tensor([int(data[1])], device=device) if data[1] != None else None
+    lang = torch.tensor([int(data[2])], device=device) if data[2] != None else None
+    text = data[3]
     return path, spks, lang, text
 
 def get_item_batched(ckpt: dict, texts: list, spk_emb: bool, lang_emb: bool):

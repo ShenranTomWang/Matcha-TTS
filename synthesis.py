@@ -143,7 +143,7 @@ def synthesis():
         for i in range(10):
             print(f"compile run {i}")
             data = texts[i]
-            path, spks, lang, text = utils.get_item(data, SPK_EMB, LANG_EMB, device)
+            path, spks, lang, text = utils.get_item(data, device)
             dirs = path.split("/")
             name = dirs[len(dirs) - 1].split(".")[0]
             output = inference.synthesise(
@@ -162,7 +162,7 @@ def synthesis():
             
         print(f"starting synthesis")
         for i, data in enumerate(tqdm(texts)):
-            path, spks, lang, text = utils.get_item(data, SPK_EMB, LANG_EMB, device)
+            path, spks, lang, text = utils.get_item(data, device)
             dirs = path.split("/")
             name = dirs[len(dirs) - 1].split(".")[0]
             output = inference.synthesise(

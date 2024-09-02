@@ -8,7 +8,7 @@ import synthesis.utils as utils
 
 @torch.inference_mode()
 def process_text(text: str, device: torch.DeviceObjType):
-    x = torch.tensor(intersperse(text_to_sequence(text, ['objiwe_cleaners']), 0),dtype=torch.long, device=device)[None]
+    x = torch.tensor(intersperse(text_to_sequence(text, ['ojibwe_cleaners']), 0),dtype=torch.long, device=device)[None]
     x_lengths = torch.tensor([x.shape[-1]],dtype=torch.long, device=device)
     x_phones = sequence_to_text(x.squeeze(0).tolist())
     return {

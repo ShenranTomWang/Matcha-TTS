@@ -5,7 +5,7 @@ valid_filelist_path: data/filelists/objiwe_audio_text_val_filelist.txt
 batch_size: 32
 num_workers: 20
 pin_memory: True
-cleaners: [objiwe_cleaners]
+cleaners: [ojibwe_cleaners]
 add_blank: True
 n_spks: 1
 n_lang: 1

@@ -5,7 +5,7 @@ valid_filelist_path: data/filelists/multilingual_val_filelist.txt
 batch_size: 32
 num_workers: 8
 pin_memory: True
-cleaners: [objiwe_cleaners]
+cleaners: [ojibwe_cleaners]
 add_blank: True
 n_spks: 4
 n_lang: 3

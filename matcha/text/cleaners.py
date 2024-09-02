@@ -109,8 +109,8 @@ def transliteration_cleaners(text):
     return text
 
 
-def objiwe_cleaners(text):
-    """Pipeline for Objiwe text."""
+def ojibwe_cleaners(text):
+    """Pipeline for Ojibwe text."""
     text = convert_to_ascii(text)
     text = lowercase(text)
     text = collapse_whitespace(text)

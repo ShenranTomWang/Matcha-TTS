@@ -26,6 +26,20 @@ def parse_filelist_get_text(
     spk_index: int = 1, 
     lang_index: int = 2
 ):
+    """Return text in form [[path, spk, lang, text]]
+
+    Args:
+        filelist_path (str)
+        spk_emb (bool)
+        lang_emb (bool)
+        split_char (str, optional). Defaults to "|".
+        sentence_index (int, optional). Defaults to 3.
+        spk_index (int, optional). Defaults to 1.
+        lang_index (int, optional). Defaults to 2.
+
+    Returns:
+        list: [[path, spk, lang, text]]
+    """
     filepaths_and_text = []
     with open(filelist_path, encoding="utf-8") as f:
         for line in f:
