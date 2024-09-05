@@ -17,6 +17,6 @@ win_length: 1024
 f_min: 0
 f_max: 8000
 data_statistics:  # Computed for objiwe dataset
-  mel_mean: -7.06768798828125
-  mel_std: 2.5676426887512207
+  mel_mean: -4.574735641479492
+  mel_std: 2.277500867843628
 seed: ${seed}
