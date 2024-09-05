@@ -35,7 +35,7 @@ DATA_TYPE = os.getenv("DATA_TYPE")
 
 WANDB_PROJECT = f"TTS"
 wandb_name = os.getenv("WANDB_NAME") + " Batched" if BATCHED_SYNTHESIS else os.getenv("WANDB_NAME")
-wandb_name = wandb_name + DATA_TYPE + " " if DATA_TYPE != None else wandb_name
+wandb_name = wandb_name + " " + DATA_TYPE if DATA_TYPE != None else wandb_name
 WANDB_NAME = wandb_name
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
