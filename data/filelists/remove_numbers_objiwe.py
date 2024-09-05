@@ -9,9 +9,9 @@ def remove_numbers(in_path):
         for line in lines:
             file.write(line)
 
-train_path = "./objiwe_audio_text_train_filelist.txt"
-test_path = "./objiwe_audio_text_test_filelist.txt"
-val_path = "./objiwe_audio_text_val_filelist.txt"
+train_path = "./ojibwe_NJ_train_filelist.txt"
+test_path = "./ojibwe_NJ_test_filelist.txt"
+val_path = "./ojibwe_NJ_val_filelist.txt"
 
 remove_numbers(train_path)
 remove_numbers(test_path)

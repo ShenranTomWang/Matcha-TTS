@@ -1,7 +1,7 @@
 _target_: matcha.data.text_mel_datamodule.TextMelDataModule
 name: objiwe
-train_filelist_path: data/filelists/mikmaw_train_filelist.txt
-valid_filelist_path: data/filelists/mikmaw_val_filelist.txt
+train_filelist_path: data/filelists/maliseet_AT_train_filelist.txt
+valid_filelist_path: data/filelists/maliseet_AT_val_filelist.txt
 batch_size: 32
 num_workers: 20
 pin_memory: True
@@ -17,6 +17,6 @@ win_length: 1024
 f_min: 0
 f_max: 8000
 data_statistics:  # Computed for dataset
-  mel_mean: -5.641646385192871
-  mel_std: 2.6819393634796143
+  mel_mean: -5.5924906730651855
+  mel_std: 2.3836777210235596
 seed: ${seed}

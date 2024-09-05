@@ -4,12 +4,12 @@
 # python train.py experiment=multispeaker
 
 defaults:
-  - override /data: mikmaw.yaml
+  - override /data: ojibwe_JJ.yaml
   - override /trainer: monolingual.yaml
 
 # all parameters below will be merged with parameters from default configurations set above
 # this allows you to overwrite only specified parameters
 
-tags: ["mikmaw"]
+tags: ["objiwe"]
 
-run_name: mikmaw
+run_name: objiwe

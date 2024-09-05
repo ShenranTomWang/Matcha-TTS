@@ -1,0 +1,100 @@
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ000181646.wav|Diindiisi ogii-izhiwinaan waanzhing Amikwan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012341.wav|“Ninjiikendam ji-maajitaayang.”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990490.wav|“Nashke gaye owe bijiinag inga-noondaag ji-gaagiigoyaan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012435.wav|Aapiji niminopidaanan.”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011763.wav|Bizindan gide banga’ng.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990349.wav|ji-onji-mino-bimaadizit.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999175.wav|Gakina wiinzowag
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012469.wav|“Gakina gigii-gidaamin.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990027.wav|miinawaa awe awesiiya' a bebezhig
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990439.wav|nashke ge ogowe awesiinyag
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001687.wav|omaa endaayaang.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990203.wav|Ge-wiin awe amik gewiin dagoshing.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011686.wav|Naanaagadawaabam Gaagaagi ogichi-apiitendaan omiinigoowiziwin.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999301.wav|Baamaa oga-kikendaan aa Anishinaabe gii-ikidogwen.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00016580.wav|ingii-wiidanokiimaaban imaa
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011537.wav|Noozhis, ganawaabam gigichi-maamaanaan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011347.wav|ji-gikinoowininang misko-bimaadizii miikana.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990232.wav|waabooz iinzan miinawaa omaa bi-bagamibatoo.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999300.wav|“Ge-niin igo nimbimwidoon ii mashkiki.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012244.wav|“Howa gigii-mikawaa gichi-apiitendaagozi migiziwigwan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00016563.wav|izhi-waawiyeyaa.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ000181695.wav|gaawiin idash ningii-poonendanzii.”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012366.wav|Amik apane naagajichige gii-nibaanid jiigishkode.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019991788.wav|wiikongewin wii-miigwechiwiaawaad azhebowesiwan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011577.wav|Mii iwe gaa-miininaan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990220.wav|iwe ge-izhi-bamii'idizod aa Anishinaabe.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001763.wav|ambegish ani-maamookoshkaag
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012183.wav|Nigig odoodaapinaan miigwanan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990538.wav|ogowe gaye ge-mamaandaawiziwaad.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001111.wav|“Gaawiin isa owe.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990519.wav|Mii go geniin owe ikido iizan
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001752.wav|aaniin dinandinaa ongow anishinaabeg?
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990022.wav|jibwaa ayaawaad maawiin
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011529.wav|Giishpin anokaadansig omiinigoowisiwinan, gaawiin da-mino-bimaadizisii.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011787.wav|awe gaa-gaazhageendang aapiji go naniizaanendaagozi.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012159.wav|gegoo miinigoowiziwag.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999222.wav|Inga-miinaa ge onowe bawaajiganan
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ000181661.wav|Aazha ani-bangishimon
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990133.wav|ji-onji-mino-bimaadizid.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ000186.wav|Gaa-ishkwaa-giziingwaaget
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990428.wav|Nashke onowe nikanan
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990443.wav|mii go miinaa imaa bezhig.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001991976.wav|Ganabaj niin onzaam apane ningitim
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990026.wav|Nashke ge mitigoo’ ogii-ozhi'aa'
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999291.wav|Mii go bezhig gaye owe
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001991871.wav|“Niibiwa gegoo gikikooamaagonaanig Awesiinyag.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990523.wav|“nashke ingoding imaa giga-waabamim
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011792.wav|Weweni naanaagajitooyang enaadiziyang:
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011338.wav|Gii-biidoowaad anamaewigamigong gaye odizhitwaawiniwaan
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011560.wav|Mindimooyenh-asabikeshiinh goshkwaawaadigoojin odasabiing.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990115.wav|gegoo inaa omaa oga-onji-ozhitoon a Anishinaabe.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012295.wav|“Gaawiin noon igiwe nindaa-amwaasiig,” ikido Nigig.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012409.wav|Noongom gii-mino-giizhigad niibing Nigig  agwajiing izhaa wii-odaminot
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001107.wav|Amik ogii-wiijiaan Nigigwan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011542.wav|mii gaye imaa ge-izhi-azhegiiweyan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001685.wav|ingii-apishimomin zhingobiig
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019991721.wav|Odinaan. “Giminjimendaan ina?
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990285.wav|Gaawiin ge-niin wiikaa nindaa-zaakitoosiin owe.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990246.wav|mii epiichi-zhawenimag aw Anishinaabe.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011710.wav|indigo dash gigii-kinooamawind gii-andawenjigeyan
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999328.wav|Aapichi onzaam gii-minopogwad owe.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999474.wav|Niibiyo go ge-niin gegoo aazha nindaabajitoon iwe.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990545.wav|nidaazhawiinamaagen nookomis gaa-gii-miinid gichi-mewinzha.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012401.wav|Ikido Nigig.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990319.wav|mashkiki nimbimiwidoon.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ000181617.wav|Gii-wiisagishin bangii
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001991924.wav|Gagwejiiwin gosha apane gidaa-izhichigemin.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001991935.wav|Awenen waa-niikimod daabishkoo bizhiw?
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012236.wav|“Aapiji sa ingii-segiz!” ikido Nigig.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990406.wav|Dibishkoo eta go awe gegoo andawendang ge-wiin
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012269.wav|Nigig ani-gizhiikaabatoo gaawiin ogii-waabamaasiin asiniin epitood.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011613.wav|niizhwaaswi gimishoomisinaanig gagiikwewinan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012277.wav|Ganabaj wiinawaa odaa-gii-ayaawaawaan.”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00016641.wav|gii-izhi-ombigiwag
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00016562.wav|maagizhaa niiyo-mininj ningodwaaso-mininj
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012113.wav|Onjida ji-naazikamowaad nibi.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999303.wav|mii owe miinawaa bezhik niibiyog gegoo
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001127.wav|“Mii dash ge-izhi-aabajitooyang
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ000181598.wav|“Gigizhiibiz,” kido Nigig.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019991787.wav|Nigig miinawaa Amik odoozhi-ayaanaawaa
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011760.wav|Waabamaan asabikeshiinwasabiin gii-kiizhichigaazonid
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990521.wav|Geniin nimbimiwidoon owe wiisiniwin.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001755.wav|Gaawiin awiiya geyaabi obashkweginwekizinisii
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001991882.wav|gidayekozinaagozim?
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990338.wav|Nashke owe giishpin ingoding naanaagaji'iyeg
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011601.wav|Gigii-gikendaamin gwayako-bimaadiziwin
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ000181643.wav|“Gidaa-izhiwizh ina iwidi?”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00019999358.wav|giizhibagizit a maanizadi aapiji mamaangibagizid a dinowa.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011670.wav|Izhichigen ezhichiget.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012428.wav|Gaawiin ge ninoondeskadesii.”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012338.wav|Amik gaye Nigig wii-pabaa-ayaawag.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001990078.wav|Miinawaa onowe zhiigozhigonan okanan maawiin igo gaye.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001119.wav|Amik ogii-izhiwinaan ziibiing.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011499.wav|zhigwa giiwedinong ge-ani-izhaayan
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00011756.wav|da-ganawaapineshin.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001991942.wav|Gigikendaan ina ezhi-bakaanikin gizhiikaawin miinawaa besikaawin?
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012457.wav|Mii i giizhigiwaagwen noongom.”
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00012339.wav|Gii-ozhiitaawag waa-maajitoowaad endawendamowaat.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ0001999990056.wav|Ingii-bi-gagwejitoonan idash onowen gaa-gikinooamaagoyaan.
+/project/6080355/shenranw/data/Ojibwe_NancyJones/Ojibwe_NancyJones_normalize/NJ00016530.wav|omaa ingoji gakina

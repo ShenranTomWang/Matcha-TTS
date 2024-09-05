@@ -82,7 +82,7 @@ def compute_rtf_w(output: dict, sr: int):
 
 def compute_throughput(output: dict, sr: int):
     dur = output['waveform_lengths']
-    total_dur = sum(dur)
+    total_dur = sum(dur) / sr
     inference_time = output['inference_time']
     throughput = total_dur / inference_time
     return throughput.cpu()

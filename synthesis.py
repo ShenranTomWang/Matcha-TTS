@@ -1,3 +1,4 @@
+from lib2to3.fixes import fix_types
 import numpy as np
 import torch
 from tqdm.auto import tqdm
@@ -30,14 +31,21 @@ VOCODER = "Vocos"
 BATCHED_SYNTHESIS = os.getenv("BATCHED_SYNTHESIS") == "1"
 BATCH_SIZE = 400
 
+DATA_TYPE = os.getenv("DATA_TYPE")
+
 WANDB_PROJECT = f"TTS"
-WANDB_NAME = os.getenv("WANDB_NAME") + " Batched" if BATCHED_SYNTHESIS else os.getenv("WANDB_NAME")
+wandb_name = os.getenv("WANDB_NAME") + " Batched" if BATCHED_SYNTHESIS else os.getenv("WANDB_NAME")
+wandb_name = wandb_name + DATA_TYPE if DATA_TYPE != None else wandb_name
+WANDB_NAME = wandb_name
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
 
 Y_FILELIST = os.getenv("Y_FILELIST")
 OUTPUT_FOLDER = f"synth_output-{WANDB_NAME}"
 SYNC_SAVE_DIR = "./"
+
+MEM_MAX_ENTRIES = 100000
+MEM_FILE_NAME = WANDB_NAME + ".pickle"
 
 MATCHA_CHECKPOINT = os.getenv("MATCHA_CHECKPOINT")
 HIFIGAN_CHECKPOINT = "./matcha/hifigan/g_02500000"
@@ -238,4 +246,14 @@ def synthesis():
     io.save_python_script_with_data(metrics, WANDB_PROJECT, WANDB_NAME, WANDB_ARCH, WANDB_DATASET, device, filename=SYNC_SAVE_DIR + WANDB_NAME.replace(" ", "_") + ".py")
 
 if __name__ == "__main__":
-    synthesis()
+    torch.cuda.memory._record_memory_history(max_entries=MEM_MAX_ENTRIES)
+    if DATA_TYPE == None:
+        synthesis()
+    elif DATA_TYPE == "fp16":
+        with torch.autocast(device, dtype=torch.float16):
+            synthesis()
+    elif DATA_TYPE == "bf16":
+        with torch.autocast(device, dtype=torch.bfloat16):
+            synthesis()
+    torch.cuda.memory._dump_snapshot(MEM_FILE_NAME)
+    torch.cuda.memory._record_memory_history(enabled=None)
