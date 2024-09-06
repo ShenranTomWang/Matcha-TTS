@@ -86,7 +86,7 @@ def synthesis():
     metrics = {}
     throughputs = []
     if BATCHED_SYNTHESIS:
-        ckpt = torch.load(MATCHA_CHECKPOINT)
+        ckpt = torch.load(MATCHA_CHECKPOINT, map_location=device)
         hop_length, names, inputs, spks, lang = utils.get_item_batched(ckpt, texts, SPK_EMB, LANG_EMB)
         for i in range(5):
             print(f"compile run {i}")
