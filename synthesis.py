@@ -133,7 +133,7 @@ def synthesis():
             for j, wave in enumerate(output['waveform']):
                 try:
                     normalized = normalize_audio(wave, sample_rate=SAMPLE_RATE).t()
-                except RuntimeError as err:
+                except Exception as err:
                     print(f"{output['names'][j]}: {err}")
                     normalized = wave.t()
                 normalized_waveforms.append(normalized)
@@ -183,7 +183,12 @@ def synthesis():
                 n_timesteps=n_timesteps
             )
             waveform = inference.to_waveform(output['mel'], denoiser, vocoder)
-            output['waveform'] = normalize_audio(waveform, sample_rate=SAMPLE_RATE).t().squeeze()
+            try:
+                output['waveform'] = normalize_audio(waveform, sample_rate=SAMPLE_RATE).t().squeeze()
+            except Exception as err:
+                print(f"{name}: {err}")
+                output['waveform'] = waveform.t().squeeze()
+                print(f"waveform has NaN? {torch.isnan(waveform).any()}")
             
             rtf_w = utils.compute_rtf_w(output, SAMPLE_RATE)
             rtfs.append(output['rtf'])
@@ -217,31 +222,32 @@ def synthesis():
     
     print(f'"num_ode_steps": {n_timesteps}, "rtfs_mean": {rtfs_mean}, "rtfs_std": {rtfs_std}, "rtfs_w_mean": {rtfs_w_mean}, "rtfs_w_std": {rtfs_w_std}, "throughput_mean": {throughput_mean}, "thoughput_std": {throughput_std}')
 
-    if LANG_EMB:
-        for spk_flag in SPK_FLAGS:
-            stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
-            
-            metrics[f"{spk_flag}/stoi"] = stoi
-            metrics[f"{spk_flag}/pesq"] = pesq
-            metrics[f"{spk_flag}/mcd"] = mcd
-            metrics[f"{spk_flag}/f0_rmse"] = f0_rmse
-            metrics[f"{spk_flag}/las_rmse"] = las_rmse
-            metrics[f"{spk_flag}/vuv_f1"] = vuv_f1
-            metrics[f"{spk_flag}/fd"] = fd
-            
-            print(f'"{spk_flag}/stoi": {stoi}, "{spk_flag}/pesq": {pesq}, "{spk_flag}/mcd": {mcd}, "{spk_flag}/f0_rmse": {f0_rmse}, "{spk_flag}/las_rmse": {las_rmse}, "{spk_flag}/vuv_f1": {vuv_f1}, {spk_flag}/fd": {fd},')
-    else:
-        stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, SPK_FLAG_MONOLINGUAL)
+    with torch.cuda.amp.autocast(dtype=torch.float32):
+        if LANG_EMB:
+            for spk_flag in SPK_FLAGS:
+                stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
+                
+                metrics[f"{spk_flag}/stoi"] = stoi
+                metrics[f"{spk_flag}/pesq"] = pesq
+                metrics[f"{spk_flag}/mcd"] = mcd
+                metrics[f"{spk_flag}/f0_rmse"] = f0_rmse
+                metrics[f"{spk_flag}/las_rmse"] = las_rmse
+                metrics[f"{spk_flag}/vuv_f1"] = vuv_f1
+                metrics[f"{spk_flag}/fd"] = fd
+                
+                print(f'"{spk_flag}/stoi": {stoi}, "{spk_flag}/pesq": {pesq}, "{spk_flag}/mcd": {mcd}, "{spk_flag}/f0_rmse": {f0_rmse}, "{spk_flag}/las_rmse": {las_rmse}, "{spk_flag}/vuv_f1": {vuv_f1}, {spk_flag}/fd": {fd},')
+        else:
+            stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, SPK_FLAG_MONOLINGUAL)
 
-        metrics[f"{SPK_FLAG_MONOLINGUAL}/stoi"] = stoi
-        metrics[f"{SPK_FLAG_MONOLINGUAL}/pesq"] = pesq
-        metrics[f"{SPK_FLAG_MONOLINGUAL}/mcd"] = mcd
-        metrics[f"{SPK_FLAG_MONOLINGUAL}/f0_rmse"] = f0_rmse
-        metrics[f"{SPK_FLAG_MONOLINGUAL}/las_rmse"] = las_rmse
-        metrics[f"{SPK_FLAG_MONOLINGUAL}/vuv_f1"] = vuv_f1
-        metrics[f"{SPK_FLAG_MONOLINGUAL}/fd"] = fd
-        
-        print(f'"{SPK_FLAG_MONOLINGUAL}/stoi": {stoi}, "{SPK_FLAG_MONOLINGUAL}/pesq": {pesq}, "{SPK_FLAG_MONOLINGUAL}/mcd": {mcd}, "{SPK_FLAG_MONOLINGUAL}/f0_rmse": {f0_rmse}, "{SPK_FLAG_MONOLINGUAL}/las_rmse": {las_rmse}, "{SPK_FLAG_MONOLINGUAL}/vuv_f1": {vuv_f1}, {SPK_FLAG_MONOLINGUAL}/fd": {fd},')
+            metrics[f"{SPK_FLAG_MONOLINGUAL}/stoi"] = stoi
+            metrics[f"{SPK_FLAG_MONOLINGUAL}/pesq"] = pesq
+            metrics[f"{SPK_FLAG_MONOLINGUAL}/mcd"] = mcd
+            metrics[f"{SPK_FLAG_MONOLINGUAL}/f0_rmse"] = f0_rmse
+            metrics[f"{SPK_FLAG_MONOLINGUAL}/las_rmse"] = las_rmse
+            metrics[f"{SPK_FLAG_MONOLINGUAL}/vuv_f1"] = vuv_f1
+            metrics[f"{SPK_FLAG_MONOLINGUAL}/fd"] = fd
+            
+            print(f'"{SPK_FLAG_MONOLINGUAL}/stoi": {stoi}, "{SPK_FLAG_MONOLINGUAL}/pesq": {pesq}, "{SPK_FLAG_MONOLINGUAL}/mcd": {mcd}, "{SPK_FLAG_MONOLINGUAL}/f0_rmse": {f0_rmse}, "{SPK_FLAG_MONOLINGUAL}/las_rmse": {las_rmse}, "{SPK_FLAG_MONOLINGUAL}/vuv_f1": {vuv_f1}, {SPK_FLAG_MONOLINGUAL}/fd": {fd},')
     
     io.save_python_script_with_data(metrics, WANDB_PROJECT, WANDB_NAME, WANDB_ARCH, WANDB_DATASET, device, filename=SYNC_SAVE_DIR + WANDB_NAME.replace(" ", "_") + ".py")
 
