@@ -1,6 +1,9 @@
 import torch
 import datetime as dt
 
+# Hifigan imports
+from matcha.hifigan.denoiser import Denoiser
+
 from matcha.hifigan.env import AttrDict
 from matcha.hifigan.models import Generator as HiFiGAN
 from matcha.hifigan.config import v1
@@ -95,10 +98,12 @@ def compute_waveform_lengths(output: dict, hop_length: int):
     wave_lengths = output["mel_lengths"] * hop_length
     return wave_lengths
 
-def load_vocoder(config_path: str, checkpoint_path: str, device: torch.DeviceObjType, vocoder_type: str = "HiFiGAN"):
+def load_vocoder(config_path: str, checkpoint_path: str, device: torch.DeviceObjType, data_type: torch.dtype, vocoder_type: str = "HiFiGAN"):
     if vocoder_type == "HiFiGAN":
         h = AttrDict(v1)
         hifigan = HiFiGAN(h).to(device)
+        if data_type != None:
+            hifigan.to(data_type)
         hifigan.load_state_dict(torch.load(checkpoint_path, map_location=device)['generator'])
         _ = hifigan.eval()
         hifigan.remove_weight_norm()
@@ -108,9 +113,37 @@ def load_vocoder(config_path: str, checkpoint_path: str, device: torch.DeviceObj
         checkpoint = torch.load(checkpoint_path, map_location=device)
         state_dict = checkpoint["state_dict"]
         vocoder.load_state_dict(state_dict, strict=False)
+        if data_type != None:
+            vocoder.to(data_type)
         return vocoder
+    
+def load_denoiser(vocoder, data_type: torch.dtype):
+    denoiser = Denoiser(vocoder, mode='zeros')
+    if data_type != None:
+        denoiser.to(data_type)
+    return denoiser
 
-def load_model(checkpoint_path: str, device: torch.DeviceObjType):
+def load_model(checkpoint_path: str, device: torch.DeviceObjType, data_type: torch.dtype):
     model = MatchaTTS.load_from_checkpoint(checkpoint_path, map_location=device)
+    if data_type != None:
+        model.to(data_type)
     model.eval()
     return model
+
+def get_dtype(data_type: str):
+    """Obtain torch datatype based on data_type string
+
+    Args:
+        data_type (str): datatype, one of "fp32", "fp16" or "bf16"
+
+    Returns:
+        torch.dtype: torch datatype
+    """
+    if data_type == "fp32":
+        return torch.float32
+    elif data_type == "fp16":
+        return torch.float16
+    elif data_type == "bf16":
+        return torch.bfloat16
+    else:
+        return None

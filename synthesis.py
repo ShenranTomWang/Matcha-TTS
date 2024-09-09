@@ -3,8 +3,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-# Hifigan imports
-from matcha.hifigan.denoiser import Denoiser
 # Evaluation imports
 import evaluation
 # Normalization imports
@@ -31,11 +29,12 @@ VOCODER = "Vocos"
 BATCHED_SYNTHESIS = os.getenv("BATCHED_SYNTHESIS") == "1"
 BATCH_SIZE = 400
 
-DATA_TYPE = os.getenv("DATA_TYPE")
+data_type = os.getenv("DATA_TYPE")
+DATA_TYPE = utils.get_dtype(data_type)
 
 WANDB_PROJECT = f"TTS"
 wandb_name = os.getenv("WANDB_NAME") + " Batched" if BATCHED_SYNTHESIS else os.getenv("WANDB_NAME")
-wandb_name = wandb_name + " " + DATA_TYPE if DATA_TYPE != None else wandb_name
+wandb_name = wandb_name + f" {data_type}" if DATA_TYPE != None else wandb_name
 WANDB_NAME = wandb_name
 WANDB_DATASET = "multilingual-test"
 WANDB_ARCH = f"MatchaTTS: language embedding, {VOCODER}: vanilla"
@@ -64,19 +63,20 @@ n_timesteps = 10
 length_scale = 1.0
 ## Sampling temperature
 temperature = 0.667
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device_str = "cuda" if torch.cuda.is_available() else "cpu"
+device = torch.device(device_str)
 
 def synthesis():
     count_params = lambda x: f"{sum(p.numel() for p in x.parameters()):,}"
 
-    model = utils.load_model(MATCHA_CHECKPOINT, device)
+    model = utils.load_model(MATCHA_CHECKPOINT, device, DATA_TYPE)
     print(f"Model loaded! Parameter count: {count_params(model)}")
     
     if VOCODER == "HiFiGAN":
-        vocoder = utils.load_vocoder(None, HIFIGAN_CHECKPOINT, device, vocoder_type=VOCODER)
-        denoiser = Denoiser(vocoder, mode='zeros')
+        vocoder = utils.load_vocoder(None, HIFIGAN_CHECKPOINT, device, DATA_TYPE, vocoder_type=VOCODER)
+        denoiser = utils.load_denoiser(vocoder, DATA_TYPE)
     else:
-        vocoder = utils.load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT, device, vocoder_type=VOCODER)
+        vocoder = utils.load_vocoder(VOCOS_CONFIG, VOCOS_CHECKPOINT, device, DATA_TYPE, vocoder_type=VOCODER)
         denoiser = None
     index = utils.get_data_index(SPK_EMB, LANG_EMB)
     texts = io.parse_filelist_get_text(Y_FILELIST, SPK_EMB, LANG_EMB, sentence_index=index)
@@ -222,7 +222,7 @@ def synthesis():
     
     print(f'"num_ode_steps": {n_timesteps}, "rtfs_mean": {rtfs_mean}, "rtfs_std": {rtfs_std}, "rtfs_w_mean": {rtfs_w_mean}, "rtfs_w_std": {rtfs_w_std}, "throughput_mean": {throughput_mean}, "thoughput_std": {throughput_std}')
 
-    with torch.cuda.amp.autocast(dtype=torch.float32):
+    with torch.autocast(device_str, dtype=torch.float32):
         if LANG_EMB:
             for spk_flag in SPK_FLAGS:
                 stoi, pesq, mcd, f0_rmse, las_rmse, vuv_f1, fd = evaluation.evaluate(OUTPUT_FOLDER, Y_FILELIST, spk_flag=spk_flag)
@@ -252,14 +252,13 @@ def synthesis():
     io.save_python_script_with_data(metrics, WANDB_PROJECT, WANDB_NAME, WANDB_ARCH, WANDB_DATASET, device, filename=SYNC_SAVE_DIR + WANDB_NAME.replace(" ", "_") + ".py")
 
 if __name__ == "__main__":
-    torch.cuda.memory._record_memory_history(max_entries=MEM_MAX_ENTRIES)
-    if DATA_TYPE == "fp16":
-        with torch.cuda.amp.autocast(dtype=torch.float16):
-            synthesis()
-    elif DATA_TYPE == "bf16":
-        with torch.cuda.amp.autocast(dtype=torch.bfloat16):
+    if device_str != "cpu":
+        torch.cuda.memory._record_memory_history(max_entries=MEM_MAX_ENTRIES)
+    if DATA_TYPE != None:
+        with torch.autocast(device_str, dtype=DATA_TYPE):
             synthesis()
     else:
         synthesis()
-    torch.cuda.memory._dump_snapshot(MEM_FILE_NAME)
-    torch.cuda.memory._record_memory_history(enabled=None)
+    if device_str != "cpu":
+        torch.cuda.memory._dump_snapshot(MEM_FILE_NAME)
+        torch.cuda.memory._record_memory_history(enabled=None)
