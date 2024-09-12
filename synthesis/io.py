@@ -6,7 +6,7 @@ from pathlib import Path
 def save_to_folder(filename: str, output: dict, folder: str, sr: int):
     folder = Path(folder)
     folder.mkdir(exist_ok=True, parents=True)
-    np.save(folder / f'{filename}', output['mel'].cpu().numpy())
+    # np.save(folder / f'{filename}', output['mel'].cpu().numpy())
     sf.write(folder / f'{filename}.wav', output['waveform'], sr, 'PCM_24')
     
 def save_to_folder_batch(output: dict, folder: str, sr: int):
